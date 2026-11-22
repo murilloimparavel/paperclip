@@ -76,4 +76,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Custos do agente:
   - [x] Traduzir períodos, intervalo personalizado, métricas, detalhamento por modelo e estados sem dados/erro.
   - [x] Validar catálogos, testes das funções de agregação e typecheck da UI.
+- Entrada do Chat com agentes:
+  - [x] Traduzir estados de carregamento, seleção de agente, orientação inicial e recurso desativado.
+  - [x] Traduzir navegação, acessibilidade e estados sem agentes.
+  - [x] Validar catálogos, testes do fluxo de entrada e typecheck da UI.
 - Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.

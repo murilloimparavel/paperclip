@@ -991,6 +991,22 @@
       "extra-high": "Extra High"
     }
   },
+  "agentChats": {
+    "breadcrumb": "Chat",
+    "loadingChat": "Loading chat…",
+    "disabledPrefix": "Agent Chat is off for this instance. An administrator can enable it in",
+    "experimentalSettings": "Experimental settings",
+    "disabledSuffix": "Your workspace preference does not change Chat availability.",
+    "selectCompany": "Select a company to start a conversation.",
+    "openingChat": "Opening chat…",
+    "chooseAgent": "Who would you like to talk to?",
+    "intro": "Ask a question, think through an idea, or plan the next step with your team.",
+    "loadYourChats": "load your chats",
+    "loadingAgents": "Loading agents…",
+    "openFailed": "Couldn’t open chat. Try again.",
+    "addAgent": "Add an agent to start a conversation.",
+    "browseAgents": "Browse all agents"
+  },
   "agentCosts": {
     "periodLabel": "Cost period",
     "period": {

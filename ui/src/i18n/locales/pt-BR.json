@@ -991,6 +991,22 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentChats": {
+    "breadcrumb": "Chat",
+    "loadingChat": "Carregando o chat…",
+    "disabledPrefix": "O Chat com agentes está desativado nesta instância. Um administrador pode ativá-lo em",
+    "experimentalSettings": "Configurações experimentais",
+    "disabledSuffix": "Sua preferência do espaço de trabalho não altera a disponibilidade do Chat.",
+    "selectCompany": "Selecione uma empresa para iniciar uma conversa.",
+    "openingChat": "Abrindo o chat…",
+    "chooseAgent": "Com quem você gostaria de conversar?",
+    "intro": "Faça uma pergunta, desenvolva uma ideia ou planeje o próximo passo com sua equipe.",
+    "loadYourChats": "carregar seus chats",
+    "loadingAgents": "Carregando agentes…",
+    "openFailed": "Não foi possível abrir o chat. Tente novamente.",
+    "addAgent": "Adicione um agente para iniciar uma conversa.",
+    "browseAgents": "Ver todos os agentes"
+  },
   "agentCosts": {
     "periodLabel": "Período de custos",
     "period": {
