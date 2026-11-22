@@ -989,7 +989,23 @@
       "plan": "Plan",
       "ask": "Ask",
       "extra-high": "Extra High"
-    }
+    },
+    "processArgsExample": "e.g. script.js, --flag",
+    "extraArgsExample": "e.g. --verbose, --foo=bar",
+    "errors": {
+      "selectOrganizationCreateSecrets": "Select an organization to create secrets",
+      "selectOrganizationUploadImages": "Select an organization to upload images",
+      "upgradeEnvironmentUnavailable": "Could not determine which environment to verify. Retry the upgrade.",
+      "upgradeSettingsChanged": "Agent settings changed during verification. Retry the upgrade with the current settings.",
+      "upgradeEnvironmentUnsupported": "This environment does not support Paperclip Runner. Your agent still uses Legacy runner.",
+      "upgradeFailed": "Could not upgrade this agent. Try again.",
+      "selectOrganizationDetectModel": "Select an organization to detect the model",
+      "selectOrganizationTestEnvironment": "Select an organization to test adapter environment",
+      "environmentSettingsUnavailable": "Could not load environment settings to determine which environment to test in. Retry the test.",
+      "testSettingsChanged": "Agent settings changed during the test. Run test again.",
+      "savedComputerVerifyFailed": "Could not verify the saved computer. Run test again."
+    },
+    "extraArgsLabel": "Extra args (comma-separated)"
   },
   "agentDetailDescription": {
     "runtime": "How {{name}} runs: harness, model and environment.",

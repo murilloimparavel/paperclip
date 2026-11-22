@@ -54,7 +54,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
     - [x] Traduzir configurações de HTTP, processo, OpenClaw Gateway e Hermes Gateway.
     - [x] Localizar rótulos, dicas e opções vindos de schemas dinâmicos de adaptadores.
     - [x] Traduzir grupos, badges e níveis compartilhados de raciocínio do formulário.
-    - [ ] Traduzir os campos específicos dos adaptadores e revisar todas as ações restantes do formulário.
+    - [x] Traduzir os campos específicos dos adaptadores e placeholders em linguagem natural, preservando exemplos técnicos.
+    - [x] Revisar campos dos adaptadores OpenCode e Process que não estavam usando as chaves existentes do catálogo.
+    - [x] Traduzir ações e erros locais restantes do formulário de configuração e aprimoramento do executor.
+    - [ ] Traduzir/revisar mensagens de erro e resumos legíveis fornecidos dinamicamente pela API.
     - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
     - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
   - [ ] Validar visualmente a criação em pt-BR.

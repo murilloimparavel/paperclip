@@ -989,7 +989,23 @@
       "plan": "Planejar",
       "ask": "Perguntar",
       "extra-high": "Extra alto"
-    }
+    },
+    "processArgsExample": "ex.: script.js, --flag",
+    "extraArgsExample": "ex.: --verbose, --foo=bar",
+    "errors": {
+      "selectOrganizationCreateSecrets": "Selecione uma organização para criar segredos",
+      "selectOrganizationUploadImages": "Selecione uma organização para enviar imagens",
+      "upgradeEnvironmentUnavailable": "Não foi possível identificar qual ambiente deve ser verificado. Tente atualizar novamente.",
+      "upgradeSettingsChanged": "As configurações do agente mudaram durante a verificação. Tente atualizar usando as configurações atuais.",
+      "upgradeEnvironmentUnsupported": "Este ambiente não oferece suporte ao Paperclip Runner. Seu agente continua usando o executor legado.",
+      "upgradeFailed": "Não foi possível atualizar este agente. Tente novamente.",
+      "selectOrganizationDetectModel": "Selecione uma organização para detectar o modelo",
+      "selectOrganizationTestEnvironment": "Selecione uma organização para testar o ambiente do adaptador",
+      "environmentSettingsUnavailable": "Não foi possível carregar as configurações do ambiente para escolher onde fazer o teste. Tente novamente.",
+      "testSettingsChanged": "As configurações do agente mudaram durante o teste. Execute o teste novamente.",
+      "savedComputerVerifyFailed": "Não foi possível verificar o computador salvo. Execute o teste novamente."
+    },
+    "extraArgsLabel": "Argumentos extras (separados por vírgula)"
   },
   "agentDetailDescription": {
     "runtime": "Como {{name}} executa tarefas: executor, modelo e ambiente.",

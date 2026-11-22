@@ -474,7 +474,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   );
   const createSecret = useMutation({
     mutationFn: (input: { name: string; value: string }) => {
-      if (!selectedCompanyId) throw new Error("Select an organization to create secrets");
+      if (!selectedCompanyId) throw new Error(t("agentConfig.errors.selectOrganizationCreateSecrets"));
       return secretsApi.create(selectedCompanyId, input);
     },
     onSuccess: () => {
@@ -485,7 +485,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
   const uploadMarkdownImage = useMutation({
     mutationFn: async ({ file, namespace }: { file: File; namespace: string }) => {
-      if (!selectedCompanyId) throw new Error("Select an organization to upload images");
+      if (!selectedCompanyId) throw new Error(t("agentConfig.errors.selectOrganizationUploadImages"));
       return assetsApi.uploadImage(selectedCompanyId, file, namespace);
     },
   });
@@ -970,7 +970,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       const pendingTarget = runnerSettingsTargetRef.current;
       if (runnerAvailability?.defaultRunner !== "paperclip") {
         if (!canQualifyRunnerUpgrade || !upgradeEnvironmentId || !selectedCompanyId) {
-          throw new Error("Could not determine which environment to verify. Retry the upgrade.");
+          throw new Error(t("agentConfig.errors.upgradeEnvironmentUnavailable"));
         }
         const qualified = await qualifyRunnerEnvironment({
           adapterType: harnessType,
@@ -978,15 +978,15 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           probeEnvironment: () => agentsApi.qualifyRunner(agentId, upgradeEnvironmentId, selectedCompanyId),
           isCurrent: () => runnerSettingsTargetRef.current === pendingTarget,
         });
-        if (!qualified) throw new Error("Agent settings changed during verification. Retry the upgrade with the current settings.");
+        if (!qualified) throw new Error(t("agentConfig.errors.upgradeSettingsChanged"));
         queryClient.setQueryData(queryKeys.adapters.availability(selectedCompanyId, rawCurrentDefaultEnvironmentId || null), qualified.adapters);
-        if (qualified.runner !== "paperclip") throw new Error("This environment does not support Paperclip Runner. Your agent still uses Legacy runner.");
+        if (qualified.runner !== "paperclip") throw new Error(t("agentConfig.errors.upgradeEnvironmentUnsupported"));
       }
       await props.onSave({ ...buildAgentUpdatePatch(props.agent, nextOverlay), runner: "paperclip" });
       setRunnerUpgrade(current => current?.agentId === agentId ? { agentId, status: "upgraded" } : current);
     } catch (error) {
       setRunnerUpgrade(current => current?.agentId === agentId ? {
-        agentId, status: "failed", error: error instanceof Error ? error.message : "Could not upgrade this agent. Try again.",
+        agentId, status: "failed", error: error instanceof Error ? error.message : t("agentConfig.errors.upgradeFailed"),
       } : current);
     }
   };
@@ -1098,7 +1098,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       : ["agents", "none", "detect-model", adapterType],
     queryFn: () => {
       if (!selectedCompanyId) {
-        throw new Error("Select an organization to detect the model");
+        throw new Error(t("agentConfig.errors.selectOrganizationDetectModel"));
       }
       return agentsApi.detectModel(selectedCompanyId, adapterType);
     },
@@ -1178,7 +1178,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const testEnvironment = useMutation({
     mutationFn: async () => {
       if (!selectedCompanyId) {
-        throw new Error("Select an organization to test adapter environment");
+        throw new Error(t("agentConfig.errors.selectOrganizationTestEnvironment"));
       }
       const flushedEnv = flushEnvironmentDraft();
       const adapterConfigPatch = flushedEnv ? { env: flushedEnv } : undefined;
@@ -1228,7 +1228,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           managedSandboxOnly = resolvedExperimental?.enableManagedSandboxOnly === true;
         } catch {
           throw new Error(
-            "Could not load environment settings to determine which environment to test in. Retry the test.",
+            t("agentConfig.errors.environmentSettingsUnavailable"),
           );
         }
       }
@@ -1264,9 +1264,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
         // Qualify only the saved computer. The strict agent-scoped endpoint
         // accepts no draft provider config, credentials or replacement target.
         const qualification = await agentsApi.qualifyRunner(props.agent.id, environmentId, selectedCompanyId);
-        if (runnerSettingsTargetRef.current !== target) throw new Error("Agent settings changed during the test. Run test again.");
+        if (runnerSettingsTargetRef.current !== target) throw new Error(t("agentConfig.errors.testSettingsChanged"));
         if (qualification.ok !== true || qualification.details?.platformQualificationRecorded !== true) {
-          throw new Error(qualification.summary || "Could not verify the saved computer. Run test again.");
+          throw new Error(qualification.summary || t("agentConfig.errors.savedComputerVerifyFailed"));
         }
       }
       if (props.compactTestFeedback) {
@@ -1357,7 +1357,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     (!loginNeedsPty || providerSupportsLoginPty);
   const runEnvironmentTest = useCallback(async () => {
     if (!selectedCompanyId) {
-      throw new Error("Select an organization to test adapter environment");
+      throw new Error(t("agentConfig.errors.selectOrganizationTestEnvironment"));
     }
     setTestActionPending(true);
     setTestActionError(null);
@@ -2135,7 +2135,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 flashes on a managed instance.
               */}
               {!hideHostPaths && (
-                <Field label="Command" hint={help.localCommand}>
+                <Field label={t("agentConfig.commandLabel")} hint={help.localCommand}>
                   <DraftInput
                     value={
                       isCreate
@@ -2170,7 +2170,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 </Field>
               )}
 
-              <Field label="Extra args (comma-separated)" hint={help.extraArgs}>
+              <Field label={t("agentConfig.extraArgsLabel")} hint={help.extraArgs}>
                 <DraftInput
                   value={
                     isCreate
@@ -2183,7 +2183,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                       : mark("adapterConfig", "extraArgs", v?.trim() ? parseCommaArgs(v) : null)
                   }
                   className={inputClass}
-                  placeholder="e.g. --verbose, --foo=bar"
+                  placeholder={t("agentConfig.extraArgsExample")}
                 />
               </Field>
 

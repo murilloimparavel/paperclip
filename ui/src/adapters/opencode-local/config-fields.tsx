@@ -52,7 +52,7 @@ export function OpenCodeLocalConfigFields({
         </Field>
       )}
       <ToggleField
-        label="Skip permissions"
+        label={t("agentConfig.skipPermissions")}
         hint={help.dangerouslySkipPermissions}
         checked={
           isCreate

@@ -72,7 +72,7 @@ export function ProcessConfigFields({
           }
           immediate
           className={inputClass}
-          placeholder="e.g. script.js, --flag"
+          placeholder={t("agentConfig.processArgsExample")}
         />
       </Field>
     </>
