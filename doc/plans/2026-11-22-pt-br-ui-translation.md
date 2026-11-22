@@ -165,4 +165,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir ações de arquivar/restaurar, marcar como lida e os respectivos rótulos acessíveis.
   - [x] Traduzir o aviso de tarefa bloqueadora e os nomes acessíveis para abrir, expandir e verificar a recuperação da tarefa.
   - [x] Validar catálogos, 65 testes focados de linha/lista e typecheck da UI.
-- Em andamento: auditoria dos eventos estruturados restantes, conteúdo de instruções, listas e detalhes de tarefas, além da revisão visual das rotas principais.
+- Lista ativa de tarefas (`IssuesList`):
+  - [x] Traduzir busca, criação, modo de visualização, ordenação, agrupamento e ajustes do quadro.
+  - [x] Traduzir status de busca/falha, limites de resultados, estados vazios, agrupamentos, carregamento e acessibilidade.
+  - [x] Traduzir resumo de subtarefas, custos agregados e separadores de data.
+  - [x] Validar catálogos, 74 testes focados da lista e typecheck da UI.
+- Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
