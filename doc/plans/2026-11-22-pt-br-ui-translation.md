@@ -174,4 +174,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir busca, criação, modo de visualização, ordenação e agrupamento.
   - [x] Traduzir estados vazios, limites, hierarquia, badges, progresso de subtarefas, custos, carregamento e separadores de data.
   - [x] Validar catálogo, teste de renderização em pt-BR e typecheck da UI.
+- Painel de tarefas relacionadas no detalhe da tarefa:
+  - [x] Traduzir subtarefas, progresso, bloqueio principal, próxima ação e referências entre tarefas.
+  - [x] Traduzir ancestrais, tarefas criadas, estados vazios, carregamento, falha, repetição e acessibilidade.
+  - [x] Validar catálogos, testes de painéis e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

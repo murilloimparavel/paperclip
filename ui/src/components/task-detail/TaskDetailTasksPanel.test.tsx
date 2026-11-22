@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import type { Issue, Project } from "@paperclipai/shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TaskDetailTasksPanel } from "./TaskDetailTasksPanel";
+import { i18n } from "@/i18n";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 vi.mock("@/lib/router", () => ({ Link: ({ to, children, ...props }: { to: string; children: React.ReactNode }) => <a href={to} {...props}>{children}</a> }));
@@ -25,6 +26,14 @@ const ancestors = [
 ] as NonNullable<Issue["ancestors"]>;
 
 describe("TaskDetailTasksPanel", () => {
+  it("renders related task labels in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    render({ subtasks: [], createdTasks: [], projects: [] });
+    expect(container.querySelector('section[aria-label="Tarefas relacionadas"]')).not.toBeNull();
+    expect(container.textContent).toContain("Ainda não há tarefas.");
+    await i18n.changeLanguage("en");
+  });
+
   it("shows ancestors root first above subtasks and folds them independently", () => {
     render({ ancestors, subtasks: [task("child")], createdTasks: [], projects: [] });
     const group = container.querySelector('section[aria-label="Ancestors"]')!;
