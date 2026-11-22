@@ -991,6 +991,22 @@
       "extra-high": "Extra alto"
     }
   },
+  "instructionSettings": {
+    "absolutePath": "Use um caminho absoluto iniciado por / ou ~.",
+    "entryMustStayInsideRoot": "O arquivo de entrada precisa ficar dentro do caminho raiz.",
+    "couldNotRead": "Não foi possível ler {{entry}} em {{root}}.",
+    "switchFailed": "Não foi possível voltar ao conjunto de instruções gerenciado.",
+    "advancedManagement": "Gerenciamento avançado",
+    "externalManagement": "Gerenciamento externo",
+    "externalManagementHelp": "Aponte este agente para uma pasta no disco. Antes de trocar, o Paperclip verifica se o arquivo raiz existe.",
+    "rootPath": "Caminho raiz",
+    "rootFile": "Arquivo raiz",
+    "useManagedBundle": "Usar conjunto gerenciado",
+    "saveOrDiscardFirst": "Salve ou descarte primeiro as alterações nos arquivos.",
+    "loadedFrom": "{{entry}} carregado de {{root}}",
+    "loading": "Carregando…",
+    "loadProfile": "Carregar perfil"
+  },
   "budgets": {
     "lifetimeBudget": "Orçamento vitalício",
     "monthlyUtcBudget": "Orçamento mensal (UTC)",

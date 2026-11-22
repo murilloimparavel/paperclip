@@ -92,4 +92,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir política, limites, reserva por execução, métricas, alertas e incidentes.
   - [x] Traduzir estados e ações para escopos de agente e projeto, preservando nomes definidos pela organização.
   - [x] Validar catálogos, testes dos incidentes e typecheck da UI.
+- Configuração externa das instruções do agente:
+  - [x] Traduzir validações de caminho, gerenciamento externo, seleção de arquivo raiz e estados de carregamento.
+  - [x] Preservar caminhos e nomes de arquivos; traduzir somente os fallbacks de erro locais.
+  - [x] Validar catálogos, testes do fluxo e typecheck da UI.
 - Em andamento: abas de atividade/execuções e auditoria do agente, conteúdo de instruções e revisão visual das rotas de detalhe.

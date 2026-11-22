@@ -991,6 +991,22 @@
       "extra-high": "Extra High"
     }
   },
+  "instructionSettings": {
+    "absolutePath": "Use an absolute path that starts with / or ~.",
+    "entryMustStayInsideRoot": "The entry file has to sit inside the root path.",
+    "couldNotRead": "Couldn’t read {{entry}} in {{root}}.",
+    "switchFailed": "Couldn’t switch back to the managed bundle.",
+    "advancedManagement": "Advanced management",
+    "externalManagement": "External management",
+    "externalManagementHelp": "Point this agent at a directory on disk. Paperclip checks that the root file exists before it switches over.",
+    "rootPath": "Root path",
+    "rootFile": "Root file",
+    "useManagedBundle": "Use managed bundle",
+    "saveOrDiscardFirst": "Save or discard your file changes first.",
+    "loadedFrom": "Loaded {{entry}} from {{root}}",
+    "loading": "Loading…",
+    "loadProfile": "Load profile"
+  },
   "budgets": {
     "lifetimeBudget": "Lifetime budget",
     "monthlyUtcBudget": "Monthly UTC budget",
