@@ -9,6 +9,7 @@ import { RunsTab } from "./AgentDetail";
 import { RunsTab as ProductionRunsTab } from "./AgentDetail.production";
 import { ToastProvider } from "../context/ToastContext";
 import { PanelProvider } from "../context/PanelContext";
+import { t } from "@/i18n";
 import { pendingSendKeyFor, readPendingSend, writePendingSend } from "../lib/pending-send";
 
 const { get, cancel, grokStop, actor } = vi.hoisted(() => ({ get: vi.fn(), cancel: vi.fn(), grokStop: vi.fn(), actor: { id: "operator-1", source: "authenticated" } }));
@@ -23,32 +24,32 @@ vi.mock("../context/CompanyContext", () => ({ useCompany: () => ({ selectedCompa
 afterEach(() => { get.mockReset(); cancel.mockReset(); grokStop.mockReset(); actor.id = "operator-1"; actor.source = "authenticated"; sessionStorage.clear(); vi.unstubAllGlobals(); });
 
 const states = [
-  { status: "failed", eligibility: true, label: "Stop" },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop") },
   { status: "failed", eligibility: false, label: null },
   { status: "failed", eligibility: undefined, label: null },
   { status: "succeeded", eligibility: false, label: null },
   { status: "cancelled", eligibility: false, label: null },
   { status: "succeeded", eligibility: true, label: null },
   { status: "cancelled", eligibility: true, label: null },
-  { status: "running", eligibility: undefined, label: "Cancel" },
-  { status: "queued", eligibility: undefined, label: "Cancel" },
-  { status: "failed", eligibility: true, label: "Stop", denial: true },
-  { status: "failed", eligibility: true, label: "Stop", unchanged: true },
-  { status: "failed", eligibility: true, label: "Stop", pending: true },
-  { status: "failed", eligibility: true, label: "Stop", pending: true, wrongIntent: "run" },
-  { status: "failed", eligibility: true, label: "Stop", pending: true, wrongIntent: "request" },
-  { status: "failed", eligibility: true, label: "Stop", uncertain: true },
-  { status: "failed", eligibility: true, label: "Stop", uncertain: true, remount: true },
-  { status: "failed", eligibility: true, label: "Stop", uncertain: true, remount: true, canonical: true },
-  { status: "failed", eligibility: true, label: "Stop", uncertain: true, remount: true, canonical: true, actorChanged: true },
-  { status: "failed", eligibility: true, label: "Stop", uncertain: true, remount: true, canonical: true, wrongRun: true },
-  { status: "failed", eligibility: true, label: "Stop", http: true },
-  { status: "failed", eligibility: true, label: "Stop", existingClaim: true },
-  { status: "failed", eligibility: true, label: "Stop", existingClaim: true, local: true },
-  { status: "failed", eligibility: true, label: "Stop", priorSession: true },
+  { status: "running", eligibility: undefined, label: t("agentRuns.cancel") },
+  { status: "queued", eligibility: undefined, label: t("agentRuns.cancel") },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), denial: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), unchanged: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), pending: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), pending: true, wrongIntent: "run" },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), pending: true, wrongIntent: "request" },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), uncertain: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), uncertain: true, remount: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), uncertain: true, remount: true, canonical: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), uncertain: true, remount: true, canonical: true, actorChanged: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), uncertain: true, remount: true, canonical: true, wrongRun: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), http: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), existingClaim: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), existingClaim: true, local: true },
+  { status: "failed", eligibility: true, label: t("agentRuns.stop"), priorSession: true },
   { status: "failed", eligibility: true, label: null, driverKind: "grok_bot_mcp" },
-  { status: "running", eligibility: undefined, label: "Cancel", driverKind: "grok_bot_mcp" },
-  { status: "queued", eligibility: undefined, label: "Cancel", driverKind: "grok_bot_mcp" },
+  { status: "running", eligibility: undefined, label: t("agentRuns.cancel"), driverKind: "grok_bot_mcp" },
+  { status: "queued", eligibility: undefined, label: t("agentRuns.cancel"), driverKind: "grok_bot_mcp" },
 ];
 
 it.each([RunsTab, ProductionRunsTab].flatMap(Tab => [null, "The previous turn is no longer active."].map(error => ({ Tab, error }))))(
@@ -123,7 +124,7 @@ it.each([RunsTab, ProductionRunsTab].flatMap(Tab => states.map(state => ({ Tab, 
     return { stopped: true, remoteTerminationConfirmed: false };
   });
   const usesGrokStop = Tab === RunsTab && state.driverKind === "grok_bot_mcp";
-  const expectedLabel = label && usesGrokStop ? "Stop Paperclip work" : label;
+  const expectedLabel = label && usesGrokStop ? t("agentRuns.cancelWork") : label;
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
   const element = document.createElement("div"); document.body.append(element);
   let root = createRoot(element);
@@ -132,8 +133,11 @@ it.each([RunsTab, ProductionRunsTab].flatMap(Tab => states.map(state => ({ Tab, 
   </ToastProvider></PanelProvider></MemoryRouter></QueryClientProvider>);
   try {
     await act(async () => render());
-    await vi.waitFor(async () => { await act(async () => {}); expect(element.textContent).toContain(status); });
-    const control = () => Array.from(element.querySelectorAll("button")).find(candidate => ["Stop", "Cancel", "Stop Paperclip work"].includes(candidate.textContent ?? ""));
+    const expectedStatus = Tab === RunsTab
+      ? t(`agentRuns.status.${status}`, { defaultValue: status.replace(/[_-]/g, " ") })
+      : status;
+    await vi.waitFor(async () => { await act(async () => {}); expect(element.textContent).toContain(expectedStatus); });
+    const control = () => Array.from(element.querySelectorAll("button")).find(candidate => [t("agentRuns.stop"), t("agentRuns.cancel"), t("agentRuns.cancelWork")].includes(candidate.textContent ?? ""));
     if (label) {
       expect(control()?.textContent).toBe(expectedLabel);
       await act(async () => control()!.click());
@@ -184,7 +188,10 @@ it.each([RunsTab, ProductionRunsTab].flatMap(Tab => states.map(state => ({ Tab, 
           if (state.denial) expect(control()?.textContent).toBe(expectedLabel);
         } else {
           expect(control()).toBeUndefined();
-          expect(element.textContent).toContain(state.pending || state.uncertain ? "failed" : "cancelled");
+          const finalStatus = state.pending || state.uncertain
+            ? expectedStatus
+            : Tab === RunsTab ? t("agentRuns.status.cancelled") : "cancelled";
+          expect(element.textContent).toContain(finalStatus);
           expect(element.querySelector('[role="alert"]')).toBeNull();
         }
       });
