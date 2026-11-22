@@ -991,6 +991,48 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentAdvanced": {
+    "invalidYaml": "YAML inválido",
+    "reloadBeforeSaving": "Recarregue o que foi salvo antes de salvar novamente.",
+    "agentSaved": "Agente salvo",
+    "loadingConfiguration": "Carregando configuração…",
+    "retry": "Tentar novamente",
+    "omittedSettingsHelp": "As configurações omitidas permanecem inalteradas. O conteúdo dos arquivos de instruções, os acessos herdados e o histórico ficam disponíveis nas respectivas abas.",
+    "createdCredentials": "Credenciais criadas",
+    "copyKeyNow": "Copie esta chave agora. Ela não será exibida novamente depois que você sair desta página.",
+    "namedToken": "Token de {{name}}",
+    "changeCount_one": "{{count}} alteração para aplicar",
+    "changeCount_other": "{{count}} alterações para aplicar",
+    "saveOrderHelp": "As alterações são salvas nesta ordem. Se uma falhar, as anteriores continuarão salvas.",
+    "reloadSaved": "Recarregar o que foi salvo",
+    "savingProgress": "Salvando: {{progress}}…",
+    "configuration": "configuração",
+    "noConfigurationChanges": "Nenhuma alteração de configuração",
+    "unsavedChanges": "Alterações não salvas",
+    "noUnsavedChanges": "Todas as alterações foram salvas",
+    "saving": "Salvando…",
+    "saveChanges": "Salvar alterações",
+    "yamlConfiguration": "Configuração YAML do agente",
+    "receipt": {
+      "secret": "Segredo: {{name}}",
+      "apiKey": "Chave de API: {{name}}"
+    },
+    "change": {
+      "instructionsLocation": "Local das instruções (carregar os arquivos de destino)",
+      "agentConfiguration": "Configuração do agente",
+      "skillsAndVersions": "Habilidades e versões fixadas",
+      "permissionsAndTrust": "Permissões e confiança",
+      "restoreRevision": "Restaurar revisão da configuração",
+      "instructions": "Instruções: {{value}}",
+      "removeInstructionFile": "Remover arquivo de instruções: {{value}}",
+      "createSecret": "Criar segredo: {{value}}",
+      "rotateSecret": "Alternar segredo: {{value}}",
+      "updateSecret": "Atualizar segredo: {{value}}",
+      "secretProposal": "Proposta de segredo: {{value}}",
+      "revokeApiKey": "Revogar chave de API: {{value}}",
+      "createApiKey": "Criar chave de API: {{value}}"
+    }
+  },
   "toolUi": {
     "risk": {
       "unknown": "desconhecido",

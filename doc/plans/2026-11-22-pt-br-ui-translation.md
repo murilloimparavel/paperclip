@@ -68,4 +68,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir acesso efetivo, ferramentas permitidas/indisponíveis, perfis e políticas.
   - [x] Traduzir badges compartilhados de risco e capacidade usados em tabelas de ferramentas.
   - [x] Validar catálogos, testes da aba/validação de idiomas e typecheck da UI.
+- Configuração avançada do agente:
+  - [x] Traduzir editor YAML, estados de carregamento/salvamento, revisão da ordem de alterações e credenciais criadas.
+  - [x] Traduzir os rótulos de operações e preservar nomes/paths definidos pelo usuário.
+  - [x] Validar catálogos, testes do fluxo e typecheck da UI.
+  - [ ] Revisar erros dinâmicos de API e validação que ainda podem chegar em inglês.
 - Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.

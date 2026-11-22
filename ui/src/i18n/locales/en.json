@@ -991,6 +991,48 @@
       "extra-high": "Extra High"
     }
   },
+  "agentAdvanced": {
+    "invalidYaml": "Invalid YAML",
+    "reloadBeforeSaving": "Reload saved before saving again.",
+    "agentSaved": "Agent saved",
+    "loadingConfiguration": "Loading configuration…",
+    "retry": "Retry",
+    "omittedSettingsHelp": "Omitted settings stay unchanged. Instruction file contents, inherited access, and history are available in their settings tabs.",
+    "createdCredentials": "Created credentials",
+    "copyKeyNow": "Copy this key now. It won’t be shown again after leaving this page.",
+    "namedToken": "{{name}} token",
+    "changeCount_one": "{{count}} change to apply",
+    "changeCount_other": "{{count}} changes to apply",
+    "saveOrderHelp": "Changes save in this order. If one fails, earlier changes remain saved.",
+    "reloadSaved": "Reload saved",
+    "savingProgress": "Saving: {{progress}}…",
+    "configuration": "configuration",
+    "noConfigurationChanges": "No configuration changes",
+    "unsavedChanges": "Unsaved changes",
+    "noUnsavedChanges": "No unsaved changes",
+    "saving": "Saving…",
+    "saveChanges": "Save changes",
+    "yamlConfiguration": "Agent YAML configuration",
+    "receipt": {
+      "secret": "Secret: {{name}}",
+      "apiKey": "API key: {{name}}"
+    },
+    "change": {
+      "instructionsLocation": "Instructions location (load the destination files)",
+      "agentConfiguration": "Agent configuration",
+      "skillsAndVersions": "Skills and version pins",
+      "permissionsAndTrust": "Permissions and trust",
+      "restoreRevision": "Restore configuration revision",
+      "instructions": "Instructions: {{value}}",
+      "removeInstructionFile": "Remove instruction file: {{value}}",
+      "createSecret": "Create secret: {{value}}",
+      "rotateSecret": "Rotate secret: {{value}}",
+      "updateSecret": "Update secret: {{value}}",
+      "secretProposal": "Secret proposal: {{value}}",
+      "revokeApiKey": "Revoke API key: {{value}}",
+      "createApiKey": "Create API key: {{value}}"
+    }
+  },
   "toolUi": {
     "risk": {
       "unknown": "unknown",
