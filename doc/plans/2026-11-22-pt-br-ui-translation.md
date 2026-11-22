@@ -96,6 +96,11 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir validações de caminho, gerenciamento externo, seleção de arquivo raiz e estados de carregamento.
   - [x] Preservar caminhos e nomes de arquivos; traduzir somente os fallbacks de erro locais.
   - [x] Validar catálogos, testes do fluxo e typecheck da UI.
+- Editor de instruções do agente:
+  - [x] Traduzir navegação da árvore de arquivos, edição, cópia, download, exclusão e nomes acessíveis.
+  - [x] Traduzir recuperação/comparação de alterações preservadas, revisão de arquivo e estados de salvamento.
+  - [x] Validar catálogos, testes do editor e typecheck da UI.
+  - [ ] Mapear mensagens dinâmicas de API e avisos do conjunto, que ainda podem chegar em inglês.
 - Navegação de detalhes do agente:
   - [x] Traduzir grupos, abas, rótulos acessíveis, breadcrumbs e nomes de rotas legadas.
   - [x] Preservar os segmentos e URLs das rotas.
