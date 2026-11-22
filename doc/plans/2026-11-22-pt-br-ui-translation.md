@@ -62,4 +62,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados de gerenciamento, suporte por adaptador, busca, contagens, seções e estados vazios.
   - [x] Traduzir ações acessíveis de ativação, estado somente leitura e seletor de versões da habilidade.
   - [x] Validar catálogos, placeholders, testes da aba/seletor e typecheck da UI.
-- Em andamento: áreas de detalhes e outras abas do agente.
+- Aba de ferramentas do agente:
+  - [x] Traduzir identidade GitHub, mensagens de conexão e ações de gerenciamento da conta.
+  - [x] Traduzir instalação de aplicativos, permissões, estados de salvamento e controles acessíveis.
+  - [x] Traduzir acesso efetivo, ferramentas permitidas/indisponíveis, perfis e políticas.
+  - [x] Traduzir badges compartilhados de risco e capacidade usados em tabelas de ferramentas.
+  - [x] Validar catálogos, testes da aba/validação de idiomas e typecheck da UI.
+- Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.
