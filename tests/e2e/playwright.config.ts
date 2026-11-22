@@ -92,6 +92,7 @@ export default defineConfig({
       PAPERCLIP_BIND: "loopback",
       PAPERCLIP_DEPLOYMENT_MODE: "local_trusted",
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private",
+      VITE_DEFAULT_LOCALE: "en",
     },
   },
   outputDir: "./test-results",
