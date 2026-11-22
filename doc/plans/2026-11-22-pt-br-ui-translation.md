@@ -143,7 +143,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir alterações estruturadas de bloqueadores, revisores e aprovadores.
   - [x] Traduzir valores de políticas de revisão e textos das regras compartilhadas entre auditoria e tarefas.
   - [x] Validar catálogos, testes do feed e typecheck da UI.
-  - [ ] Definir apresentação em português para mensagens de eventos futuros/desconhecidos.
+  - [x] Exibir eventos futuros/desconhecidos com uma apresentação em português, preservando o identificador técnico da ação.
 - Política de revisão compartilhada:
   - [x] Traduzir badges, descrições acessíveis e valores usados nos recibos de alteração.
   - [x] Validar os consumidores da política, formatação de auditoria e catálogos.

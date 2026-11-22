@@ -265,10 +265,12 @@ function formatInteractionOutcomeLabel(action: string, details: ActivityDetails)
 }
 
 function activityVerb(action: string, fallback: string): string {
+  if (!ACTIVITY_ROW_VERBS[action]) return t("auditFeed.unknownEventVerb", { action });
   return t(`auditFeed.eventVerbs.${action}`, { defaultValue: fallback });
 }
 
 function activityLabel(action: string, fallback: string): string {
+  if (!ISSUE_ACTIVITY_LABELS[action]) return t("auditFeed.unknownEventLabel", { action });
   return t(`auditFeed.eventLabels.${action}`, { defaultValue: fallback });
 }
 

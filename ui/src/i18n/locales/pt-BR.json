@@ -2168,7 +2168,9 @@
       "removedApproverFrom": "removeu {{changed}} de",
       "approversUpdated": "atualizou os aprovadores",
       "approversUpdatedOn": "atualizou os aprovadores em"
-    }
+    },
+    "unknownEventVerb": "registrou a ação {{action}}",
+    "unknownEventLabel": "Evento registrado: {{action}}"
   },
   "reviewPolicy": {
     "anyone": "qualquer pessoa",
