@@ -325,17 +325,17 @@ const OVERVIEW_ACTIVITY_LIMIT = 200;
 function agentViewDescription(view: AgentDetailView, name: string): string | null {
   switch (view) {
     case "runtime":
-      return `How ${name} runs: harness, model and environment.`;
+      return t("agentDetailDescription.runtime", { name });
     case "secrets":
-      return "Secrets this agent can reach. Values are never shown here.";
+      return t("agentDetailDescription.secrets");
     case "permissions":
-      return `What ${name} may do without asking, and where.`;
+      return t("agentDetailDescription.permissions", { name });
     case "activity":
-      return `Everything ${name} did and everything done to ${name}.`;
+      return t("agentDetailDescription.activity", { name });
     case "runs":
-      return `Every execution of ${name}, newest first.`;
+      return t("agentDetailDescription.runs", { name });
     case "costs":
-      return `What ${name} spent, by model.`;
+      return t("agentDetailDescription.costs", { name });
     default:
       return null;
   }

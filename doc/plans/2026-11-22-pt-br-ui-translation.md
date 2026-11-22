@@ -108,4 +108,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir avisos de participação, hierarquia, agente integrado e aprovação pendente.
   - [x] Traduzir confirmação de alterações não salvas, ações e textos acessíveis do cabeçalho.
   - [x] Validar catálogo, testes da página de detalhe e typecheck da UI.
+- Descrições das abas do agente:
+  - [x] Traduzir as descrições de ambiente, segredos, permissões, atividade, execuções e custos.
+  - [x] Validar catálogo, testes da página de detalhe e typecheck da UI.
 - Em andamento: abas de atividade/execuções e auditoria do agente, conteúdo de instruções e revisão visual das rotas de detalhe.

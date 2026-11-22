@@ -991,6 +991,14 @@
       "extra-high": "Extra High"
     }
   },
+  "agentDetailDescription": {
+    "runtime": "How {{name}} runs: harness, model and environment.",
+    "secrets": "Secrets this agent can reach. Values are never shown here.",
+    "permissions": "What {{name}} may do without asking, and where.",
+    "activity": "Everything {{name}} did and everything done to {{name}}.",
+    "runs": "Every execution of {{name}}, newest first.",
+    "costs": "What {{name}} spent, by model."
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "You left this agent. It no longer appears in your sidebar.",
     "dismissMembershipNotice": "Dismiss agent membership notice",

@@ -991,6 +991,14 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentDetailDescription": {
+    "runtime": "Como {{name}} executa tarefas: executor, modelo e ambiente.",
+    "secrets": "Segredos aos quais este agente pode ter acesso. Os valores nunca são exibidos aqui.",
+    "permissions": "O que {{name}} pode fazer sem pedir autorização e em quais contextos.",
+    "activity": "Tudo o que {{name}} fez e tudo o que foi feito a {{name}}.",
+    "runs": "Todas as execuções de {{name}}, da mais recente para a mais antiga.",
+    "costs": "Quanto {{name}} gastou, por modelo."
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "Você deixou este agente. Ele não aparece mais na sua barra lateral.",
     "dismissMembershipNotice": "Dispensar aviso de participação no agente",
