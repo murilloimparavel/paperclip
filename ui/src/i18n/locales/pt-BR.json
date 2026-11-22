@@ -623,7 +623,30 @@
       "linuxTip": "Na maioria dos gerenciadores de arquivos, Ctrl+L exibe o caminho completo na barra de endereço.",
       "descriptionBefore": "Cole o caminho absoluto (por exemplo,",
       "descriptionAfter": ") no campo de entrada."
-    }
+    },
+    "acp": {
+      "executionEngine": "Motor de execução",
+      "executionEngineHelp": "O padrão usa ACP. Se o ACP não estiver disponível, a execução falha com um erro de configuração. Escolha CLI explicitamente para usá-la.",
+      "defaultEngine": "Padrão (ACP)",
+      "serverCommand": "Comando do servidor ACP",
+      "claudeCommandHelp": "Substituição opcional do comando do servidor ACP do Claude. O padrão é o executável claude-agent-acp instalado com o pacote.",
+      "geminiCommandHelp": "Substituição opcional do comando do servidor ACP do Gemini. O padrão é gemini --acp.",
+      "sessionMode": "Modo de sessão ACP",
+      "sessionModeHelp": "Persistente mantém o estado da sessão ACP entre execuções. Avulsa inicia uma sessão nova a cada execução.",
+      "persistent": "Persistente",
+      "oneShot": "Avulsa",
+      "nonInteractivePermissions": "Permissões ACP sem interação",
+      "nonInteractivePermissionsHelp": "Ação padrão caso o agente ACP solicite entrada fora de uma sessão interativa.",
+      "deny": "Negar",
+      "fail": "Falhar",
+      "stateDirectory": "Diretório de estado do ACP",
+      "stateDirectoryHelp": "Diretório opcional para o estado das sessões ACP. Por padrão, o Paperclip gerencia o armazenamento separado por organização e agente.",
+      "warmProcessIdleMs": "Tempo ocioso do processo ACP aquecido (ms)",
+      "warmProcessIdleMsHelp": "O padrão é 0, que encerra o processo ACP ao fim de cada execução, mantendo o estado persistente da sessão."
+    },
+    "enableChrome": "Ativar Chrome",
+    "skipPermissions": "Ignorar permissões",
+    "maxTurnsPerRun": "Máximo de turnos por execução"
   },
   "reportsTo": {
     "disabledEmpty": "Responde a: indisponível (CEO)",

@@ -623,7 +623,30 @@
       "linuxTip": "In most file managers, Ctrl+L reveals the full path in the address bar.",
       "descriptionBefore": "Paste the absolute path (for example,",
       "descriptionAfter": ") into the input field."
-    }
+    },
+    "acp": {
+      "executionEngine": "Execution engine",
+      "executionEngineHelp": "Default uses ACP. If ACP is unavailable, the run fails with a setup error. Choose CLI explicitly to use it.",
+      "defaultEngine": "Default (ACP)",
+      "serverCommand": "ACP server command",
+      "claudeCommandHelp": "Optional override for the Claude ACP server command. Defaults to the package-local claude-agent-acp binary.",
+      "geminiCommandHelp": "Optional override for the Gemini ACP server command. Defaults to gemini --acp.",
+      "sessionMode": "ACP session mode",
+      "sessionModeHelp": "Persistent keeps ACP session state between runs. One-shot starts fresh each run.",
+      "persistent": "Persistent",
+      "oneShot": "One-shot",
+      "nonInteractivePermissions": "ACP non-interactive permissions",
+      "nonInteractivePermissionsHelp": "Fallback if the ACP agent asks for input outside an interactive session.",
+      "deny": "Deny",
+      "fail": "Fail",
+      "stateDirectory": "ACP state directory",
+      "stateDirectoryHelp": "Optional ACP session state directory. Defaults to Paperclip-managed organization/agent scoped storage.",
+      "warmProcessIdleMs": "ACP warm process idle ms",
+      "warmProcessIdleMsHelp": "Defaults to 0, which closes the ACP process after each run while retaining persistent session state."
+    },
+    "enableChrome": "Enable Chrome",
+    "skipPermissions": "Skip permissions",
+    "maxTurnsPerRun": "Max turns per run"
   },
   "reportsTo": {
     "disabledEmpty": "Reports to: N/A (CEO)",

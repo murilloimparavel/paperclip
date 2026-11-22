@@ -49,6 +49,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
     - [x] Preservar placeholders de templates dentro das dicas e placeholders de interpolação i18next.
     - [x] Traduzir opções avançadas, políticas de execução, estados do seletor de modelos e depuração.
     - [x] Traduzir o campo compartilhado de arquivo de instruções e a janela de seleção de caminho para macOS, Windows e Linux.
+    - [x] Traduzir opções de execução ACP e políticas específicas de Claude e Gemini.
     - [ ] Traduzir os campos específicos dos adaptadores e revisar todas as ações restantes do formulário.
     - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
     - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
