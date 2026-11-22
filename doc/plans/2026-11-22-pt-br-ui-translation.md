@@ -88,4 +88,4 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir resumo das alterações, identificação de autoria, tabela e confirmação de restauração.
   - [x] Preservar nomes de agentes, membros, IDs e chaves de configuração.
   - [x] Validar catálogo, testes auxiliares e typecheck da UI.
-- Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.
+- Em andamento: abas de atividade/execuções e auditoria do agente, orçamento, conteúdo de instruções e revisão visual das rotas de detalhe.
