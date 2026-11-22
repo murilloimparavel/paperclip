@@ -1029,7 +1029,63 @@
       "versionDetected": "A versão de {{provider}} foi identificada.",
       "versionProbeFailed": "Não foi possível identificar a versão de {{provider}}.",
       "versionProbeTimedOut": "A identificação da versão de {{provider}} excedeu o tempo limite.",
-      "gitCheckSkipped": "A verificação do repositório foi ignorada."
+      "gitCheckSkipped": "A verificação do repositório foi ignorada.",
+      "probeSkipped": "A verificação de {{provider}} foi ignorada porque não foi possível confirmar o comando ou a versão.",
+      "probeUpstreamUnavailable": "O serviço de {{provider}} está temporariamente indisponível.",
+      "usageLimited": "A conta de {{provider}} atingiu um limite de uso.",
+      "unexpectedOutput": "A verificação de {{provider}} recebeu uma resposta inesperada.",
+      "modelUnavailable": "O modelo configurado não está disponível em {{provider}}.",
+      "modelsProbePassed": "A verificação de modelos de {{provider}} foi concluída com sucesso.",
+      "modelsProbeTimedOut": "A verificação dos modelos de {{provider}} excedeu o tempo limite.",
+      "modelProbeFailed": "Não foi possível concluir a verificação de modelo de {{provider}}.",
+      "modelNotFound": "O modelo configurado não foi encontrado em {{provider}}.",
+      "modelValidationSkippedRemote": "A validação do modelo foi ignorada no ambiente remoto de {{provider}}.",
+      "modelValidationViaProbe": "O modelo configurado foi validado com uma resposta de {{provider}}.",
+      "apiKeyConfigured": "Há uma chave de API configurada para {{provider}}.",
+      "authDetected": "Foi detectada uma autenticação de {{provider}}.",
+      "authFailed": "A autenticação com {{provider}} falhou.",
+      "managedProviderConfigured": "Há uma conexão gerenciada de {{provider}} configurada.",
+      "oauthTokenConfigured": "Há um token OAuth configurado para {{provider}}.",
+      "bedrockAuth": "Há uma autenticação do Amazon Bedrock configurada.",
+      "subscriptionModePossible": "A assinatura de {{provider}} pode ser usada para autenticação.",
+      "apiKeyOverridesSubscription": "A chave de API da Anthropic tem prioridade sobre a autenticação por assinatura.",
+      "effortFlagUnsupported": "A versão selecionada de {{provider}} não oferece suporte a esta opção de esforço de raciocínio.",
+      "cliVersionIncompatible": "A versão instalada de {{provider}} é incompatível com esta configuração.",
+      "fastModeUnsupported": "O modelo selecionado não oferece suporte ao modo rápido.",
+      "repositoryPresent": "Há um repositório configurado para {{provider}}.",
+      "repositoryMissing": "É necessário configurar um repositório para {{provider}}.",
+      "repositoryInvalid": "O repositório configurado para {{provider}} é inválido.",
+      "urlValid": "A URL de {{provider}} é válida.",
+      "urlMissing": "É necessário informar uma URL para {{provider}}.",
+      "urlInvalid": "A URL configurada para {{provider}} é inválida.",
+      "baseUrlMissing": "É necessário informar uma URL base para {{provider}}.",
+      "baseUrlInvalid": "A URL base configurada para {{provider}} é inválida.",
+      "dashboardRootMapped": "A raiz do painel está direcionada ao endpoint do gateway.",
+      "healthUnreachable": "Não foi possível acessar o endpoint de saúde de {{provider}}.",
+      "loopbackHttpAllowed": "O uso de HTTP sem criptografia está permitido para um endereço local.",
+      "plainHttpRemoteDenied": "Conexões HTTP sem criptografia com servidores remotos estão bloqueadas.",
+      "plainHttpRemoteUnsafeAllowed": "Uma configuração insegura permite conexões HTTP sem criptografia com servidores remotos.",
+      "plaintextRemoteWebSocket": "A conexão WebSocket remota está usando um protocolo sem criptografia.",
+      "probeChallengeOnly": "{{provider}} respondeu com um desafio de autenticação.",
+      "providerDetected": "Provedor detectado: {{provider}}.",
+      "providerMismatch": "O provedor configurado não corresponde a {{provider}}.",
+      "providerRuntimeConfig": "Foi encontrada uma configuração de execução para {{provider}}.",
+      "providerUnknown": "Não foi possível identificar o provedor configurado.",
+      "providerUnsupported": "{{provider}} não tem suporte neste ambiente.",
+      "defaultModelConfigured": "Há um modelo padrão de {{provider}} configurado.",
+      "customProviderConfigured": "Há um provedor personalizado de {{provider}} configurado.",
+      "pythonMissing": "O Python é necessário para {{provider}}, mas não foi encontrado.",
+      "pythonOutdated": "A versão do Python necessária para {{provider}} está desatualizada.",
+      "cliMissing": "O comando de {{provider}} não foi encontrado.",
+      "remoteProbeUnsupported": "As verificações de ambiente remoto não são compatíveis com {{provider}}.",
+      "commandSkipped": "A verificação do comando de {{provider}} foi ignorada.",
+      "environmentUnprepared": "O ambiente de {{provider}} ainda não está pronto para o teste.",
+      "probeCleanupIncomplete": "A verificação de {{provider}} terminou, mas não foi possível remover todos os arquivos temporários.",
+      "packageInstallFailed": "Não foi possível instalar o pacote de {{provider}}.",
+      "versionUnknown": "Não foi possível identificar a versão de {{provider}}.",
+      "engineUnavailable": "O executor selecionado para o adaptador está indisponível.",
+      "headlessPermissionsEnabled": "O modo sem interface está configurado para ignorar solicitações interativas de permissão em {{provider}}.",
+      "runtimePackageMissing": "O pacote do executor selecionado não está instalado."
     },
     "providerNames": {
       "claude": "Claude CLI",
@@ -2369,5 +2425,67 @@
     "retrying": "Tentando novamente…",
     "loading": "Carregando",
     "updatingPaused": "Atualização pausada enquanto reconecta…"
-  }
+  },
+  "runtimeTestCard": {
+    "runtimeMissing": "Executor ausente",
+    "ariaLabel": "Teste do executor",
+    "details": "Detalhes do teste",
+    "metadataIdle": "Verifique o token salvo, a instalação do executor e o modelo selecionado sem enviar uma solicitação ao modelo.",
+    "metadataRunning": "Verificando o token salvo, o executor e o modelo selecionado…",
+    "connection": {
+      "idle": {
+        "title": "Teste seu agente",
+        "description": "Verifique se o executor e o modelo conseguem responder.",
+        "action": "Executar teste"
+      },
+      "running": {
+        "title": "Testando a conexão",
+        "description": "Verificando o executor e aguardando uma resposta do modelo…",
+        "action": "Testando…"
+      },
+      "pass": {
+        "title": "Conexão bem-sucedida",
+        "description": "As verificações do executor passaram. Confira os detalhes abaixo.",
+        "action": "Testar novamente"
+      },
+      "warn": {
+        "title": "A conexão precisa de atenção",
+        "description": "Confira os detalhes do teste antes de executar o agente.",
+        "action": "Testar novamente"
+      },
+      "fail": {
+        "title": "Não foi possível conectar",
+        "description": "Verifique o modelo e a conexão com o provedor e tente novamente.",
+        "action": "Tentar teste novamente"
+      }
+    },
+    "prerequisites": {
+      "idle": {
+        "title": "Verificar pré-requisitos",
+        "description": "Verifique as configurações da instância e a configuração da conexão pública.",
+        "action": "Verificar configuração"
+      },
+      "running": {
+        "title": "Verificando pré-requisitos",
+        "description": "Verificando as configurações da instância e a conexão pública…",
+        "action": "Verificando…"
+      },
+      "pass": {
+        "title": "Verificações de configuração aprovadas",
+        "description": "Confira os detalhes antes de atribuir tarefas.",
+        "action": "Verificar novamente"
+      },
+      "warn": {
+        "title": "Pareamento necessário",
+        "description": "Crie este agente, faça o pareamento e verifique a entrega de eventos.",
+        "action": "Verificar novamente"
+      },
+      "fail": {
+        "title": "Falha na verificação de pré-requisitos",
+        "description": "Confira os detalhes da configuração e tente novamente.",
+        "action": "Tentar verificação novamente"
+      }
+    }
+  },
+  "runtimePackageMissing": "O pacote do executor selecionado não está instalado."
 }

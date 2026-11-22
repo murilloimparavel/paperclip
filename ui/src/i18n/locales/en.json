@@ -1029,7 +1029,63 @@
       "versionDetected": "The {{provider}} version was detected.",
       "versionProbeFailed": "Could not detect the {{provider}} version.",
       "versionProbeTimedOut": "Detecting the {{provider}} version timed out.",
-      "gitCheckSkipped": "The repository check was skipped."
+      "gitCheckSkipped": "The repository check was skipped.",
+      "probeSkipped": "The {{provider}} check was skipped because its command or version could not be verified.",
+      "probeUpstreamUnavailable": "The {{provider}} service is temporarily unavailable.",
+      "usageLimited": "The {{provider}} account has reached a usage limit.",
+      "unexpectedOutput": "The {{provider}} check returned an unexpected response.",
+      "modelUnavailable": "The configured model is not available from {{provider}}.",
+      "modelsProbePassed": "The {{provider}} model check completed successfully.",
+      "modelsProbeTimedOut": "Checking {{provider}} models timed out.",
+      "modelProbeFailed": "The {{provider}} model check could not complete.",
+      "modelNotFound": "The configured model was not found by {{provider}}.",
+      "modelValidationSkippedRemote": "Model validation was skipped for the remote {{provider}} environment.",
+      "modelValidationViaProbe": "The configured model was validated with a {{provider}} response.",
+      "apiKeyConfigured": "An API key is configured for {{provider}}.",
+      "authDetected": "Authentication was detected for {{provider}}.",
+      "authFailed": "Authentication with {{provider}} failed.",
+      "managedProviderConfigured": "A managed {{provider}} connection is configured.",
+      "oauthTokenConfigured": "An OAuth token is configured for {{provider}}.",
+      "bedrockAuth": "Amazon Bedrock authentication is configured.",
+      "subscriptionModePossible": "The {{provider}} subscription can be used for authentication.",
+      "apiKeyOverridesSubscription": "The Anthropic API key takes precedence over subscription authentication.",
+      "effortFlagUnsupported": "The selected {{provider}} version does not support this reasoning effort option.",
+      "cliVersionIncompatible": "The installed {{provider}} version is incompatible with this configuration.",
+      "fastModeUnsupported": "The selected model does not support fast mode.",
+      "repositoryPresent": "A repository is configured for {{provider}}.",
+      "repositoryMissing": "A repository must be configured for {{provider}}.",
+      "repositoryInvalid": "The configured {{provider}} repository is invalid.",
+      "urlValid": "The {{provider}} URL is valid.",
+      "urlMissing": "A URL is required for {{provider}}.",
+      "urlInvalid": "The configured {{provider}} URL is invalid.",
+      "baseUrlMissing": "A base URL is required for {{provider}}.",
+      "baseUrlInvalid": "The configured {{provider}} base URL is invalid.",
+      "dashboardRootMapped": "The dashboard root is mapped to the gateway endpoint.",
+      "healthUnreachable": "The {{provider}} health endpoint could not be reached.",
+      "loopbackHttpAllowed": "Plain HTTP is allowed for a loopback address.",
+      "plainHttpRemoteDenied": "Plain HTTP connections to remote hosts are blocked.",
+      "plainHttpRemoteUnsafeAllowed": "An unsafe setting allows plain HTTP connections to remote hosts.",
+      "plaintextRemoteWebSocket": "A remote WebSocket connection is using an unencrypted protocol.",
+      "probeChallengeOnly": "{{provider}} responded with an authentication challenge.",
+      "providerDetected": "Provider {{provider}} was detected.",
+      "providerMismatch": "The configured provider does not match {{provider}}.",
+      "providerRuntimeConfig": "Runtime configuration for {{provider}} was found.",
+      "providerUnknown": "The configured provider could not be identified.",
+      "providerUnsupported": "{{provider}} is not supported in this environment.",
+      "defaultModelConfigured": "A default {{provider}} model is configured.",
+      "customProviderConfigured": "A custom {{provider}} provider is configured.",
+      "pythonMissing": "Python is required for {{provider}} but was not found.",
+      "pythonOutdated": "The Python version for {{provider}} is too old.",
+      "cliMissing": "The {{provider}} command was not found.",
+      "remoteProbeUnsupported": "Remote environment checks are not supported for {{provider}}.",
+      "commandSkipped": "The {{provider}} command check was skipped.",
+      "environmentUnprepared": "The {{provider}} environment is not ready for a test.",
+      "probeCleanupIncomplete": "The {{provider}} check finished, but temporary files could not be fully cleaned up.",
+      "packageInstallFailed": "The {{provider}} package could not be installed.",
+      "versionUnknown": "The {{provider}} version could not be determined.",
+      "engineUnavailable": "The selected adapter execution engine is unavailable.",
+      "headlessPermissionsEnabled": "Headless mode is configured to skip interactive permission prompts for {{provider}}.",
+      "runtimePackageMissing": "The selected runtime package is not installed."
     },
     "providerNames": {
       "claude": "Claude CLI",
@@ -2369,5 +2425,67 @@
     "retrying": "Retrying…",
     "loading": "Loading",
     "updatingPaused": "Updating paused while reconnecting…"
-  }
+  },
+  "runtimeTestCard": {
+    "runtimeMissing": "Runtime missing",
+    "ariaLabel": "Runtime test",
+    "details": "Test details",
+    "metadataIdle": "Verify your saved token, runtime installation, and selected model without sending a model prompt.",
+    "metadataRunning": "Checking the saved token, runtime, and selected model…",
+    "connection": {
+      "idle": {
+        "title": "Test your agent",
+        "description": "Check that your runtime and model can respond.",
+        "action": "Run test"
+      },
+      "running": {
+        "title": "Testing connection",
+        "description": "Checking the runtime and waiting for a model response…",
+        "action": "Testing…"
+      },
+      "pass": {
+        "title": "Connection successful",
+        "description": "Your runtime checks passed. Review the details below.",
+        "action": "Test again"
+      },
+      "warn": {
+        "title": "Connection needs attention",
+        "description": "Review the test details before running your agent.",
+        "action": "Test again"
+      },
+      "fail": {
+        "title": "Couldn't connect",
+        "description": "Check your model and provider connection, then try again.",
+        "action": "Retry test"
+      }
+    },
+    "prerequisites": {
+      "idle": {
+        "title": "Check prerequisites",
+        "description": "Check instance settings and public connection configuration.",
+        "action": "Check setup"
+      },
+      "running": {
+        "title": "Checking prerequisites",
+        "description": "Checking instance settings and public connection configuration…",
+        "action": "Checking…"
+      },
+      "pass": {
+        "title": "Setup checks passed",
+        "description": "Review the setup details before assigning work.",
+        "action": "Check again"
+      },
+      "warn": {
+        "title": "Pairing required",
+        "description": "Create this agent, then pair it and verify event delivery.",
+        "action": "Check again"
+      },
+      "fail": {
+        "title": "Prerequisite check failed",
+        "description": "Review the setup details and retry.",
+        "action": "Retry check"
+      }
+    }
+  },
+  "runtimePackageMissing": "The selected runtime package is not installed."
 }

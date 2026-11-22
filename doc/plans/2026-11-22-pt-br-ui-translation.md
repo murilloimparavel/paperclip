@@ -57,8 +57,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
     - [x] Traduzir os campos específicos dos adaptadores e placeholders em linguagem natural, preservando exemplos técnicos.
     - [x] Revisar campos dos adaptadores OpenCode e Process que não estavam usando as chaves existentes do catálogo.
     - [x] Traduzir ações e erros locais restantes do formulário de configuração e aprimoramento do executor.
-    - [x] Traduzir códigos conhecidos de teste do adaptador e avisos de opções de executor compartilhados entre criação, edição e onboarding.
+    - [x] Traduzir os 172 códigos de teste estáveis encontrados nos adaptadores e avisos de opções de executor compartilhados entre criação, edição e onboarding.
     - [ ] Traduzir/revisar mensagens livres, dicas e resumos legíveis fornecidos dinamicamente pela API.
+  - [x] Traduzir o cartão compartilhado de teste do executor e os resultados apresentados no onboarding.
     - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
     - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
   - [ ] Validar visualmente a criação em pt-BR.
