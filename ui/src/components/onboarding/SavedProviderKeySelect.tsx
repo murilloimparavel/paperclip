@@ -1,4 +1,5 @@
 import { aiConnectionsApi } from "@/api/ai-connections";
+import { t } from "@/i18n";
 import type { AiProvider } from "@paperclipai/shared";
 import { useQuery } from "@tanstack/react-query";
 import { agentsApi } from "@/api/agents";
@@ -87,9 +88,9 @@ export function SavedProviderKeySelect({
     <div className="space-y-2">
       {options.length > 0 && (
         <label className="block space-y-2 text-sm">
-          <span>{kind === "api" ? "API key" : "Subscription"}</span>
+          <span>{kind === "api" ? t("modelConnection.apiKey") : t("modelConnection.subscription")}</span>
           <select
-            aria-label={kind === "api" ? "Saved API key" : "Saved subscription"}
+            aria-label={kind === "api" ? t("agentProviderConnection.savedApiKey") : t("agentProviderConnection.savedSubscription")}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             value={value}
             onChange={(event) => onChange(event.target.value)}
@@ -102,8 +103,8 @@ export function SavedProviderKeySelect({
             ))}
             <option value="">
               {kind === "api"
-                ? "Enter a new API key"
-                : "Sign in to another account"}
+                ? t("agentProviderConnection.enterNewApiKey")
+                : t("agentProviderConnection.signInAnotherAccount")}
             </option>
           </select>
         </label>
