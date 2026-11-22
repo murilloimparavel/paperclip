@@ -47,7 +47,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [ ] Concluir a tradução de `AgentConfigForm`.
     - [x] Traduzir as dicas de ajuda do formulário, identidade, ambiente e seção de executor.
     - [x] Preservar placeholders de templates dentro das dicas e placeholders de interpolação i18next.
-    - [ ] Traduzir configuração avançada, políticas de execução, modelos e demais ações do formulário.
+    - [x] Traduzir opções avançadas, políticas de execução, estados do seletor de modelos e depuração.
+    - [ ] Traduzir os campos específicos dos adaptadores e revisar todas as ações restantes do formulário.
     - [ ] Traduzir o painel OAuth embutido e revisar os fluxos de conexão.
   - [ ] Validar visualmente a criação em pt-BR.
 - Próximo depois da criação: telas de detalhes, abas, ferramentas, skills, histórico e custos do agente.
