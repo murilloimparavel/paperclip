@@ -404,6 +404,26 @@ describe("IssuesList", () => {
     }
   });
 
+  it("renders the legacy task list in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableStreamlinedUi: false });
+    const { root, queryClient } = renderWithQueryClient(
+      <IssuesList issues={[]} agents={[]} projects={[]} viewStateKey="paperclip:pt-br-legacy-list" onUpdateIssue={() => undefined} />,
+      container,
+    );
+    try {
+      await waitForAssertion(() => {
+        expect(container.querySelector('input[aria-label="Pesquisar tarefas"]')).not.toBeNull();
+        expect(container.querySelector('[role="group"][aria-label="Modo de visualização"]')).not.toBeNull();
+        expect(container.textContent).toContain("Nenhuma tarefa corresponde aos filtros ou à busca atual.");
+      });
+      expect(container.querySelector('button[aria-label="Visualização em lista"]')).not.toBeNull();
+    } finally {
+      act(() => root.unmount());
+      queryClient.clear();
+    }
+  });
+
   it.each([[true, true], [true, false], [false, true], [false, false]])("defaults task and subtask lists to newest updates (streamlined=%s, nesting=%s)", async (streamlined, nesting) => {
     mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableStreamlinedUi: streamlined });
     const items = [
