@@ -1049,6 +1049,27 @@
     "fileEditor": "Instruction file editor",
     "emptyFile": "This instruction file is empty."
   },
+  "agentRuns": {
+    "source": {
+      "timer": "Timer",
+      "assignment": "Assignment",
+      "onDemand": "On-demand",
+      "automation": "Automation"
+    },
+    "usageUnavailable": "Usage and cost unavailable",
+    "loading": "Loading run…",
+    "unavailable": "This run is unavailable for this agent.",
+    "tryAgain": "Try again",
+    "noneYet": "No runs yet.",
+    "backToRuns": "Back to runs",
+    "agentStorageWarning": "Agent storage warning",
+    "fileSyncFailed": "Agent file sync failed for this run",
+    "input": "Input",
+    "output": "Output",
+    "cached": "Cached",
+    "cost": "Cost",
+    "unavailableMetric": "Unavailable"
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "You left this agent. It no longer appears in your sidebar.",
     "dismissMembershipNotice": "Dismiss agent membership notice",

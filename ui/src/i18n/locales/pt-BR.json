@@ -1049,6 +1049,27 @@
     "fileEditor": "Editor do arquivo de instruções",
     "emptyFile": "Este arquivo de instruções está vazio."
   },
+  "agentRuns": {
+    "source": {
+      "timer": "Agendador",
+      "assignment": "Atribuição",
+      "onDemand": "Sob demanda",
+      "automation": "Automação"
+    },
+    "usageUnavailable": "Uso e custo indisponíveis",
+    "loading": "Carregando execução…",
+    "unavailable": "Esta execução não está disponível para este agente.",
+    "tryAgain": "Tentar novamente",
+    "noneYet": "Ainda não há execuções.",
+    "backToRuns": "Voltar às execuções",
+    "agentStorageWarning": "Aviso de armazenamento do agente",
+    "fileSyncFailed": "Falha ao sincronizar os arquivos do agente nesta execução",
+    "input": "Entrada",
+    "output": "Saída",
+    "cached": "Em cache",
+    "cost": "Custo",
+    "unavailableMetric": "Indisponível"
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "Você deixou este agente. Ele não aparece mais na sua barra lateral.",
     "dismissMembershipNotice": "Dispensar aviso de participação no agente",

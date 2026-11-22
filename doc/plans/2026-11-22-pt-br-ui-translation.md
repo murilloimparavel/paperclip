@@ -101,6 +101,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir recuperação/comparação de alterações preservadas, revisão de arquivo e estados de salvamento.
   - [x] Validar catálogos, testes do editor e typecheck da UI.
   - [ ] Mapear mensagens dinâmicas de API e avisos do conjunto, que ainda podem chegar em inglês.
+- Lista de execuções do agente:
+  - [x] Traduzir origens, carregamento, indisponibilidade, estado vazio, navegação e métricas de uso.
+  - [x] Traduzir títulos de avisos de armazenamento e sincronização de arquivos.
+  - [ ] Cobrir detalhes completos da execução e variantes `production`.
 - Navegação de detalhes do agente:
   - [x] Traduzir grupos, abas, rótulos acessíveis, breadcrumbs e nomes de rotas legadas.
   - [x] Preservar os segmentos e URLs das rotas.
