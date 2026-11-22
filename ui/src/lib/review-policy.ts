@@ -1,5 +1,6 @@
 import { UserCheck, UserMinus, type LucideIcon } from "lucide-react";
 import { ISSUE_REVIEW_POLICIES, type IssueReviewPolicy } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Copy for an issue's `reviewPolicy` (PAP-16506 P4).
@@ -29,26 +30,10 @@ export interface IssueReviewPolicyBadge {
 }
 
 /** Only the constrained policies are shown; `anyone` is the silent default. */
-const BADGES: Partial<Record<IssueReviewPolicy, IssueReviewPolicyBadge>> = {
-  not_creator: {
-    value: "not_creator",
-    label: "Anyone else",
-    description: "Anyone except whoever asked for the review can approve it.",
-    Icon: UserMinus,
-  },
-  human_only: {
-    value: "human_only",
-    label: "Human only",
-    description: "Only a person can approve this review. Agents cannot give the verdict.",
-    Icon: UserCheck,
-  },
-};
-
 /** Mid-sentence wording for activity lines and field-change receipts. */
-const VALUE_LABELS: Record<IssueReviewPolicy, string> = {
-  anyone: "anyone",
-  not_creator: "anyone else",
-  human_only: "human only",
+const BADGE_ICONS: Partial<Record<IssueReviewPolicy, LucideIcon>> = {
+  not_creator: UserMinus,
+  human_only: UserCheck,
 };
 
 /**
@@ -59,7 +44,14 @@ export function issueReviewPolicyBadge(
   policy: IssueReviewPolicy | null | undefined,
 ): IssueReviewPolicyBadge | null {
   if (typeof policy !== "string") return null;
-  return BADGES[policy as IssueReviewPolicy] ?? null;
+  const Icon = BADGE_ICONS[policy as IssueReviewPolicy];
+  if (!Icon) return null;
+  return {
+    value: policy as IssueReviewPolicy,
+    label: t(`reviewPolicy.${policy}.label`),
+    description: t(`reviewPolicy.${policy}.description`),
+    Icon,
+  };
 }
 
 /**
@@ -67,10 +59,15 @@ export function issueReviewPolicyBadge(
  * cleared column must read "anyone" rather than "none".
  */
 export function formatReviewPolicyValue(value: unknown): string {
-  if (value === null || value === undefined) return VALUE_LABELS.anyone;
-  if (typeof value !== "string") return VALUE_LABELS.anyone;
+  if (value === null || value === undefined) return t("reviewPolicy.anyone");
+  if (typeof value !== "string") return t("reviewPolicy.anyone");
   // Forward-compatible: a policy this build does not know reads as itself.
-  return VALUE_LABELS[value as IssueReviewPolicy] ?? value.replace(/_/g, " ");
+  if (value === "anyone") return t("reviewPolicy.anyone");
+  if ((ISSUE_REVIEW_POLICIES as readonly string[]).includes(value)) {
+    const label = t(`reviewPolicy.${value}.label`);
+    return label.charAt(0).toLocaleLowerCase() + label.slice(1);
+  }
+  return value.replace(/_/g, " ");
 }
 
 /**

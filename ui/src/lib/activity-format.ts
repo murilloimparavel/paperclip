@@ -432,7 +432,7 @@ function formatIssueUpdatedAction(details: ActivityDetails, options: ActivityFor
   if (details.reviewPolicy !== undefined) {
     // `null` is the default ("anyone can approve"), so it must not read as
     // "changed the review policy to none" (PAP-16506).
-    parts.push(`changed who can approve to ${formatReviewPolicyValue(details.reviewPolicy)}`);
+    parts.push(t("auditFeed.dynamicVerbs.reviewPolicyChanged", { policy: formatReviewPolicyValue(details.reviewPolicy) }));
   }
   if (details.title !== undefined) parts.push("updated the title");
   if (details.description !== undefined) parts.push("updated the description");

@@ -2072,7 +2072,8 @@
       "statusChangedFromTo": "alterou o status de {{from}} para {{to}} em",
       "statusChangedTo": "alterou o status para {{to}} em",
       "priorityChangedFromTo": "alterou a prioridade de {{from}} para {{to}} em",
-      "priorityChangedTo": "alterou a prioridade para {{to}} em"
+      "priorityChangedTo": "alterou a prioridade para {{to}} em",
+      "reviewPolicyChanged": "alterou quem pode aprovar para {{policy}}"
     },
     "values": {
       "backlog": "fila",
@@ -2124,6 +2125,17 @@
       "sessionCreated": "abriu uma sessão do aplicativo para",
       "sessionRejected": "teve a abertura da sessão do aplicativo bloqueada para",
       "discovery": "identificou ações do aplicativo para"
+    }
+  },
+  "reviewPolicy": {
+    "anyone": "qualquer pessoa",
+    "not_creator": {
+      "label": "Qualquer pessoa, exceto quem solicitou",
+      "description": "Qualquer pessoa, exceto quem solicitou a revisão, pode aprová-la."
+    },
+    "human_only": {
+      "label": "Somente uma pessoa",
+      "description": "Somente uma pessoa pode aprovar esta revisão. Agentes não podem decidir."
     }
   }
 }

@@ -139,6 +139,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Feed de auditoria:
   - [x] Traduzir filtros, escopos, estados vazios, exportação, mensagens de acesso, nomes de atores e fallbacks de entidades.
   - [x] Traduzir rótulos e verbos dos eventos conhecidos, decisões de revisão, interações e mudanças de status/prioridade.
+  - [x] Traduzir valores de políticas de revisão e textos das regras compartilhadas entre auditoria e tarefas.
   - [x] Validar catálogos, testes do feed e typecheck da UI.
-  - [ ] Traduzir descrições compostas de alterações estruturadas, valores de políticas de revisão e mensagens de eventos futuros/desconhecidos.
+  - [ ] Traduzir descrições compostas de alterações estruturadas e mensagens de eventos futuros/desconhecidos.
+- Política de revisão compartilhada:
+  - [x] Traduzir badges, descrições acessíveis e valores usados nos recibos de alteração.
+  - [x] Validar os consumidores da política, formatação de auditoria e catálogos.
 - Em andamento: auditoria de ações e eventos, conteúdo de instruções e revisão visual das rotas de detalhe.

@@ -2072,7 +2072,8 @@
       "statusChangedFromTo": "changed status from {{from}} to {{to}} on",
       "statusChangedTo": "changed status to {{to}} on",
       "priorityChangedFromTo": "changed priority from {{from}} to {{to}} on",
-      "priorityChangedTo": "changed priority to {{to}} on"
+      "priorityChangedTo": "changed priority to {{to}} on",
+      "reviewPolicyChanged": "changed who can approve to {{policy}}"
     },
     "values": {
       "backlog": "backlog",
@@ -2124,6 +2125,17 @@
       "sessionCreated": "opened an app session for",
       "sessionRejected": "was blocked from opening an app session for",
       "discovery": "discovered app actions for"
+    }
+  },
+  "reviewPolicy": {
+    "anyone": "anyone",
+    "not_creator": {
+      "label": "Anyone else",
+      "description": "Anyone except whoever asked for the review can approve it."
+    },
+    "human_only": {
+      "label": "Human only",
+      "description": "Only a person can approve this review. Agents cannot give the verdict."
     }
   }
 }
