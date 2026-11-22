@@ -2073,7 +2073,14 @@
       "statusChangedTo": "changed status to {{to}} on",
       "priorityChangedFromTo": "changed priority from {{from}} to {{to}} on",
       "priorityChangedTo": "changed priority to {{to}} on",
-      "reviewPolicyChanged": "changed who can approve to {{policy}}"
+      "reviewPolicyChanged": "changed who can approve to {{policy}}",
+      "assignedToVerb": "made {{name}} responsible for the task",
+      "assignedToAction": "made {{name}} responsible for the task",
+      "assignmentCleared": "cleared the responsible",
+      "titleChangedVerb": "updated the title on",
+      "titleChangedAction": "updated the title",
+      "descriptionChangedVerb": "updated the description on",
+      "descriptionChangedAction": "updated the description"
     },
     "values": {
       "backlog": "backlog",
@@ -2125,6 +2132,14 @@
       "sessionCreated": "opened an app session for",
       "sessionRejected": "was blocked from opening an app session for",
       "discovery": "discovered app actions for"
+    },
+    "plan": {
+      "created": "created {{count}} new",
+      "reused": "reused {{count}} existing",
+      "requested": "{{count}} requested",
+      "completedWithSummary": "decomposition completed ({{summary}})",
+      "completed": "decomposition completed",
+      "inFlightWithSummary": "decomposition in flight ({{summary}})"
     }
   },
   "reviewPolicy": {

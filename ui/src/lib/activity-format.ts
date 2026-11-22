@@ -355,17 +355,17 @@ function formatAcceptedPlanDecompositionDetail(details: ActivityDetails): string
   const newlyCreated = readStringArrayLength(details.newlyCreatedChildIssueIds);
   const reused = Math.max(0, totalChildren - newlyCreated);
   const parts: string[] = [];
-  if (newlyCreated > 0) parts.push(`created ${newlyCreated} new`);
-  if (reused > 0) parts.push(`reused ${reused} existing`);
-  if (parts.length === 0 && requested !== null) parts.push(`${requested} requested`);
+  if (newlyCreated > 0) parts.push(t("auditFeed.plan.created", { count: newlyCreated }));
+  if (reused > 0) parts.push(t("auditFeed.plan.reused", { count: reused }));
+  if (parts.length === 0 && requested !== null) parts.push(t("auditFeed.plan.requested", { count: requested }));
   const summary = parts.length > 0 ? parts.join(", ") : null;
-  if (status === "completed" && summary) return `decomposition completed (${summary})`;
-  if (status === "completed") return "decomposition completed";
-  if (status === "in_flight" && summary) return `decomposition in flight (${summary})`;
+  if (status === "completed" && summary) return t("auditFeed.plan.completedWithSummary", { summary });
+  if (status === "completed") return t("auditFeed.plan.completed");
+  if (status === "in_flight" && summary) return t("auditFeed.plan.inFlightWithSummary", { summary });
   return summary;
 }
 
-function formatIssueUpdatedVerb(details: ActivityDetails): string | null {
+function formatIssueUpdatedVerb(details: ActivityDetails, options: ActivityFormatOptions = {}): string | null {
   if (!details) return null;
   const previous = asRecord(details._previous) ?? {};
   if (details.status !== undefined) {
@@ -381,6 +381,17 @@ function formatIssueUpdatedVerb(details: ActivityDetails): string | null {
       ? t("auditFeed.dynamicVerbs.priorityChangedFromTo", { from: translateActivityValue(from), to: translateActivityValue(details.priority) })
       : t("auditFeed.dynamicVerbs.priorityChangedTo", { to: translateActivityValue(details.priority) });
   }
+  if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
+    const assigneeName = formatAssigneeName(details, options);
+    return assigneeName
+      ? t("auditFeed.dynamicVerbs.assignedToVerb", { name: assigneeName })
+      : t("auditFeed.dynamicVerbs.assignmentCleared");
+  }
+  if (details.reviewPolicy !== undefined) {
+    return t("auditFeed.dynamicVerbs.reviewPolicyChanged", { policy: formatReviewPolicyValue(details.reviewPolicy) });
+  }
+  if (details.title !== undefined) return t("auditFeed.dynamicVerbs.titleChangedVerb");
+  if (details.description !== undefined) return t("auditFeed.dynamicVerbs.descriptionChangedVerb");
   return null;
 }
 
@@ -427,15 +438,17 @@ function formatIssueUpdatedAction(details: ActivityDetails, options: ActivityFor
   }
   if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
     const assigneeName = formatAssigneeName(details, options);
-    parts.push(assigneeName ? `made ${assigneeName} responsible for the task` : "cleared the responsible");
+    parts.push(assigneeName
+      ? t("auditFeed.dynamicVerbs.assignedToAction", { name: assigneeName })
+      : t("auditFeed.dynamicVerbs.assignmentCleared"));
   }
   if (details.reviewPolicy !== undefined) {
     // `null` is the default ("anyone can approve"), so it must not read as
     // "changed the review policy to none" (PAP-16506).
     parts.push(t("auditFeed.dynamicVerbs.reviewPolicyChanged", { policy: formatReviewPolicyValue(details.reviewPolicy) }));
   }
-  if (details.title !== undefined) parts.push("updated the title");
-  if (details.description !== undefined) parts.push("updated the description");
+  if (details.title !== undefined) parts.push(t("auditFeed.dynamicVerbs.titleChangedAction"));
+  if (details.description !== undefined) parts.push(t("auditFeed.dynamicVerbs.descriptionChangedAction"));
 
   return parts.length > 0 ? parts.join(", ") : null;
 }
@@ -505,7 +518,7 @@ export function formatActivityVerb(
   }
 
   if (action === "issue.updated") {
-    const issueUpdatedVerb = formatIssueUpdatedVerb(details);
+    const issueUpdatedVerb = formatIssueUpdatedVerb(details, options);
     if (issueUpdatedVerb) return issueUpdatedVerb;
   }
 

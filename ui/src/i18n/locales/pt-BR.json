@@ -2073,7 +2073,14 @@
       "statusChangedTo": "alterou o status para {{to}} em",
       "priorityChangedFromTo": "alterou a prioridade de {{from}} para {{to}} em",
       "priorityChangedTo": "alterou a prioridade para {{to}} em",
-      "reviewPolicyChanged": "alterou quem pode aprovar para {{policy}}"
+      "reviewPolicyChanged": "alterou quem pode aprovar para {{policy}}",
+      "assignedToVerb": "definiu {{name}} como responsável por",
+      "assignedToAction": "definiu {{name}} como responsável pela tarefa",
+      "assignmentCleared": "removeu a pessoa responsável",
+      "titleChangedVerb": "alterou o título de",
+      "titleChangedAction": "alterou o título",
+      "descriptionChangedVerb": "alterou a descrição de",
+      "descriptionChangedAction": "alterou a descrição"
     },
     "values": {
       "backlog": "fila",
@@ -2125,6 +2132,14 @@
       "sessionCreated": "abriu uma sessão do aplicativo para",
       "sessionRejected": "teve a abertura da sessão do aplicativo bloqueada para",
       "discovery": "identificou ações do aplicativo para"
+    },
+    "plan": {
+      "created": "criou {{count}} nova(s)",
+      "reused": "reutilizou {{count}} existente(s)",
+      "requested": "{{count}} solicitada(s)",
+      "completedWithSummary": "divisão do plano concluída ({{summary}})",
+      "completed": "divisão do plano concluída",
+      "inFlightWithSummary": "divisão do plano em andamento ({{summary}})"
     }
   },
   "reviewPolicy": {
