@@ -1343,8 +1343,19 @@
   "budgets": {
     "lifetimeBudget": "Lifetime budget",
     "monthlyUtcBudget": "Monthly UTC budget",
-    "scope": { "agent": "Agent", "project": "Project", "company": "Organization", "organization": "Organization" },
-    "status": { "ok": "Healthy", "healthy": "Healthy", "warning": "Warning", "hard_stop": "Hard stop", "paused": "Paused" },
+    "scope": {
+      "agent": "Agent",
+      "project": "Project",
+      "company": "Organization",
+      "organization": "Organization"
+    },
+    "status": {
+      "ok": "Healthy",
+      "healthy": "Healthy",
+      "warning": "Warning",
+      "hard_stop": "Hard stop",
+      "paused": "Paused"
+    },
     "reservePerRun": "Reserve per run (USD)",
     "validNonNegativeAmount": "Enter a valid amount of zero or more.",
     "reserveHelp": "An estimate held before each run starts. Zero disables the estimate. Actual provider charges may exceed it.",
@@ -1749,5 +1760,37 @@
     "actions": "Actions for {{label}}",
     "collapseSection": "Collapse {{label}}",
     "expandSection": "Expand {{label}}"
+  },
+  "auditRuns": {
+    "runs": "Runs",
+    "routineRuns": "Routine runs",
+    "routineRun": "Routine run",
+    "description": "Recent agent executions across the organization. Open a run to inspect its transcript, output, and task context.",
+    "routineRunsDescription": "Executions created by this routine, newest first.",
+    "filters": "Audit filters",
+    "agent": "Agent",
+    "allAgents": "All agents",
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "clearFilters": "Clear filters",
+    "loadingRuns": "Loading runs…",
+    "loadingRoutineRuns": "Loading routine runs…",
+    "loadRunsAction": "load runs",
+    "loadRoutineRunsAction": "load routine runs",
+    "noRuns": "No runs yet.",
+    "noRunsMatch": "No runs match these filters.",
+    "noRoutineRuns": "No routine runs yet.",
+    "unknownAgent": "Unknown agent",
+    "recentRuns": "Recent runs",
+    "showingRuns": "Showing the {{count}} most recent runs.",
+    "showingRoutineRuns": "Showing the {{count}} most recent routine runs.",
+    "sourceRun": "{{source}} run",
+    "sources": {
+      "heartbeat": "heartbeat",
+      "manual": "manual",
+      "scheduled": "scheduled",
+      "issue": "task",
+      "routine": "routine"
+    }
   }
 }

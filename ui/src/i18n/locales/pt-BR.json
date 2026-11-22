@@ -1343,8 +1343,19 @@
   "budgets": {
     "lifetimeBudget": "Orçamento vitalício",
     "monthlyUtcBudget": "Orçamento mensal (UTC)",
-    "scope": { "agent": "Agente", "project": "Projeto", "company": "Organização", "organization": "Organização" },
-    "status": { "ok": "Em dia", "healthy": "Em dia", "warning": "Alerta", "hard_stop": "Bloqueado", "paused": "Pausado" },
+    "scope": {
+      "agent": "Agente",
+      "project": "Projeto",
+      "company": "Organização",
+      "organization": "Organização"
+    },
+    "status": {
+      "ok": "Em dia",
+      "healthy": "Em dia",
+      "warning": "Alerta",
+      "hard_stop": "Bloqueado",
+      "paused": "Pausado"
+    },
     "reservePerRun": "Reservar por execução (USD)",
     "validNonNegativeAmount": "Informe um valor válido igual ou maior que zero.",
     "reserveHelp": "Uma estimativa reservada antes de cada execução. Zero desativa a estimativa. As cobranças reais do provedor podem ultrapassá-la.",
@@ -1749,5 +1760,37 @@
     "actions": "Ações de {{label}}",
     "collapseSection": "Recolher {{label}}",
     "expandSection": "Expandir {{label}}"
+  },
+  "auditRuns": {
+    "runs": "Execuções",
+    "routineRuns": "Execuções da rotina",
+    "routineRun": "Execução da rotina",
+    "description": "Execuções recentes dos agentes na organização. Abra uma execução para consultar a conversa, o resultado e o contexto da tarefa.",
+    "routineRunsDescription": "Execuções criadas por esta rotina, da mais recente para a mais antiga.",
+    "filters": "Filtros de auditoria",
+    "agent": "Agente",
+    "allAgents": "Todos os agentes",
+    "status": "Status",
+    "allStatuses": "Todos os status",
+    "clearFilters": "Limpar filtros",
+    "loadingRuns": "Carregando execuções…",
+    "loadingRoutineRuns": "Carregando execuções da rotina…",
+    "loadRunsAction": "carregar execuções",
+    "loadRoutineRunsAction": "carregar execuções da rotina",
+    "noRuns": "Ainda não há execuções.",
+    "noRunsMatch": "Nenhuma execução corresponde a estes filtros.",
+    "noRoutineRuns": "Ainda não há execuções desta rotina.",
+    "unknownAgent": "Agente desconhecido",
+    "recentRuns": "Execuções recentes",
+    "showingRuns": "Exibindo as {{count}} execuções mais recentes.",
+    "showingRoutineRuns": "Exibindo as {{count}} execuções mais recentes da rotina.",
+    "sourceRun": "Execução: {{source}}",
+    "sources": {
+      "heartbeat": "periódica",
+      "manual": "manual",
+      "scheduled": "agendada",
+      "issue": "tarefa",
+      "routine": "rotina"
+    }
   }
 }

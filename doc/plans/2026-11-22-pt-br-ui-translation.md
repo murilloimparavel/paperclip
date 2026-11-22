@@ -132,4 +132,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Descrições das abas do agente:
   - [x] Traduzir as descrições de ambiente, segredos, permissões, atividade, execuções e custos.
   - [x] Validar catálogo, testes da página de detalhe e typecheck da UI.
+- Auditoria e lista de execuções:
+  - [x] Traduzir a lista de execuções gerais e por rotina, seus filtros, estados vazios, carregamento e acessibilidade.
+  - [x] Traduzir fontes de execução conhecidas e manter os resumos fornecidos pelo servidor intactos.
+  - [x] Validar catálogos, testes da lista de auditoria e typecheck da UI.
+  - [ ] Traduzir o feed de auditoria, ações, filtros, exportação e descrições de entidades.
 - Em andamento: abas de atividade/execuções e auditoria do agente, conteúdo de instruções e revisão visual das rotas de detalhe.
