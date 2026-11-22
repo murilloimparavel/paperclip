@@ -20,6 +20,8 @@ describe("locale validation", () => {
     expect(t("organizationMenu.create")).toBe("Criar organização");
     expect(t("dashboardLive.title")).toBe("Execuções ativas de agentes");
     expect(t("dashboard.importedAgentPaused", { count: 2 })).toContain("2 agentes importados");
+    expect(t("agentConfig.help.promptTemplate")).toContain("{{ agent.name }}");
+    expect(t("agentConfig.help.workspaceBranchTemplate")).toContain("{{issue.identifier}}");
     expect(t("app.missing", { defaultValue: "Fallback" })).toBe("Fallback");
     expect(t("app.missing")).toBe("app.missing");
   });

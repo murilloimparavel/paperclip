@@ -9,6 +9,7 @@ import {
 import { FlyoutAppearanceProvider, FlyoutHeader, FlyoutOptions } from "./ui/flyout";
 import { Check, User } from "lucide-react";
 import { cn } from "../lib/utils";
+import { t } from "@/i18n";
 
 export function ReportsToPicker({
   agents,
@@ -16,8 +17,8 @@ export function ReportsToPicker({
   onChange,
   disabled = false,
   excludeAgentIds = [],
-  disabledEmptyLabel = "Reports to: N/A (CEO)",
-  chooseLabel = "Reports to...",
+  disabledEmptyLabel = t("reportsTo.disabledEmpty"),
+  chooseLabel = t("reportsTo.choose"),
   trigger,
   disabledAgentIds = [],
 }: {
@@ -55,7 +56,7 @@ export function ReportsToPicker({
           {unknownManager ? (
             <>
               <User className="h-3 w-3 shrink-0 text-muted-foreground" />
-              <span className="min-w-0 truncate text-muted-foreground">Unknown manager (stale ID)</span>
+              <span className="min-w-0 truncate text-muted-foreground">{t("reportsTo.unknownManagerStale")}</span>
             </>
           ) : current ? (
             <>
@@ -66,7 +67,9 @@ export function ReportsToPicker({
                   terminatedManager && "text-amber-900 dark:text-amber-200",
                 )}
               >
-                {`Reports to ${current.name}${terminatedManager ? " (terminated)" : ""}`}
+                {terminatedManager
+                  ? t("reportsTo.assignedTerminated", { name: current.name })
+                  : t("reportsTo.assigned", { name: current.name })}
               </span>
             </>
           ) : (
@@ -79,8 +82,8 @@ export function ReportsToPicker({
           )}
         </button>}
       </PopoverTrigger>
-      <PopoverContent className="w-64" align="start" aria-label="Choose manager">
-        <FlyoutHeader>Reports to</FlyoutHeader>
+      <PopoverContent className="w-64" align="start" aria-label={t("reportsTo.chooseManager")}>
+        <FlyoutHeader>{t("reportsTo.reportsTo")}</FlyoutHeader>
         <FlyoutOptions className="max-h-80 overflow-y-auto">
         <button
           type="button"
@@ -95,20 +98,20 @@ export function ReportsToPicker({
           }}
         >
           <User className="size-5 shrink-0" aria-hidden />
-          <span className="min-w-0 flex-1 text-left">No manager</span>
+          <span className="min-w-0 flex-1 text-left">{t("reportsTo.noManager")}</span>
           {value === null && <Check className="size-4 shrink-0" aria-hidden />}
         </button>
         {terminatedManager && (
           <div className="flex min-w-0 items-center gap-2 overflow-hidden px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-0.5">
             <AgentAvatar agent={current} size={16} className="shrink-0 h-3 w-3"/>
             <span className="min-w-0 truncate">
-              Current: {current.name} (terminated)
+              {t("reportsTo.currentTerminated", { name: current.name })}
             </span>
           </div>
         )}
         {unknownManager && (
           <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-0.5">
-            Saved manager is missing from this organization. Choose a new manager or clear.
+            {t("reportsTo.savedManagerMissing")}
           </div>
         )}
         {rows.map((a) => (
@@ -117,7 +120,7 @@ export function ReportsToPicker({
             key={a.id}
             aria-pressed={a.id === value}
             disabled={disabledAgentIds.includes(a.id)}
-            title={disabledAgentIds.includes(a.id) ? "Would create a reporting loop" : undefined}
+            title={disabledAgentIds.includes(a.id) ? t("reportsTo.wouldCreateLoop") : undefined}
             className={cn(
               "flex items-center gap-2 w-full min-w-0 px-2 py-1.5 text-xs rounded hover:bg-accent/50 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed",
               a.id === value && "bg-accent",
