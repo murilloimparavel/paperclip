@@ -104,6 +104,7 @@ import { useAdapterCapabilities } from "../adapters/use-adapter-capabilities";
 import { resolveForcedKubernetesEnvironment } from "../lib/forced-kubernetes-environment";
 import { codexReasoningEffortOptions } from "../lib/codex-reasoning-effort";
 import { t } from "@/i18n";
+import { adapterEnvironmentCheckMessage, configurationWarningText } from "@/lib/adapter-test-copy";
 
 /* ---- Create mode values ---- */
 
@@ -1650,7 +1651,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               {canQualifyRunnerUpgrade && runnerAvailability?.defaultRunner !== "paperclip" ? (
                 <p className="text-xs text-muted-foreground">{t("agentConfig.upgradeVerifyComputer")}</p>
               ) : null}
-              {upgradeWarnings.map(warning => <p key={warning.field} className="text-xs text-muted-foreground">{warning.message}</p>)}
+              {upgradeWarnings.map(warning => <p key={warning.field} className="text-xs text-muted-foreground">{configurationWarningText(warning)}</p>)}
               {upgradeEnvironmentChanged ? (
                 <p className="text-xs text-muted-foreground">{t("agentConfig.saveComputerFirst")}</p>
               ) : isDirty ? <p className="text-xs text-muted-foreground">{t("agentConfig.unsavedChangesIncluded")}</p> : null}
@@ -1666,7 +1667,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       {runnerUpgraded ? <p role="status" className="text-sm text-muted-foreground">{t("agentConfig.upgradedRunner")}</p> : null}
       {adapterType === "paperclip_runner" && upgradeWarnings.length > 0 ? (
         <div role="status" className="space-y-1 rounded-lg border border-border bg-muted/30 p-4">
-          {upgradeWarnings.map(warning => <p key={warning.field} className="text-sm text-muted-foreground">{warning.message}</p>)}
+          {upgradeWarnings.map(warning => <p key={warning.field} className="text-sm text-muted-foreground">{configurationWarningText(warning)}</p>)}
         </div>
       ) : null}
     <ConfigSections order={props.sectionOrder} hidden={props.hiddenSections} className={cn("relative", panels ? "agent-config-panels" : cards && "space-y-6")}>
@@ -4022,7 +4023,7 @@ export function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmen
               {check.level}
             </span>
             <span className="mx-1 opacity-60">·</span>
-            <span>{check.message}</span>
+            <span>{adapterEnvironmentCheckMessage(check)}</span>
             {check.detail && <span className="block opacity-75 break-all">({check.detail})</span>}
             {check.hint && <span className="block opacity-90 break-words">{t("agentConfig.hintPrefix")} {check.hint}</span>}
           </div>

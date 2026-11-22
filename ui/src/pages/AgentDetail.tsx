@@ -25,6 +25,7 @@ import { builtInAgentsApi, type BuiltInManagedResourceKind } from "../api/builtI
 import { companySkillsApi } from "../api/companySkills";
 import { heartbeatsApi } from "../api/heartbeats";
 import { runCancellationLabel } from "../lib/run-cancellation-label";
+import { configurationWarningMessages } from "../lib/configuration-warnings";
 import { stopFailedNativeRun } from "../lib/native-run-stop";
 import { instanceSettingsApi } from "../api/instanceSettings";
 import { ApiError } from "../api/client";
@@ -1678,8 +1679,8 @@ export function ConfigurationTab({
         || !syncAgentRouteAfterRename(queryClient, navigate, target, updated, urlTab ?? content)) {
         queryClient.invalidateQueries({ queryKey: queryKeys.agents.detail(target.urlKey) });
       }
-      pushToast({ title: "Agent saved", tone: updated.configurationWarnings?.length ? "warn" : "success",
-        body: updated.configurationWarnings?.map(warning => warning.message).join("\n") });
+      pushToast({ title: t("agentAdvanced.agentSaved"), tone: updated.configurationWarnings?.length ? "warn" : "success",
+        body: configurationWarningMessages(updated) ?? undefined });
     },
     onError: (err) => {
       setAwaitingRefreshAfterSave(false);

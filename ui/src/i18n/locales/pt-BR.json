@@ -1005,7 +1005,57 @@
       "testSettingsChanged": "As configurações do agente mudaram durante o teste. Execute o teste novamente.",
       "savedComputerVerifyFailed": "Não foi possível verificar o computador salvo. Execute o teste novamente."
     },
-    "extraArgsLabel": "Argumentos extras (separados por vírgula)"
+    "extraArgsLabel": "Argumentos extras (separados por vírgula)",
+    "testCheckMessages": {
+      "authMissing": "Este ambiente não tem uma autenticação válida para o adaptador.",
+      "loginRequired": "O {{provider}} precisa de autenticação. Entre na conta para continuar.",
+      "probeFailed": "A verificação do {{provider}} não foi concluída com sucesso.",
+      "probeTimedOut": "A verificação do {{provider}} excedeu o tempo limite.",
+      "probePassed": "A verificação do {{provider}} foi concluída com sucesso.",
+      "probeSkippedCustomCommand": "A verificação do {{provider}} foi ignorada porque há um comando personalizado configurado.",
+      "commandResolvable": "O comando configurado para {{provider}} está disponível.",
+      "commandUnresolvable": "Não foi possível localizar o comando configurado para {{provider}}.",
+      "cwdValid": "O diretório de trabalho está disponível.",
+      "cwdInvalid": "O diretório de trabalho não está disponível.",
+      "environmentTarget": "Destino de execução do ambiente",
+      "apiKeyMissing": "Nenhuma chave de API foi encontrada para {{provider}}.",
+      "apiKeyPresent": "Há uma chave de API configurada para {{provider}}.",
+      "modelsDiscovered": "Modelos encontrados para {{provider}}.",
+      "modelsEmpty": "Nenhum modelo foi encontrado para {{provider}}.",
+      "modelsDiscoveryFailed": "Não foi possível buscar os modelos de {{provider}}.",
+      "modelRequired": "É necessário informar um modelo para {{provider}}.",
+      "modelConfigured": "Há um modelo configurado para {{provider}}.",
+      "modelInvalid": "O modelo configurado para {{provider}} é inválido.",
+      "versionDetected": "A versão de {{provider}} foi identificada.",
+      "versionProbeFailed": "Não foi possível identificar a versão de {{provider}}.",
+      "versionProbeTimedOut": "A identificação da versão de {{provider}} excedeu o tempo limite.",
+      "gitCheckSkipped": "A verificação do repositório foi ignorada."
+    },
+    "providerNames": {
+      "claude": "Claude CLI",
+      "codex": "Codex CLI",
+      "cursor": "Cursor",
+      "cursor_cloud": "Cursor Cloud",
+      "gemini": "Gemini CLI",
+      "grok": "Grok CLI",
+      "hermes": "Hermes",
+      "openclaw_gateway": "OpenClaw Gateway",
+      "kimi": "Kimi CLI",
+      "opencode": "OpenCode",
+      "pi": "Pi"
+    },
+    "warningFields": {
+      "maxTurnsPerRun": "Máximo de turnos por execução",
+      "chrome": "Integração com Chrome",
+      "warmHandleIdleMs": "Tempo limite de sessão aquecida",
+      "acpWarmHandleIdleMs": "Tempo limite de sessão aquecida ACP"
+    },
+    "runnerOptionIgnored": "A opção {{field}} ({{fieldId}}) não tem suporte no Paperclip Runner e será ignorada. O agente ainda poderá executar.",
+    "testLevels": {
+      "info": "Informação",
+      "warn": "Aviso",
+      "error": "Erro"
+    }
   },
   "agentDetailDescription": {
     "runtime": "Como {{name}} executa tarefas: executor, modelo e ambiente.",

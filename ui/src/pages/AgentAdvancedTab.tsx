@@ -16,6 +16,7 @@ import { loadAgentConfiguration, type AgentConfigurationSnapshot } from "../lib/
 import { ConfigurationSaveInterrupted, planAgentConfiguration, saveAgentConfiguration, type ConfigurationReceipt } from "../lib/agent-configuration/save";
 import { compactAgentConfiguration } from "../lib/agent-configuration/compact";
 import { t } from "@/i18n";
+import { configurationWarningText } from "@/lib/adapter-test-copy";
 
 const editableYaml = (configuration: AgentConfigurationSnapshot) => serializeAgentConfigurationDocument(compactAgentConfiguration(configuration.document));
 
@@ -129,7 +130,7 @@ function ConfigurationEditor({ agent, initial, onDirtyChange, onSaved, onSavingC
       setReloadRequired(false);
       onSaved(configuration.agent);
       const warnings = configuration.agent.configurationWarnings;
-      pushToast({ title: t("agentAdvanced.agentSaved"), tone: warnings?.length ? "warn" : "success", body: warnings?.map(warning => warning.message).join("\n") });
+      pushToast({ title: t("agentAdvanced.agentSaved"), tone: warnings?.length ? "warn" : "success", body: warnings?.map(configurationWarningText).join("\n") });
     },
     onSettled: () => {
       operationPending.current = false;

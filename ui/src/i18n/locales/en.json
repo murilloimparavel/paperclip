@@ -1005,7 +1005,57 @@
       "testSettingsChanged": "Agent settings changed during the test. Run test again.",
       "savedComputerVerifyFailed": "Could not verify the saved computer. Run test again."
     },
-    "extraArgsLabel": "Extra args (comma-separated)"
+    "extraArgsLabel": "Extra args (comma-separated)",
+    "testCheckMessages": {
+      "authMissing": "This environment does not have ready authentication for this adapter.",
+      "loginRequired": "{{provider}} requires authentication. Sign in to continue.",
+      "probeFailed": "The {{provider}} check could not complete successfully.",
+      "probeTimedOut": "The {{provider}} check timed out.",
+      "probePassed": "The {{provider}} check completed successfully.",
+      "probeSkippedCustomCommand": "The {{provider}} check was skipped because a custom command is configured.",
+      "commandResolvable": "The configured {{provider}} command is available.",
+      "commandUnresolvable": "The configured {{provider}} command could not be found.",
+      "cwdValid": "The working directory is available.",
+      "cwdInvalid": "The working directory is unavailable.",
+      "environmentTarget": "Execution environment target",
+      "apiKeyMissing": "No API key was found for {{provider}}.",
+      "apiKeyPresent": "An API key is configured for {{provider}}.",
+      "modelsDiscovered": "Models were discovered for {{provider}}.",
+      "modelsEmpty": "No models were found for {{provider}}.",
+      "modelsDiscoveryFailed": "Could not discover models for {{provider}}.",
+      "modelRequired": "A model is required for {{provider}}.",
+      "modelConfigured": "A model is configured for {{provider}}.",
+      "modelInvalid": "The configured {{provider}} model is invalid.",
+      "versionDetected": "The {{provider}} version was detected.",
+      "versionProbeFailed": "Could not detect the {{provider}} version.",
+      "versionProbeTimedOut": "Detecting the {{provider}} version timed out.",
+      "gitCheckSkipped": "The repository check was skipped."
+    },
+    "providerNames": {
+      "claude": "Claude CLI",
+      "codex": "Codex CLI",
+      "cursor": "Cursor",
+      "cursor_cloud": "Cursor Cloud",
+      "gemini": "Gemini CLI",
+      "grok": "Grok CLI",
+      "hermes": "Hermes",
+      "openclaw_gateway": "OpenClaw Gateway",
+      "kimi": "Kimi CLI",
+      "opencode": "OpenCode",
+      "pi": "Pi"
+    },
+    "warningFields": {
+      "maxTurnsPerRun": "Max turns per run",
+      "chrome": "Chrome integration",
+      "warmHandleIdleMs": "Warm handle idle timeout",
+      "acpWarmHandleIdleMs": "ACP warm handle idle timeout"
+    },
+    "runnerOptionIgnored": "The {{field}} option ({{fieldId}}) is not supported by Paperclip Runner and is ignored. The agent can still run.",
+    "testLevels": {
+      "info": "Info",
+      "warn": "Warning",
+      "error": "Error"
+    }
   },
   "agentDetailDescription": {
     "runtime": "How {{name}} runs: harness, model and environment.",
