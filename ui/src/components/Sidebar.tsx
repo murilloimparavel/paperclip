@@ -52,6 +52,7 @@ import { PluginSlotOutlet } from "@/plugins/slots";
 import { PluginLauncherOutlet } from "@/plugins/launchers";
 import { SidebarCompanyMenu } from "./SidebarCompanyMenu";
 import { primarySidebarStyles } from "./primary-sidebar-styles";
+import { useTranslation } from "@/i18n";
 
 export function Sidebar({ children }: { children?: ReactNode }) {
   const { enabled } = useCoordinatorWorkspaceEnabled();
@@ -59,6 +60,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
 }
 
 function ClassicSidebar({ children }: { children?: ReactNode }) {
+  const { t } = useTranslation();
   const { openNewIssue } = useDialogActions();
   const { enabled: agentChatEnabled } = useAgentChatEnabled();
   const chatNavigation = useAgentChatNavigation();
@@ -187,7 +189,7 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
             className="flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <SquarePen className="h-4 w-4 shrink-0" />
-            <span className="truncate">New Task</span>
+            <span className="truncate">{t("sidebar.labels.New Task")}</span>
           </button>
           <SidebarNavItem to="/search" label="Search" icon={Search} />
           {responsibilitiesHome ? (

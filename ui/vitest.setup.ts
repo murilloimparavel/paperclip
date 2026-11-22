@@ -1,3 +1,9 @@
+import { i18n } from "@/i18n";
+
+// Keep existing UI behavior tests deterministic in English. Locale-specific
+// tests switch languages explicitly and restore this value afterwards.
+await i18n.changeLanguage("en");
+
 const storageEntries = new Map<string, string>();
 
 function installStorageMock(target: Record<string, unknown>) {
