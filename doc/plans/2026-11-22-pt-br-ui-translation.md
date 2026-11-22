@@ -28,10 +28,19 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 
 ## Andamento
 
-- Análise das alternativas `ancora-auto` e `MaxPaperclipPlugin` concluída. A implementação seguirá o i18next nativo do fork; os outros projetos ficam como referência terminológica.
+- Análise das alternativas `ancora-auto` e `MaxPaperclipPlugin` concluída. Vamos reaproveitar as traduções compatíveis como memória de tradução, revisar cada frase no contexto atual e manter a integração nativa via i18next.
+  - `ancora-auto` tem 299 pares no catálogo `ui/src/lib/i18n.ts`; o repositório declara MIT.
+  - `MaxPaperclipPlugin` tem 2.554 pares no dicionário atual; o `package.json` declara MIT e o autor como MaxVue contributors. O mecanismo DOM e as permissões do plugin não serão incorporados.
+  - Correspondências literais são pistas para revisão, não prova de que a string é texto visível ou de que a tradução serve sem ajuste.
 - Lote atual: roster de agentes nas variantes clássica e simplificada, filtros compartilhados e estados/labels.
   - [x] Traduzir toolbar, filtros, lista em lote, status e badges de ciclo de vida.
   - [x] Traduzir estados vazios, ações, hierarquia, acessibilidade e informações de ambiente nas variantes clássica e simplificada.
   - [x] Manter chaves e plurais compatíveis nos catálogos `en` e `pt-BR`.
   - [x] Validar catálogos e tipos da UI.
-- Próximo lote: formulários de criação/configuração e telas de detalhes do agente.
+- Criação de agente em andamento:
+  - [x] Traduzir a tela principal de setup, etapas, confirmação, campos do provedor e validações locais.
+  - [x] Traduzir dicas de login e mensagens de fallback do próprio fluxo.
+  - [ ] Traduzir o diálogo inicial de nome/escolha de adaptador e a conexão de provedor.
+  - [ ] Traduzir `AgentConfigForm` e revisar os fluxos de OAuth/modelos.
+  - [ ] Validar visualmente a criação em pt-BR.
+- Próximo depois da criação: telas de detalhes, abas, ferramentas, skills, histórico e custos do agente.
