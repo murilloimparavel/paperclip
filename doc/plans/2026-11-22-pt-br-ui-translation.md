@@ -138,6 +138,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Validar catálogos, testes da lista de auditoria e typecheck da UI.
 - Feed de auditoria:
   - [x] Traduzir filtros, escopos, estados vazios, exportação, mensagens de acesso, nomes de atores e fallbacks de entidades.
+  - [x] Traduzir rótulos e verbos dos eventos conhecidos, decisões de revisão, interações e mudanças de status/prioridade.
   - [x] Validar catálogos, testes do feed e typecheck da UI.
-  - [ ] Traduzir as descrições de eventos e verbos dinâmicos do feed.
+  - [ ] Traduzir descrições compostas de alterações estruturadas, valores de políticas de revisão e mensagens de eventos futuros/desconhecidos.
 - Em andamento: auditoria de ações e eventos, conteúdo de instruções e revisão visual das rotas de detalhe.

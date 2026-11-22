@@ -1,6 +1,7 @@
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
+import { t } from "@/i18n";
 
 type ActivityDetails = Record<string, unknown> | null | undefined;
 
@@ -258,7 +259,17 @@ function formatInteractionOutcomeLabel(action: string, details: ActivityDetails)
       : null;
   if (!table) return null;
   const kind = typeof details?.interactionKind === "string" ? details.interactionKind : null;
-  return kind ? table[kind] ?? null : null;
+  if (!kind || !table[kind]) return null;
+  const key = action.endsWith("accepted") ? "accepted" : "rejected";
+  return t(`auditFeed.interactionOutcomes.${key}.${kind}`, { defaultValue: table[kind] });
+}
+
+function activityVerb(action: string, fallback: string): string {
+  return t(`auditFeed.eventVerbs.${action}`, { defaultValue: fallback });
+}
+
+function activityLabel(action: string, fallback: string): string {
+  return t(`auditFeed.eventLabels.${action}`, { defaultValue: fallback });
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -294,17 +305,17 @@ function readIssueReferences(details: ActivityDetails, key: string): ActivityIss
 }
 
 function formatUserLabel(userId: string | null | undefined, options: ActivityFormatOptions = {}): string {
-  if (!userId || userId === "local-board") return "Board";
-  if (options.currentUserId && userId === options.currentUserId) return "You";
+  if (!userId || userId === "local-board") return t("auditFeed.board");
+  if (options.currentUserId && userId === options.currentUserId) return t("auditFeed.you");
   const profile = options.userProfileMap?.get(userId);
   if (profile) return profile.label;
-  return `user ${userId.slice(0, 5)}`;
+  return t("auditFeed.userIdFallback", { id: userId.slice(0, 5) });
 }
 
 function formatParticipantLabel(participant: ActivityParticipant, options: ActivityFormatOptions): string {
   if (participant.type === "agent") {
     const agentId = participant.agentId ?? "";
-    return options.agentMap?.get(agentId)?.name ?? "agent";
+    return options.agentMap?.get(agentId)?.name ?? t("auditFeed.actors.agent");
   }
   return formatUserLabel(participant.userId, options);
 }
@@ -313,7 +324,7 @@ function formatIssueReferenceLabel(reference: ActivityIssueReference): string {
   if (reference.identifier) return reference.identifier;
   if (reference.title) return reference.title;
   if (reference.id) return reference.id.slice(0, 8);
-  return "task";
+  return t("auditFeed.entities.task");
 }
 
 function formatChangedEntityLabel(
@@ -359,18 +370,24 @@ function formatIssueUpdatedVerb(details: ActivityDetails): string | null {
   const previous = asRecord(details._previous) ?? {};
   if (details.status !== undefined) {
     const from = previous.status;
-    const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
+    const to = translateActivityValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     return from
-      ? `changed status from ${humanizeValue(from)} to ${to} on`
-      : `changed status to ${to} on`;
+      ? t("auditFeed.dynamicVerbs.statusChangedFromTo", { from: translateActivityValue(from), to })
+      : t("auditFeed.dynamicVerbs.statusChangedTo", { to });
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     return from
-      ? `changed priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)} on`
-      : `changed priority to ${humanizeValue(details.priority)} on`;
+      ? t("auditFeed.dynamicVerbs.priorityChangedFromTo", { from: translateActivityValue(from), to: translateActivityValue(details.priority) })
+      : t("auditFeed.dynamicVerbs.priorityChangedTo", { to: translateActivityValue(details.priority) });
   }
   return null;
+}
+
+function translateActivityValue(value: unknown): string {
+  const fallback = humanizeValue(value);
+  if (typeof value !== "string") return fallback;
+  return t(`auditFeed.values.${value}`, { defaultValue: fallback });
 }
 
 function formatAssigneeName(details: ActivityDetails, options: ActivityFormatOptions): string | null {
@@ -393,19 +410,19 @@ function formatIssueUpdatedAction(details: ActivityDetails, options: ActivityFor
 
   if (details.status !== undefined) {
     const from = previous.status;
-    const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
+    const to = translateActivityValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     parts.push(
       from
-        ? `changed the status from ${humanizeValue(from)} to ${to}`
-        : `changed the status to ${to}`,
+        ? t("auditFeed.dynamicVerbs.statusActionFromTo", { from: translateActivityValue(from), to })
+        : t("auditFeed.dynamicVerbs.statusActionTo", { to }),
     );
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     parts.push(
       from
-        ? `changed the priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)}`
-        : `changed the priority to ${humanizeValue(details.priority)}`,
+        ? t("auditFeed.dynamicVerbs.priorityActionFromTo", { from: translateActivityValue(from), to: translateActivityValue(details.priority) })
+        : t("auditFeed.dynamicVerbs.priorityActionTo", { to: translateActivityValue(details.priority) }),
     );
   }
   if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
@@ -478,13 +495,13 @@ export function formatActivityVerb(
         : "an app action";
     const tool = rawTool.replace(/[._-]+/g, " ");
     const isTest = details?.source === "test";
-    if (action === "tool_gateway.call_completed") return `${isTest ? "tested" : "used"} ${tool} on`;
-    if (action === "tool_gateway.call_allowed") return `${isTest ? "started a test of" : "was allowed to use"} ${tool} on`;
-    if (action === "tool_gateway.call_denied") return `was blocked from using ${tool} on`;
-    if (action === "tool_gateway.approval_requested") return `asked to use ${tool} on`;
-    if (action === "tool_gateway.session_created") return "opened an app session for";
-    if (action === "tool_gateway.session_rejected") return "was blocked from opening an app session for";
-    if (action === "tool_gateway.discovery") return "discovered app actions for";
+    if (action === "tool_gateway.call_completed") return t(`auditFeed.gatewayVerbs.${isTest ? "tested" : "used"}`, { tool });
+    if (action === "tool_gateway.call_allowed") return t(`auditFeed.gatewayVerbs.${isTest ? "testAllowed" : "allowed"}`, { tool });
+    if (action === "tool_gateway.call_denied") return t("auditFeed.gatewayVerbs.denied", { tool });
+    if (action === "tool_gateway.approval_requested") return t("auditFeed.gatewayVerbs.approvalRequested", { tool });
+    if (action === "tool_gateway.session_created") return t("auditFeed.gatewayVerbs.sessionCreated");
+    if (action === "tool_gateway.session_rejected") return t("auditFeed.gatewayVerbs.sessionRejected");
+    if (action === "tool_gateway.discovery") return t("auditFeed.gatewayVerbs.discovery");
   }
 
   if (action === "issue.updated") {
@@ -495,11 +512,11 @@ export function formatActivityVerb(
   if (action === "issue.stalled_review_decided") {
     const decision = typeof details?.action === "string" ? details.action : null;
     const label = decision ? STALLED_REVIEW_DECISION_LABELS[decision] : null;
-    if (label) return `${label} on`;
+    if (label) return `${t(`auditFeed.reviewDecisions.${decision}`, { defaultValue: label })}${t("auditFeed.onSuffix")}`;
   }
 
   const outcomeLabel = formatInteractionOutcomeLabel(action, details);
-  if (outcomeLabel) return `${outcomeLabel} on`;
+  if (outcomeLabel) return `${outcomeLabel}${t("auditFeed.onSuffix")}`;
 
   const structuredChange = formatStructuredIssueChange({
     action,
@@ -509,7 +526,7 @@ export function formatActivityVerb(
   });
   if (structuredChange) return structuredChange;
 
-  return ACTIVITY_ROW_VERBS[action] ?? action.replace(/[._]/g, " ");
+  return activityVerb(action, ACTIVITY_ROW_VERBS[action] ?? action.replace(/[._]/g, " "));
 }
 
 export function formatIssueActivityAction(
@@ -538,7 +555,7 @@ export function formatIssueActivityAction(
   if (action === "issue.stalled_review_decided") {
     const decision = typeof details?.action === "string" ? details.action : null;
     const label = decision ? STALLED_REVIEW_DECISION_LABELS[decision] : null;
-    if (label) return label;
+    if (label) return t(`auditFeed.reviewDecisions.${decision}`, { defaultValue: label });
   }
 
   const outcomeLabel = formatInteractionOutcomeLabel(action, details);
@@ -548,7 +565,7 @@ export function formatIssueActivityAction(
     const serviceName = typeof details.serviceName === "string" && details.serviceName.trim()
       ? details.serviceName.trim()
       : null;
-    const base = ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+    const base = activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " "));
     return serviceName ? `${base} for ${serviceName}` : base;
   }
 
@@ -564,8 +581,8 @@ export function formatIssueActivityAction(
   ) {
     const key = typeof details.key === "string" ? details.key : "document";
     const title = typeof details.title === "string" && details.title ? ` (${details.title})` : "";
-    return `${ISSUE_ACTIVITY_LABELS[action] ?? action} ${key}${title}`;
+    return `${activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action)} ${key}${title}`;
   }
 
-  return ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+  return activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " "));
 }
