@@ -13,6 +13,7 @@ import {
 } from "../components/agent-config-primitives";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { ChevronDown } from "lucide-react";
+import { t } from "@/i18n";
 
 // ── Select field (extracted to keep hooks at component top level) ──────
 function SelectField({
@@ -31,7 +32,7 @@ function SelectField({
       <PopoverTrigger asChild>
         <button className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm hover:bg-accent/50 transition-colors w-full justify-between">
           <span className={!value ? "text-muted-foreground" : ""}>
-            {selectedOpt?.label ?? value ?? "Select..."}
+            {selectedOpt?.label ?? value ?? t("agentConfig.schemaConfig.select")}
           </span>
           <ChevronDown className="h-3 w-3 text-muted-foreground" />
         </button>
@@ -56,6 +57,15 @@ function SelectField({
 }
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
+
+function localizedSchemaFieldText(adapterType: string, field: ConfigFieldSchema) {
+  return {
+    label: t(`agentConfig.schemaConfig.fields.${adapterType}.${field.key}.label`, { defaultValue: field.label }),
+    hint: field.hint
+      ? t(`agentConfig.schemaConfig.fields.${adapterType}.${field.key}.hint`, { defaultValue: field.hint })
+      : undefined,
+  };
+}
 
 
 // ---------------------------------------------------------------------------
@@ -139,7 +149,7 @@ function ComboboxField({
           type="text"
           className="flex-1 rounded-l-md border border-r-0 border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40 focus:z-10"
           value={displayValue}
-          placeholder={placeholder ?? "Type or select..."}
+          placeholder={placeholder ?? t("agentConfig.schemaConfig.typeOrSelect")}
           onChange={(e) => {
             setFilter(e.target.value);
             if (!open) setOpen(true);
@@ -190,7 +200,7 @@ function ComboboxField({
             ))}
             {filter && filtered.length === 0 && (
               <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                Use &quot;{filter}&quot; as custom value (press Enter)
+                {t("agentConfig.schemaConfig.useAsCustomValue", { value: filter })}
               </div>
             )}
           </PopoverContent>
@@ -418,31 +428,39 @@ export function SchemaConfigFields({
           switch (field.type) {
             case "select": {
               const currentVal = String(readValue(field) ?? "");
+              const fieldText = localizedSchemaFieldText(adapterType, field);
+              const localizedOptions = (field.options ?? []).map((option) => ({
+                ...option,
+                label: t(`agentConfig.schemaConfig.options.${field.key}.${option.value}`, { defaultValue: option.label }),
+              }));
               return (
-                <Field key={field.key} label={field.label} hint={field.hint}>
+                <Field key={field.key} label={fieldText.label} hint={fieldText.hint}>
                   <SelectField
                     value={currentVal}
-                    options={field.options ?? []}
+                    options={localizedOptions}
                     onChange={(v) => writeValue(field, v)}
                   />
                 </Field>
               );
             }
 
-            case "toggle":
+            case "toggle": {
+              const fieldText = localizedSchemaFieldText(adapterType, field);
               return (
                 <ToggleField
                   key={field.key}
-                  label={field.label}
-                  hint={field.hint}
+                  label={fieldText.label}
+                  hint={fieldText.hint}
                   checked={readValue(field) === true}
                   onChange={(v) => writeValue(field, v)}
                 />
               );
+            }
 
-            case "number":
+            case "number": {
+              const fieldText = localizedSchemaFieldText(adapterType, field);
               return (
-                <Field key={field.key} label={field.label} hint={field.hint}>
+                <Field key={field.key} label={fieldText.label} hint={fieldText.hint}>
                   <DraftNumberInput
                     value={Number(readValue(field) ?? 0)}
                     onCommit={(v) => writeValue(field, v)}
@@ -451,10 +469,12 @@ export function SchemaConfigFields({
                   />
                 </Field>
               );
+            }
 
-            case "textarea":
+            case "textarea": {
+              const fieldText = localizedSchemaFieldText(adapterType, field);
               return (
-                <Field key={field.key} label={field.label} hint={field.hint}>
+                <Field key={field.key} label={fieldText.label} hint={fieldText.hint}>
                   <DraftTextarea
                     value={String(readValue(field) ?? "")}
                     onCommit={(v) => writeValue(field, v || undefined)}
@@ -462,6 +482,7 @@ export function SchemaConfigFields({
                   />
                 </Field>
               );
+            }
 
             case "combobox": {
               const currentVal = String(readValue(field) ?? "");
@@ -493,22 +514,24 @@ export function SchemaConfigFields({
                   }));
                 }
               }
+              const fieldText = localizedSchemaFieldText(adapterType, field);
               return (
-                <Field key={field.key} label={field.label} hint={field.hint}>
+                <Field key={field.key} label={fieldText.label} hint={fieldText.hint}>
                   <ComboboxField
                     value={currentVal}
                     options={comboboxOptions}
                     onChange={(v) => writeValue(field, v || undefined)}
-                    placeholder={field.hint}
+                    placeholder={fieldText.hint}
                   />
                 </Field>
               );
             }
 
             case "text":
-            default:
+            default: {
+              const fieldText = localizedSchemaFieldText(adapterType, field);
               return (
-                <Field key={field.key} label={field.label} hint={field.hint}>
+                <Field key={field.key} label={fieldText.label} hint={fieldText.hint}>
                   <DraftInput
                     value={String(readValue(field) ?? "")}
                     onCommit={(v) => writeValue(field, v || undefined)}
@@ -517,6 +540,7 @@ export function SchemaConfigFields({
                   />
                 </Field>
               );
+            }
           }
         })}
     </>

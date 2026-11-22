@@ -780,6 +780,200 @@
       "extraHeadersHelp": "Objeto JSON opcional com cabeçalhos adicionais não secretos. Cabeçalhos críticos de segurança são gerados pelo adaptador.",
       "instructions": "Instruções",
       "instructionsHelp": "Instruções estáveis opcionais do Hermes, enviadas separadamente da solicitação de ativação."
+    },
+    "schemaConfig": {
+      "fields": {
+        "claude_local": {
+          "engine": {
+            "label": "Motor de execução",
+            "hint": "O padrão usa ACP. Se o ACP não estiver disponível, a execução falha com um erro de configuração. Escolha CLI explicitamente para usá-la."
+          },
+          "agentCommand": {
+            "label": "Comando do servidor ACP",
+            "hint": "Substituição opcional do comando do servidor ACP do Claude. O padrão é o executável claude-agent-acp instalado com o pacote."
+          },
+          "mode": {
+            "label": "Modo de sessão ACP",
+            "hint": "Persistente mantém o estado da sessão ACP entre execuções. Avulsa inicia uma sessão nova a cada execução."
+          },
+          "nonInteractivePermissions": {
+            "label": "Permissões ACP sem interação",
+            "hint": "Ação padrão caso o agente ACP solicite entrada fora de uma sessão interativa."
+          },
+          "stateDir": {
+            "label": "Diretório de estado do ACP",
+            "hint": "Diretório opcional para o estado das sessões ACP. Por padrão, o Paperclip gerencia o armazenamento separado por empresa e agente."
+          },
+          "warmHandleIdleMs": {
+            "label": "Tempo ocioso do processo ACP aquecido (ms)",
+            "hint": "O padrão é 0, que encerra o processo ACP ao fim de cada execução, mantendo o estado persistente da sessão."
+          }
+        },
+        "codex_local": {
+          "engine": {
+            "label": "Motor de execução",
+            "hint": "O padrão usa ACP. Se o ACP não estiver disponível, a execução falha com um erro de configuração. Escolha CLI explicitamente para usá-la."
+          },
+          "agentCommand": {
+            "label": "Comando do servidor ACP",
+            "hint": "Substituição opcional do comando do servidor ACP do Codex. O padrão é o executável codex-acp instalado com o pacote."
+          },
+          "mode": {
+            "label": "Modo de sessão ACP",
+            "hint": "Persistente mantém o estado da sessão ACP entre execuções. Avulsa inicia uma sessão nova a cada execução."
+          },
+          "nonInteractivePermissions": {
+            "label": "Permissões ACP sem interação",
+            "hint": "Ação padrão caso o agente ACP solicite entrada fora de uma sessão interativa."
+          },
+          "stateDir": {
+            "label": "Diretório de estado do ACP",
+            "hint": "Diretório opcional para o estado das sessões ACP. Por padrão, o Paperclip gerencia o armazenamento separado por empresa e agente."
+          },
+          "warmHandleIdleMs": {
+            "label": "Tempo ocioso do processo ACP aquecido (ms)",
+            "hint": "O padrão é 0, que encerra o processo ACP ao fim de cada execução, mantendo o estado persistente da sessão."
+          }
+        },
+        "gemini_local": {
+          "engine": {
+            "label": "Motor de execução",
+            "hint": "O padrão usa ACP. Se o ACP não estiver disponível, a execução falha com um erro de configuração. Escolha CLI explicitamente para usá-la."
+          },
+          "agentCommand": {
+            "label": "Comando do servidor ACP",
+            "hint": "Substituição opcional do comando do servidor ACP do Gemini. O padrão é gemini --acp."
+          },
+          "mode": {
+            "label": "Modo de sessão ACP",
+            "hint": "Persistente mantém o estado da sessão ACP entre execuções. Avulsa inicia uma sessão nova a cada execução."
+          },
+          "nonInteractivePermissions": {
+            "label": "Permissões ACP sem interação",
+            "hint": "Ação padrão caso o agente ACP solicite entrada fora de uma sessão interativa."
+          },
+          "stateDir": {
+            "label": "Diretório de estado do ACP",
+            "hint": "Diretório opcional para o estado das sessões ACP. Por padrão, o Paperclip gerencia o armazenamento separado por empresa e agente."
+          },
+          "warmHandleIdleMs": {
+            "label": "Tempo ocioso do processo ACP aquecido (ms)",
+            "hint": "O padrão é 0, que encerra o processo ACP ao fim de cada execução, mantendo o estado persistente da sessão."
+          }
+        },
+        "hermes_gateway": {
+          "apiBaseUrl": {
+            "label": "URL base da API",
+            "hint": "URL base do servidor Hermes que o Paperclip consegue acessar. URLs HTTPS privadas são aceitas. Caminhos padrão do painel e do chat também são aceitos e convertidos para /api."
+          },
+          "apiKey": {
+            "label": "Chave de API",
+            "hint": "Hermes API_SERVER_KEY, não PAPERCLIP_API_KEY. Armazenada como referência a um segredo do Paperclip."
+          },
+          "dangerouslyAllowInsecureRemoteHttp": {
+            "label": "Permitir HTTP remoto sem segurança",
+            "hint": "Opção insegura apenas para desenvolvimento. Gateways Hermes remotos devem usar HTTPS; HTTP local continua permitido."
+          },
+          "sessionKeyStrategy": {
+            "label": "Estratégia da chave de sessão",
+            "hint": "Controla X-Hermes-Session-Key. O escopo por tarefa evita, por padrão, o vazamento de memória entre tarefas."
+          },
+          "timeoutSec": {
+            "label": "Tempo limite (s)"
+          },
+          "eventReconnectMs": {
+            "label": "Intervalo para reconexão de eventos (ms)",
+            "hint": "Atraso para reconectar o fluxo de eventos SSE do Hermes após uma desconexão não terminal."
+          },
+          "paperclipApiUrl": {
+            "label": "URL da API do Paperclip",
+            "hint": "URL opcional da API do Paperclip acessível pelo host Hermes remoto. Não é uma credencial."
+          },
+          "headers": {
+            "label": "Cabeçalhos adicionais",
+            "hint": "Objeto JSON opcional com cabeçalhos adicionais não secretos. Cabeçalhos críticos de segurança são gerados pelo adaptador."
+          },
+          "instructions": {
+            "label": "Instruções",
+            "hint": "Instruções estáveis opcionais do Hermes, enviadas separadamente da solicitação de ativação."
+          }
+        },
+        "hermes_local": {
+          "provider": {
+            "label": "Provedor",
+            "hint": "Normalmente automático. Defina esta opção apenas se Hermes não conseguir inferir o provedor pelo modelo ou pelo arquivo ~/.hermes/config.yaml."
+          },
+          "timeoutSec": {
+            "label": "Tempo limite (s)"
+          },
+          "graceSec": {
+            "label": "Período de tolerância (s)",
+            "hint": "Tempo de espera após SIGTERM antes de encerrar o processo Hermes."
+          },
+          "maxTurnsPerRun": {
+            "label": "Máximo de turnos por execução",
+            "hint": "Limite opcional de Hermes --max-turns para iterações que chamam ferramentas."
+          },
+          "toolsets": {
+            "label": "Conjuntos de ferramentas",
+            "hint": "Conjuntos opcionais de ferramentas Hermes separados por vírgula, como terminal,file,web."
+          },
+          "persistSession": {
+            "label": "Manter a sessão",
+            "hint": "Retoma as sessões Hermes entre as execuções periódicas do Paperclip."
+          },
+          "worktreeMode": {
+            "label": "Modo worktree do Hermes",
+            "hint": "Passa a opção Hermes --worktree."
+          },
+          "checkpoints": {
+            "label": "Pontos de controle",
+            "hint": "Passa a opção Hermes --checkpoints."
+          },
+          "quiet": {
+            "label": "Saída silenciosa",
+            "hint": "Passa Hermes --quiet para gerar transcrições de execução do Paperclip mais limpas."
+          },
+          "verbose": {
+            "label": "Saída detalhada",
+            "hint": "Passa a opção Hermes --verbose."
+          },
+          "paperclipApiUrl": {
+            "label": "URL da API do Paperclip",
+            "hint": "Substituição opcional da URL base da API. O padrão é PAPERCLIP_API_URL."
+          },
+          "promptTemplate": {
+            "label": "Modelo de prompt",
+            "hint": "Modelo de prompt personalizado opcional com marcadores {{variable}}."
+          }
+        }
+      },
+      "options": {
+        "engine": {
+          "auto": "Padrão (ACP)",
+          "acp": "ACP"
+        },
+        "mode": {
+          "persistent": "Persistente",
+          "oneshot": "Avulsa"
+        },
+        "nonInteractivePermissions": {
+          "deny": "Negar",
+          "fail": "Falhar"
+        },
+        "sessionKeyStrategy": {
+          "issue": "Por tarefa",
+          "agent": "Por agente",
+          "run": "Por execução",
+          "none": "Nenhuma"
+        },
+        "provider": {
+          "auto": "Automático"
+        }
+      },
+      "select": "Selecionar…",
+      "typeOrSelect": "Digite ou selecione…",
+      "useAsCustomValue": "Usar “{{value}}” como valor personalizado (pressione Enter)"
     }
   },
   "reportsTo": {
