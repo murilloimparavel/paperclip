@@ -275,7 +275,7 @@ describe("AgentActionButtons", () => {
     });
     await flushReact();
 
-    expect(document.body.textContent).toContain("Reset Sessions");
+    expect(document.body.textContent).toContain("Reset sessions");
   });
 
   it("moves work actions into the menu, leaving Assign task as the one button", async () => {

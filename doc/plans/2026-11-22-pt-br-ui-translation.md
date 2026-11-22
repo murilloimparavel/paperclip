@@ -100,4 +100,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir grupos, abas, rótulos acessíveis, breadcrumbs e nomes de rotas legadas.
   - [x] Preservar os segmentos e URLs das rotas.
   - [x] Validar catálogo, testes de navegação e typecheck da UI.
+- Ações do agente compartilhadas entre lista e detalhe:
+  - [x] Traduzir executar, pausar/retomar, limpar erro, atribuir, conversar, duplicar, redefinir sessões e encerrar.
+  - [x] Traduzir confirmações, notificações, ajuda de acessibilidade e aviso de rastreamento detalhado.
+  - [x] Validar catálogos, testes de ações e typecheck da UI.
 - Em andamento: abas de atividade/execuções e auditoria do agente, conteúdo de instruções e revisão visual das rotas de detalhe.
