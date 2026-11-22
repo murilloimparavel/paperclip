@@ -43,12 +43,13 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir dicas de login e mensagens de fallback do próprio fluxo.
   - [x] Traduzir o diálogo inicial de nome e escolha de adaptador, reaproveitando frases da memória MIT.
   - [x] Traduzir a tela de conexão, credenciais salvas e controles compartilhados de login.
-  - [ ] Traduzir o painel OAuth herdado de `AgentConfigForm` e seus fluxos de modelos.
+  - [x] Traduzir as mensagens do painel OAuth herdado de `AgentConfigForm`, incluindo login, associação de conta, expiração e conexão insegura.
   - [ ] Concluir a tradução de `AgentConfigForm`.
     - [x] Traduzir as dicas de ajuda do formulário, identidade, ambiente e seção de executor.
     - [x] Preservar placeholders de templates dentro das dicas e placeholders de interpolação i18next.
     - [x] Traduzir opções avançadas, políticas de execução, estados do seletor de modelos e depuração.
     - [ ] Traduzir os campos específicos dos adaptadores e revisar todas as ações restantes do formulário.
-    - [ ] Traduzir o painel OAuth embutido e revisar os fluxos de conexão.
+    - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
+    - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
   - [ ] Validar visualmente a criação em pt-BR.
 - Próximo depois da criação: telas de detalhes, abas, ferramentas, skills, histórico e custos do agente.
