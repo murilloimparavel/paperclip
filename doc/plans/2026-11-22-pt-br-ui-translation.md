@@ -153,4 +153,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Política de revisão compartilhada:
   - [x] Traduzir badges, descrições acessíveis e valores usados nos recibos de alteração.
   - [x] Validar os consumidores da política, formatação de auditoria e catálogos.
-- Em andamento: auditoria dos eventos estruturados restantes, conteúdo de instruções e revisão visual das rotas de detalhe.
+- Filtros compartilhados de tarefas e inbox:
+  - [x] Traduzir filtros rápidos, status, prioridades, responsáveis, criadores, projetos, etiquetas, objetos externos e opções de visibilidade nas apresentações clássica, simplificada e atualizada.
+  - [x] Traduzir categorias e status de aprovação da inbox, buscas, estados vazios e rótulos acessíveis.
+  - [x] Validar catálogos, testes do popover e typecheck da UI.
+- Em andamento: auditoria dos eventos estruturados restantes, conteúdo de instruções, listas e detalhes de tarefas, além da revisão visual das rotas principais.

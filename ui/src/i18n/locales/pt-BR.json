@@ -2487,5 +2487,84 @@
       }
     }
   },
-  "runtimePackageMissing": "O pacote do executor selecionado não está instalado."
+  "runtimePackageMissing": "O pacote do executor selecionado não está instalado.",
+  "taskFilters": {
+    "filter": "Filtrar",
+    "filters": "Filtros",
+    "clear": "Limpar",
+    "category": "Categoria",
+    "approvalStatus": "Status da aprovação",
+    "quickFilters": "Filtros rápidos",
+    "status": "Status",
+    "priority": "Prioridade",
+    "responsible": "Responsável",
+    "noAssignee": "Sem responsável",
+    "me": "Eu",
+    "creator": "Criador",
+    "project": "Projeto",
+    "projects": "projetos",
+    "creators": "criadores",
+    "responsibles": "responsáveis",
+    "labels": "Etiquetas",
+    "externalObjectStatus": "Status do objeto externo",
+    "visibility": "Visibilidade",
+    "liveRunsOnly": "Somente execuções ativas",
+    "agentCreatedTasks": "Mostrar tarefas criadas por agentes",
+    "routineTasks": "Tarefas de rotina",
+    "removeCreator": "Remover criador {{name}}",
+    "searchLabel": "Pesquisar {{label}}",
+    "searchPlaceholder": "Pesquisar {{label}}...",
+    "noProjectsMatch": "Nenhum projeto corresponde à busca.",
+    "noProjectsAvailable": "Nenhum projeto disponível.",
+    "noCreatorsMatch": "Nenhum criador corresponde à busca.",
+    "noCreatorsAvailable": "Nenhum criador disponível.",
+    "noResponsiblesMatch": "Nenhum responsável corresponde à busca.",
+    "noLabelsMatch": "Nenhuma etiqueta corresponde à busca.",
+    "noLabelsAvailable": "Nenhuma etiqueta disponível.",
+    "categories": {
+      "everything": "Todas as categorias",
+      "myRecentTasks": "Minhas tarefas recentes",
+      "joinRequests": "Solicitações de entrada",
+      "approvals": "Aprovações",
+      "failedRuns": "Execuções com falha",
+      "alerts": "Alertas"
+    },
+    "approvalStatuses": {
+      "all": "Todos os status de aprovação",
+      "needsAction": "Precisa de ação",
+      "resolved": "Resolvido"
+    },
+    "quick": {
+      "all": "Todas",
+      "active": "Ativas",
+      "backlog": "A fazer",
+      "done": "Concluídas"
+    },
+    "values": {
+      "in_progress": "Em andamento",
+      "monitoring": "Em observação",
+      "todo": "A fazer",
+      "backlog": "Backlog",
+      "in_review": "Em revisão",
+      "blocked": "Bloqueada",
+      "done": "Concluída",
+      "cancelled": "Cancelada",
+      "critical": "Crítica",
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa"
+    },
+    "externalStatuses": {
+      "failed": "Com falha",
+      "waiting": "Aguardando",
+      "running": "Em execução",
+      "auth_required": "Autenticação necessária",
+      "rate_limited": "Limite de solicitações atingido",
+      "unreachable": "Inacessível",
+      "stale": "Desatualizado",
+      "none": "Sem objetos externos"
+    },
+    "filtersCount_one": "{{count}} filtro",
+    "filtersCount_other": "{{count}} filtros"
+  }
 }

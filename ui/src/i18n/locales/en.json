@@ -2487,5 +2487,84 @@
       }
     }
   },
-  "runtimePackageMissing": "The selected runtime package is not installed."
+  "runtimePackageMissing": "The selected runtime package is not installed.",
+  "taskFilters": {
+    "filter": "Filter",
+    "filters": "Filters",
+    "clear": "Clear",
+    "category": "Category",
+    "approvalStatus": "Approval status",
+    "quickFilters": "Quick filters",
+    "status": "Status",
+    "priority": "Priority",
+    "responsible": "Assignee",
+    "noAssignee": "Unassigned",
+    "me": "Me",
+    "creator": "Creator",
+    "project": "Project",
+    "projects": "projects",
+    "creators": "creators",
+    "responsibles": "assignees",
+    "labels": "Labels",
+    "externalObjectStatus": "External object status",
+    "visibility": "Visibility",
+    "liveRunsOnly": "Live runs only",
+    "agentCreatedTasks": "Show agent-created tasks",
+    "routineTasks": "Routine tasks",
+    "removeCreator": "Remove creator {{name}}",
+    "searchLabel": "Search {{label}}",
+    "searchPlaceholder": "Search {{label}}...",
+    "noProjectsMatch": "No projects match.",
+    "noProjectsAvailable": "No projects available.",
+    "noCreatorsMatch": "No creators match.",
+    "noCreatorsAvailable": "No creators available.",
+    "noResponsiblesMatch": "No assignees match.",
+    "noLabelsMatch": "No labels match.",
+    "noLabelsAvailable": "No labels available.",
+    "categories": {
+      "everything": "All categories",
+      "myRecentTasks": "My recent tasks",
+      "joinRequests": "Join requests",
+      "approvals": "Approvals",
+      "failedRuns": "Failed runs",
+      "alerts": "Alerts"
+    },
+    "approvalStatuses": {
+      "all": "All approval statuses",
+      "needsAction": "Needs action",
+      "resolved": "Resolved"
+    },
+    "quick": {
+      "all": "All",
+      "active": "Active",
+      "backlog": "Backlog",
+      "done": "Done"
+    },
+    "values": {
+      "in_progress": "In progress",
+      "monitoring": "Monitoring",
+      "todo": "Todo",
+      "backlog": "Backlog",
+      "in_review": "In review",
+      "blocked": "Blocked",
+      "done": "Done",
+      "cancelled": "Cancelled",
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "externalStatuses": {
+      "failed": "Any failed",
+      "waiting": "Any waiting",
+      "running": "Any running",
+      "auth_required": "Auth required",
+      "rate_limited": "Rate limited",
+      "unreachable": "Unreachable",
+      "stale": "Stale",
+      "none": "No external objects"
+    },
+    "filtersCount_one": "{{count}} filter",
+    "filtersCount_other": "{{count}} filters"
+  }
 }
