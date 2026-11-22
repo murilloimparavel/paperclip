@@ -2552,7 +2552,8 @@
       "critical": "Critical",
       "high": "High",
       "medium": "Medium",
-      "low": "Low"
+      "low": "Low",
+      "idle": "Idle"
     },
     "externalStatuses": {
       "failed": "Any failed",
@@ -2605,5 +2606,15 @@
     },
     "accessibleList": "Task list",
     "accessibleColumns": "Task list columns"
+  },
+  "taskRow": {
+    "archive": "Archive",
+    "restoreFromArchive": "Restore from archive",
+    "markAsRead": "Mark as read",
+    "parkedBlocker": "Blocked by parked work",
+    "parkedBlockerTitle": "At least one assigned blocker is in the backlog and will not wake its assignee.",
+    "openTask": "Open task {{identifier}} ({{status}})",
+    "openTaskTitle": "Open {{identifier}}: {{title}}",
+    "recoveryStatus": "Task recovery status"
   }
 }

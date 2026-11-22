@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IssueRow } from "./IssueRow";
 import { StatusIcon } from "./StatusIcon";
 import { TooltipProvider } from "./ui/tooltip";
+import { i18n } from "@/i18n";
 
 vi.mock("@/lib/router", () => ({
   Link: ({
@@ -91,7 +92,8 @@ function createIssue(overrides: Partial<Issue> = {}): Issue {
 describe("IssueRow", () => {
   let container: HTMLDivElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("pt-BR");
     container = document.createElement("div");
     document.body.appendChild(container);
   });
@@ -181,7 +183,7 @@ describe("IssueRow", () => {
       );
     });
 
-    const archiveButton = container.querySelector<HTMLButtonElement>('button[aria-label="Archive"]');
+    const archiveButton = container.querySelector<HTMLButtonElement>('button[aria-label="Arquivar"]');
     expect(archiveButton?.className).toContain("h-5");
     expect(archiveButton?.className).toContain("py-0");
     expect(archiveButton?.className).not.toContain("py-1");
@@ -204,7 +206,7 @@ describe("IssueRow", () => {
       </TooltipProvider>,
     ));
 
-    const button = container.querySelector<HTMLButtonElement>('button[aria-label="Restore from archive"]')!;
+    const button = container.querySelector<HTMLButtonElement>('button[aria-label="Restaurar do arquivo"]')!;
     expect(button.closest("a")).toBeNull();
     act(() => button.click());
     expect(restore).toHaveBeenCalledOnce();
@@ -246,12 +248,12 @@ describe("IssueRow", () => {
 
     const link = container.querySelector<HTMLAnchorElement>("[data-inbox-issue-link]");
     const expand = container.querySelector<HTMLButtonElement>('button:not([aria-label])');
-    const archive = container.querySelector<HTMLButtonElement>('button[aria-label="Archive"]');
+    const archive = container.querySelector<HTMLButtonElement>('button[aria-label="Arquivar"]');
     expect(link?.href).toContain("/issues/PAP-1");
     expect(link?.contains(expand)).toBe(false);
     expect(link?.contains(archive)).toBe(false);
     // An inbox callback must not restore the old unread dot or its reserved slot.
-    expect(container.querySelector('button[aria-label="Mark as read"]')).toBeNull();
+    expect(container.querySelector('button[aria-label="Marcar como lida"]')).toBeNull();
     expect(container.querySelector('[data-testid="issue-row-unread-slot"]')).toBeNull();
 
     await reactAct(async () => link?.focus());
@@ -287,7 +289,7 @@ describe("IssueRow", () => {
       root.render(<IssueRow issue={createIssue()} onArchive={() => undefined} />);
     });
 
-    const archiveButton = container.querySelector<HTMLButtonElement>('button[aria-label="Archive"]');
+    const archiveButton = container.querySelector<HTMLButtonElement>('button[aria-label="Arquivar"]');
     expect(archiveButton?.className).toContain("py-1");
     expect(archiveButton?.className).not.toContain("h-5");
 
@@ -311,7 +313,7 @@ describe("IssueRow", () => {
     const row = container.querySelector('[data-slot="task-row"]');
     const title = row?.querySelector('[data-slot="task-row-title"]');
     const unreadSlot = row?.querySelector('[data-testid="issue-row-unread-slot"]');
-    const markReadButton = unreadSlot?.querySelector<HTMLButtonElement>('button[aria-label="Mark as read"]');
+    const markReadButton = unreadSlot?.querySelector<HTMLButtonElement>('button[aria-label="Marcar como lida"]');
     expect(row?.getAttribute("data-unread")).toBe("true");
     expect(title?.className).toContain("font-semibold");
     expect(unreadSlot).not.toBeNull();
@@ -344,7 +346,7 @@ describe("IssueRow", () => {
     expect(rows[1]?.className).toContain("pl-2 sm:pl-4");
     expect(unreadSlot).not.toBeNull();
     expect(unreadSlot?.className).toContain("absolute");
-    expect(unreadSlot?.querySelector('button[aria-label="Mark as read"]')).toBeNull();
+    expect(unreadSlot?.querySelector('button[aria-label="Marcar como lida"]')).toBeNull();
     expect(rows[1]?.querySelector('[data-testid="issue-row-unread-slot"]')).toBeNull();
 
     act(() => root.unmount());
@@ -430,7 +432,7 @@ describe("IssueRow", () => {
       root.render(<IssueRow issue={createIssue()} selected unreadState="visible" />);
     });
 
-    const markReadButton = container.querySelector('button[aria-label="Mark as read"]');
+    const markReadButton = container.querySelector('button[aria-label="Marcar como lida"]');
     const unreadDot = markReadButton?.querySelector("span");
     // Selected rows neutralize the status glyph to muted via `!`-important
     // utilities, which override the glyph's inline colour var. The glyph is an
@@ -468,7 +470,7 @@ describe("IssueRow", () => {
     // In flow, not an absolute overlay.
     expect(slot?.className).not.toContain("absolute");
     // Read rows carry no dot button in the slot.
-    expect(slot?.querySelector('button[aria-label="Mark as read"]')).toBeNull();
+    expect(slot?.querySelector('button[aria-label="Marcar como lida"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -485,12 +487,12 @@ describe("IssueRow", () => {
     // any leading control such as a parent's collapse caret).
     const slot = container.querySelector('[data-testid="issue-row-unread-slot"]');
     expect(slot).not.toBeNull();
-    expect(slot?.querySelector('button[aria-label="Mark as read"]')).not.toBeNull();
+    expect(slot?.querySelector('button[aria-label="Marcar como lida"]')).not.toBeNull();
 
     // Mobile: all inbox rows reserve a gutter and the dot stays fully inside
     // it, so the control cannot be clipped or indent the status/title.
     const mobileDot = container
-      .querySelector('button[aria-label="Mark as read"].sm\\:hidden, span.sm\\:hidden button[aria-label="Mark as read"]')
+      .querySelector('button[aria-label="Marcar como lida"].sm\\:hidden, span.sm\\:hidden button[aria-label="Marcar como lida"]')
       ?.closest("span.sm\\:hidden");
     expect(mobileDot).not.toBeNull();
     expect(mobileDot?.className).toContain("absolute");
@@ -685,7 +687,7 @@ describe("IssueRow", () => {
 
     const badges = container.querySelectorAll('[data-testid="issue-row-parked-blocker"]');
     expect(badges.length).toBeGreaterThan(0);
-    expect(badges[0]?.textContent).toContain("Blocked by parked work");
+    expect(badges[0]?.textContent).toContain("Bloqueada por tarefa em espera");
 
     act(() => {
       root.unmount();

@@ -2552,7 +2552,8 @@
       "critical": "Crítica",
       "high": "Alta",
       "medium": "Média",
-      "low": "Baixa"
+      "low": "Baixa",
+      "idle": "Ociosa"
     },
     "externalStatuses": {
       "failed": "Com falha",
@@ -2605,5 +2606,15 @@
     },
     "accessibleList": "Lista de tarefas",
     "accessibleColumns": "Colunas da lista de tarefas"
+  },
+  "taskRow": {
+    "archive": "Arquivar",
+    "restoreFromArchive": "Restaurar do arquivo",
+    "markAsRead": "Marcar como lida",
+    "parkedBlocker": "Bloqueada por tarefa em espera",
+    "parkedBlockerTitle": "Há pelo menos uma tarefa bloqueadora atribuída no backlog. Ela não ativará a pessoa responsável.",
+    "openTask": "Abrir tarefa {{identifier}} ({{status}})",
+    "openTaskTitle": "Abrir {{identifier}}: {{title}}",
+    "recoveryStatus": "Status da recuperação da tarefa"
   }
 }
