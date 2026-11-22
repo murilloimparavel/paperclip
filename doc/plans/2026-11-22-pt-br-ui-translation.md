@@ -58,4 +58,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
     - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
     - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
   - [ ] Validar visualmente a criação em pt-BR.
-- Próximo depois da criação: telas de detalhes, abas, ferramentas, skills, histórico e custos do agente.
+- Abas de habilidades do agente:
+  - [x] Traduzir estados de gerenciamento, suporte por adaptador, busca, contagens, seções e estados vazios.
+  - [x] Traduzir ações acessíveis de ativação, estado somente leitura e seletor de versões da habilidade.
+  - [x] Validar catálogos, placeholders, testes da aba/seletor e typecheck da UI.
+- Em andamento: áreas de detalhes e outras abas do agente.
