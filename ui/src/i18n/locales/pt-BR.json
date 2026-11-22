@@ -991,6 +991,36 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentDetailHeader": {
+    "leftAgentNotice": "Você deixou este agente. Ele não aparece mais na sua barra lateral.",
+    "dismissMembershipNotice": "Dispensar aviso de participação no agente",
+    "escalationPaused": "O fluxo de escalonamento está pausado",
+    "invalidReportingChain": "Hierarquia de gestão inválida",
+    "invalidReportingChainHelp": "{{name}} não pode receber tarefas nem iniciar execuções até que a hierarquia de gestão seja corrigida.",
+    "repairChainHelp": "Atribua este agente a uma pessoa responsável ativa ou à raiz, ou pause ou encerre explicitamente o agente ou subgrupo afetado.",
+    "avatar": "Avatar de {{name}}",
+    "agentName": "Nome do agente",
+    "pauseBuiltInTitle": "Pausar {{name}}?",
+    "pauseBuiltInHelp": "{{feature}} depende deste agente. Enquanto ele estiver pausado, sua geração será interrompida e a página de {{feature}} exibirá um aviso.",
+    "live": "Ao vivo",
+    "discardUnsavedQuestion": "Descartar alterações não salvas?",
+    "discardUnsavedHelp": "Há alterações não salvas em {{section}} de {{name}}. Se continuar, elas serão perdidas.",
+    "section": {
+      "runtime": "configurações do executor",
+      "secrets": "segredos e variáveis",
+      "configuration": "configuração",
+      "instructions": "instruções"
+    },
+    "keepEditing": "Continuar editando",
+    "discardChanges": "Descartar alterações",
+    "builtInAgent": "Agente integrado",
+    "resetting": "Redefinindo…",
+    "resetToDefaults": "Restaurar padrões",
+    "builtInHelp": "Vem com o Paperclip e dá suporte a {{feature}}. Configure-o como qualquer agente: modelo, instruções e orçamento. Ele pode ser pausado, mas não excluído. Ao pausá-lo, {{feature}} também será pausado.",
+    "pendingApproval": "Este agente aguarda aprovação do conselho e ainda não pode ser executado.",
+    "approveAgent": "Aprovar agente",
+    "loadingConfiguration": "Carregando configuração…"
+  },
   "agentActions": {
     "runNow": "Executar agora",
     "resume": "Retomar",

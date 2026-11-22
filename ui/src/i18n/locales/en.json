@@ -991,6 +991,36 @@
       "extra-high": "Extra High"
     }
   },
+  "agentDetailHeader": {
+    "leftAgentNotice": "You left this agent. It no longer appears in your sidebar.",
+    "dismissMembershipNotice": "Dismiss agent membership notice",
+    "escalationPaused": "Escalation path is paused",
+    "invalidReportingChain": "Invalid reporting chain",
+    "invalidReportingChainHelp": "{{name}} cannot accept tasks or start runs until its reporting chain is repaired.",
+    "repairChainHelp": "Assign this agent to an active manager or root, or explicitly pause or terminate the affected agent or subtree.",
+    "avatar": "{{name}} avatar",
+    "agentName": "Agent name",
+    "pauseBuiltInTitle": "Pause {{name}}?",
+    "pauseBuiltInHelp": "{{feature}} depends on this agent. While paused, its generation is skipped, and the {{feature}} page shows a warning.",
+    "live": "Live",
+    "discardUnsavedQuestion": "Discard unsaved changes?",
+    "discardUnsavedHelp": "You have unsaved changes to {{name}}'s {{section}}. If you continue, they'll be lost.",
+    "section": {
+      "runtime": "harness settings",
+      "secrets": "secrets and variables",
+      "configuration": "configuration",
+      "instructions": "instructions"
+    },
+    "keepEditing": "Keep editing",
+    "discardChanges": "Discard changes",
+    "builtInAgent": "Built-in agent",
+    "resetting": "Resetting…",
+    "resetToDefaults": "Reset to defaults",
+    "builtInHelp": "Ships with Paperclip and powers {{feature}}. Configure it like any agent: model, instructions, budget. It can be paused but not deleted. Pausing it also pauses {{feature}}.",
+    "pendingApproval": "This agent is pending board approval and cannot be invoked yet.",
+    "approveAgent": "Approve agent",
+    "loadingConfiguration": "Loading configuration…"
+  },
   "agentActions": {
     "runNow": "Run now",
     "resume": "Resume",
