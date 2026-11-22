@@ -1029,7 +1029,7 @@ test.describe("iMessage Photon setup and management", () => {
     await expect(page.getByText(/enroll your sender in Users/)).toBeVisible();
     await expect(page.getByRole("button", {name:/Copy \+1555/})).toHaveCount(0);
     await page.getByRole("button", {name:"I've sent the test message"}).click();
-    await page.getByRole("navigation", { name: "Chat connection" }).getByRole("link", { name: "Settings", exact: true }).click();
+    await page.getByRole("navigation", { name: "Chat connection" }).getByRole("link", { name: /^(Settings|Configurações)$/, exact: true }).click();
     await expect(page.getByText(/Shared Photon project · direct messages only/)).toBeVisible();
     await expect(page.getByRole("switch", {name:"Enable Family project"})).toBeDisabled();
     await expect(page.getByRole("button", {name:"Copy dedicated number"})).toHaveCount(0);
@@ -1087,7 +1087,7 @@ test.describe("iMessage Photon setup and management", () => {
       await page
         .getByRole("button", { name: "I've sent the test message" })
         .click();
-      await page.getByRole("navigation", { name: "Chat connection" }).getByRole("link", { name: "Settings", exact: true }).click();
+      await page.getByRole("navigation", { name: "Chat connection" }).getByRole("link", { name: /^(Settings|Configurações)$/, exact: true }).click();
       await expect(
         page.getByText(/replies are visible to everyone in that group/),
       ).toBeVisible();

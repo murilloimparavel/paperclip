@@ -40,8 +40,9 @@ test("a routine delivers a first digest, unread state, source link and replyable
       title: "Morning PR review", description: "proactive-digest-fixture", assigneeAgentId: f.agent.id,
     } }));
     await json(await request.post(`/api/routines/${routine.id}/run`, { data: { idempotencyKey: "browser-morning" } }));
-    await expect(page.getByLabel(/unread chats/)).toBeVisible({ timeout: 45_000 });
-    await expect(page.getByLabel(/unread chats/)).toBeVisible();
+    const unreadChats = page.getByLabel(/(?:unread chats|chats não lidos)/i);
+    await expect(unreadChats).toBeVisible({ timeout: 45_000 });
+    await expect(unreadChats).toBeVisible();
     let chat: any;
     await expect.poll(async () => {
       chat = await json(await request.get(f.chatPath));
@@ -55,7 +56,7 @@ test("a routine delivers a first digest, unread state, source link and replyable
     expect(source.originKind).toBe("routine_execution");
     expect(await json(await request.get(`/api/issues/${chat.id}/runs`))).toEqual([]);
     await page.reload();
-    await expect(page.getByLabel(/unread chats/)).toBeVisible();
+    await expect(unreadChats).toBeVisible();
     await page.goto(f.route);
     await expect(page.getByText("Morning PR digest", { exact: true })).toBeVisible();
     const sourceLink = page.getByRole("link", { name: `From ${source.identifier}`, exact: true });
