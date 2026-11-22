@@ -991,6 +991,32 @@
       "extra-high": "Extra High"
     }
   },
+  "agentCosts": {
+    "periodLabel": "Cost period",
+    "period": {
+      "mtd": "Month to Date",
+      "7d": "7 Days",
+      "30d": "30 Days",
+      "ytd": "Year to Date",
+      "all": "All Time",
+      "custom": "Custom"
+    },
+    "from": "From",
+    "to": "To",
+    "selectDateRange": "Select a start and end date to load data.",
+    "loadFailed": "{{name}}'s costs could not be loaded. Please try again shortly.",
+    "noCostEvents": "No cost events for {{name}} in this period.",
+    "spend": "Spend",
+    "ledgerEvents_one": "{{count}} ledger event",
+    "ledgerEvents_other": "{{count}} ledger events",
+    "tokens": "Tokens",
+    "tokenBreakdown": "in {{input}} ({{cached}} cached) · out {{output}}",
+    "runs": "Runs",
+    "runBreakdown": "{{api}} API · {{subscription}} subscription",
+    "byModel": "By model",
+    "noModelBreakdown": "No model breakdown for this period.",
+    "tokensShort": "{{tokens}} tokens"
+  },
   "agentAdvanced": {
     "invalidYaml": "Invalid YAML",
     "reloadBeforeSaving": "Reload saved before saving again.",

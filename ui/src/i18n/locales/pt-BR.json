@@ -991,6 +991,32 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentCosts": {
+    "periodLabel": "Período de custos",
+    "period": {
+      "mtd": "Este mês",
+      "7d": "7 dias",
+      "30d": "30 dias",
+      "ytd": "Este ano",
+      "all": "Todo o período",
+      "custom": "Personalizado"
+    },
+    "from": "De",
+    "to": "Até",
+    "selectDateRange": "Selecione as datas inicial e final para carregar os dados.",
+    "loadFailed": "Não foi possível carregar os custos de {{name}}. Tente novamente em instantes.",
+    "noCostEvents": "Não há lançamentos de custos de {{name}} neste período.",
+    "spend": "Gastos",
+    "ledgerEvents_one": "{{count}} lançamento no registro",
+    "ledgerEvents_other": "{{count}} lançamentos no registro",
+    "tokens": "Tokens",
+    "tokenBreakdown": "entrada {{input}} ({{cached}} em cache) · saída {{output}}",
+    "runs": "Execuções",
+    "runBreakdown": "{{api}} por API · {{subscription}} por assinatura",
+    "byModel": "Por modelo",
+    "noModelBreakdown": "Não há detalhamento por modelo neste período.",
+    "tokensShort": "{{tokens}} tokens"
+  },
   "agentAdvanced": {
     "invalidYaml": "YAML inválido",
     "reloadBeforeSaving": "Recarregue o que foi salvo antes de salvar novamente.",

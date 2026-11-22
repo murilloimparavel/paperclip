@@ -73,4 +73,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir os rótulos de operações e preservar nomes/paths definidos pelo usuário.
   - [x] Validar catálogos, testes do fluxo e typecheck da UI.
   - [ ] Revisar erros dinâmicos de API e validação que ainda podem chegar em inglês.
+- Custos do agente:
+  - [x] Traduzir períodos, intervalo personalizado, métricas, detalhamento por modelo e estados sem dados/erro.
+  - [x] Validar catálogos, testes das funções de agregação e typecheck da UI.
 - Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.
