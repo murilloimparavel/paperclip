@@ -84,4 +84,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir métricas, perfil, habilidades, tarefas recentes e sugestões de tarefa.
   - [x] Traduzir histórico de revisões de configuração e ações disponíveis.
   - [x] Validar catálogos, testes das telas e typecheck da UI.
+- Histórico e restauração do agente:
+  - [x] Traduzir resumo das alterações, identificação de autoria, tabela e confirmação de restauração.
+  - [x] Preservar nomes de agentes, membros, IDs e chaves de configuração.
+  - [x] Validar catálogo, testes auxiliares e typecheck da UI.
 - Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.
