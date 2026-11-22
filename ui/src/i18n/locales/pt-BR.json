@@ -2566,5 +2566,44 @@
     },
     "filtersCount_one": "{{count}} filtro",
     "filtersCount_other": "{{count}} filtros"
+  },
+  "taskList": {
+    "unknownAgent": "Agente desconhecido",
+    "user": "Pessoa usuária",
+    "unassigned": "Sem responsável",
+    "noProject": "Sem projeto",
+    "collapseTask": "Recolher {{title}}",
+    "expandTask": "Expandir {{title}}",
+    "densityList": "Lista de tarefas, {{density}}",
+    "density": {
+      "comfortable": "confortável",
+      "compact": "compacta"
+    },
+    "taskGroup": "Grupo de tarefas: {{title}}",
+    "renderingCount": "Exibindo {{rendered}} de {{total}} tarefas",
+    "showMore": "Mostrar mais tarefas",
+    "columnsMenu": "Colunas",
+    "resetDefaults": "Restaurar padrão",
+    "hierarchyColumn": "Hierarquia de tarefas",
+    "sortColumn": "{{label}}: ordenar em {{direction}}",
+    "sortDirection": {
+      "ascending": "ordem crescente",
+      "descending": "ordem decrescente"
+    },
+    "dragSortInstructions": "Clique para ordenar. Arraste na horizontal para reorganizar ou use Alt mais a seta para a esquerda ou para a direita.",
+    "dragReorderInstructions": "Arraste para reorganizar as colunas ou use Alt mais a seta para a esquerda ou para a direita. Clique para ordenar.",
+    "columns": {
+      "task": "Tarefa",
+      "taskId": "ID da tarefa",
+      "createdBy": "Criada por",
+      "assignee": "Responsável",
+      "project": "Projeto",
+      "parentTask": "Tarefa pai",
+      "tags": "Etiquetas",
+      "worktree": "Área de trabalho Git",
+      "lastUpdated": "Última atualização"
+    },
+    "accessibleList": "Lista de tarefas",
+    "accessibleColumns": "Colunas da lista de tarefas"
   }
 }

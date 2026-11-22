@@ -6,6 +6,7 @@ import { createIssue } from "../../storybook/fixtures/paperclipData";
 import { TaskList, type TaskListItem } from "./TaskList";
 import { TooltipProvider } from "./ui/tooltip";
 import { readTaskListSortParams } from "../lib/task-list";
+import { i18n } from "@/i18n";
 
 vi.mock("./IssueRow", () => ({ IssueRow: ({ issue, leadingControl }: { issue: { id: string; title: string }; leadingControl?: ReactNode }) =>
   <div data-issue-row-details={issue.id}>{leadingControl}<button>{issue.title}</button></div> }));
@@ -16,14 +17,14 @@ const tasks = (count: number, parentId: string | null = null): TaskListItem[] =>
 }));
 describe("TaskList progressive rendering", () => {
   let host: HTMLDivElement, root: Root;
-  beforeEach(() => { host = document.createElement("div"); document.body.append(host); root = createRoot(host); });
+  beforeEach(async () => { await i18n.changeLanguage("pt-BR"); host = document.createElement("div"); document.body.append(host); root = createRoot(host); });
   afterEach(async () => { await act(async () => root.unmount()); host.remove(); vi.unstubAllGlobals(); });
   const rows = () => host.querySelectorAll("[data-issue-row-details]");
   async function render(items: TaskListItem[], collectionKey?: string) {
     await act(async () => root.render(<TooltipProvider><TaskList items={items} collectionKey={collectionKey} /></TooltipProvider>));
   }
   async function more() {
-    await act(async () => Array.from(host.querySelectorAll("button")).find(b => b.textContent === "Show more tasks")!.click());
+    await act(async () => Array.from(host.querySelectorAll("button")).find(b => b.textContent === "Mostrar mais tarefas")!.click());
   }
   it.each([false, true])("defaults to newest updates while keeping children after their parent (controlled=%s)", async controlled => {
     const items = [
@@ -38,20 +39,20 @@ describe("TaskList progressive rendering", () => {
     expect(host.querySelector('.task-list-sort-button[data-active]')).toBeNull();
     expect(host.querySelector('[data-slot="task-list-sort-direction"]')).toBeNull();
   });
-  it("highlights Last updated only after selection and returns to the unhighlighted default when reset", async () => {
+  it("highlights Última atualização only after selection and returns to the unhighlighted default when reset", async () => {
     const items = tasks(2).reverse();
     await render(items);
     const orderedIds = () => [...rows()].map(row => row.getAttribute("data-issue-row-details"));
     expect(orderedIds()).toEqual(["task-0", "task-1"]);
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Last updated: sort ascending"]')!.click());
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Última atualização: ordenar em ordem crescente"]')!.click());
     expect(orderedIds()).toEqual(["task-1", "task-0"]);
-    expect(host.querySelector('.task-list-sort-button[data-active]')?.textContent).toBe("Last updated");
+    expect(host.querySelector('.task-list-sort-button[data-active]')?.textContent).toBe("Última atualização");
     expect(host.querySelector('[data-column="lastUpdated"][aria-sort="ascending"]')).not.toBeNull();
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Last updated: sort descending"]')!.click());
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Última atualização: ordenar em ordem decrescente"]')!.click());
     expect(orderedIds()).toEqual(["task-0", "task-1"]);
     expect(host.querySelector('[data-column="lastUpdated"][aria-sort="descending"]')).not.toBeNull();
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Columns"]')!.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true })));
-    const reset = [...document.body.querySelectorAll<HTMLElement>('[role="menuitem"]')].find(item => item.textContent === "Reset defaults");
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Colunas"]')!.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true })));
+    const reset = [...document.body.querySelectorAll<HTMLElement>('[role="menuitem"]')].find(item => item.textContent === "Restaurar padrão");
     expect(reset).toBeDefined();
     await act(async () => reset!.click());
     expect(orderedIds()).toEqual(["task-0", "task-1"]);
@@ -66,13 +67,13 @@ describe("TaskList progressive rendering", () => {
     await act(async () => root.render(<TooltipProvider><TaskList items={items}
       sort={{ column: "created", direction: "descending" }} onSortChange={onSortChange} /></TooltipProvider>));
     expect([...rows()].map(row => row.getAttribute("data-issue-row-details"))).toEqual(["newer", "older"]);
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Task ID: sort ascending"]')!.click());
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="ID da tarefa: ordenar em ordem crescente"]')!.click());
     expect(onSortChange).toHaveBeenLastCalledWith({ column: "taskId", direction: "ascending" });
     await act(async () => root.render(<TooltipProvider><TaskList items={items}
       sort={{ column: "taskId", direction: "ascending" }} onSortChange={onSortChange} /></TooltipProvider>));
     expect([...rows()].map(row => row.getAttribute("data-issue-row-details"))).toEqual(["older", "newer"]);
     expect(host.querySelector('[data-column="taskId"][aria-sort="ascending"]')).not.toBeNull();
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Task ID: sort descending"]')!.click());
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="ID da tarefa: ordenar em ordem decrescente"]')!.click());
     expect(onSortChange).toHaveBeenLastCalledWith({ column: "taskId", direction: "descending" });
   });
 
@@ -100,7 +101,7 @@ describe("TaskList progressive rendering", () => {
     expect(rows()).toHaveLength(250);
     await more(); await more();
     expect(rows()).toHaveLength(450);
-    expect(host.textContent).not.toContain("Show more tasks");
+    expect(host.textContent).not.toContain("Mostrar mais tarefas");
   });
   it("retains revealed rows when another server page sorts before them", async () => {
     const items = tasks(200).map((item, i) => ({ issue: { ...item.issue, identifier: `PAP-${i + 21}` } }));
@@ -123,10 +124,10 @@ describe("TaskList progressive rendering", () => {
     await render([parent, ...tasks(220, "root")]);
     expect(rows()).toHaveLength(100);
     expect(rows()[0].getAttribute("data-issue-row-details")).toBe("root");
-    const collapse = host.querySelector<HTMLButtonElement>('button[aria-label="Collapse Root"]')!;
+    const collapse = host.querySelector<HTMLButtonElement>('button[aria-label="Recolher Root"]')!;
     await act(async () => collapse.click());
     expect(rows()).toHaveLength(1);
-    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Expand Root"]')!.click());
+    await act(async () => host.querySelector<HTMLButtonElement>('button[aria-label="Expandir Root"]')!.click());
     expect(rows()).toHaveLength(100);
     await more();
     expect(rows()).toHaveLength(221);

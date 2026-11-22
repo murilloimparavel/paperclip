@@ -157,4 +157,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir filtros rápidos, status, prioridades, responsáveis, criadores, projetos, etiquetas, objetos externos e opções de visibilidade nas apresentações clássica, simplificada e atualizada.
   - [x] Traduzir categorias e status de aprovação da inbox, buscas, estados vazios e rótulos acessíveis.
   - [x] Validar catálogos, testes do popover e typecheck da UI.
+- Lista canônica de tarefas e colunas:
+  - [x] Traduzir títulos de colunas, configuração e restauração dos padrões, ordenação, hierarquia acessível e instruções de teclado/leitor de tela.
+  - [x] Traduzir agrupamento por status/projeto, expansão de subtarefas, responsáveis de fallback e carregamento progressivo.
+  - [x] Validar catálogos, 28 testes focados da lista e typecheck da UI.
 - Em andamento: auditoria dos eventos estruturados restantes, conteúdo de instruções, listas e detalhes de tarefas, além da revisão visual das rotas principais.

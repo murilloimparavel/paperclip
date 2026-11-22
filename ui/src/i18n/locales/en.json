@@ -2566,5 +2566,44 @@
     },
     "filtersCount_one": "{{count}} filter",
     "filtersCount_other": "{{count}} filters"
+  },
+  "taskList": {
+    "unknownAgent": "Unknown agent",
+    "user": "User",
+    "unassigned": "Unassigned",
+    "noProject": "No project",
+    "collapseTask": "Collapse {{title}}",
+    "expandTask": "Expand {{title}}",
+    "densityList": "{{density}} task list",
+    "density": {
+      "comfortable": "comfortable",
+      "compact": "compact"
+    },
+    "taskGroup": "{{title}} task group",
+    "renderingCount": "Rendering {{rendered}} of {{total}} tasks",
+    "showMore": "Show more tasks",
+    "columnsMenu": "Columns",
+    "resetDefaults": "Reset defaults",
+    "hierarchyColumn": "Task hierarchy",
+    "sortColumn": "{{label}}: sort {{direction}}",
+    "sortDirection": {
+      "ascending": "ascending",
+      "descending": "descending"
+    },
+    "dragSortInstructions": "Click to sort. Drag horizontally to reorder, or use Alt plus Left or Right Arrow.",
+    "dragReorderInstructions": "Drag to reorder columns, or use Alt plus Left or Right Arrow. Click to sort.",
+    "columns": {
+      "task": "Task",
+      "taskId": "Task ID",
+      "createdBy": "Created by",
+      "assignee": "Assignee",
+      "project": "Project",
+      "parentTask": "Parent Task",
+      "tags": "Tags",
+      "worktree": "Worktree",
+      "lastUpdated": "Last updated"
+    },
+    "accessibleList": "Task list",
+    "accessibleColumns": "Task list columns"
   }
 }
