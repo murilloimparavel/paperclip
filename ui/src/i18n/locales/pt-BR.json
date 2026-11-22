@@ -2182,5 +2182,126 @@
       "label": "Somente uma pessoa",
       "description": "Somente uma pessoa pode aprovar esta revisão. Agentes não podem decidir."
     }
+  },
+  "errors": {
+    "copy": {
+      "tenant_app_unavailable": {
+        "title": "Reconectando ao Paperclip",
+        "body": "O Paperclip está reiniciando ou sendo atualizado. Tente novamente em instantes."
+      },
+      "tenant_app_starting": {
+        "title": "O Paperclip está iniciando",
+        "body": "O Paperclip está iniciando. Tente novamente em alguns segundos."
+      },
+      "WORKER_UNAVAILABLE": {
+        "title": "Plugin indisponível",
+        "body": "Este plugin está reiniciando. Tente novamente em instantes."
+      },
+      "TIMEOUT": {
+        "title": "Tempo limite excedido",
+        "body": "A solicitação demorou demais para responder. Tente novamente em instantes."
+      },
+      "queued_comment_revision_conflict": {
+        "title": "Fila alterada",
+        "body": "A fila foi alterada em outra sessão. Sua edição continua aqui. Salve novamente para aplicá-la à fila atualizada."
+      },
+      "queued_comment_stale_queue": {
+        "title": "Fila alterada",
+        "body": "A fila foi alterada em outra sessão. Sua edição continua aqui. Salve novamente para aplicá-la à fila atualizada."
+      },
+      "queued_comment_stale_target": {
+        "title": "Mensagem agendada alterada",
+        "body": "Esta mensagem já foi enviada ou removida. Seu texto continua aqui e pode ser agendado como uma nova mensagem."
+      },
+      "queued_comment_not_pending": {
+        "title": "Mensagem agendada alterada",
+        "body": "Esta mensagem já foi enviada ou removida. Seu texto continua aqui e pode ser agendado como uma nova mensagem."
+      },
+      "interaction_audience_denied": {
+        "title": "Você não pode responder a este cartão",
+        "body": "Seu perfil não está entre as pessoas autorizadas a resolver este cartão."
+      },
+      "interaction_forbidden": {
+        "title": "Você não tem permissão para responder",
+        "body": "Você não tem permissão para responder a este cartão."
+      },
+      "interaction_settled": {
+        "title": "Solicitação já resolvida",
+        "body": "Esta solicitação não está mais aguardando uma decisão."
+      },
+      "interaction_submit_failed": {
+        "title": "Não foi possível enviar",
+        "body": "Não foi possível enviar. Tente novamente."
+      }
+    },
+    "kinds": {
+      "transient": {
+        "title": "Conexão interrompida",
+        "body": "O Paperclip está temporariamente indisponível. Tente novamente em instantes."
+      },
+      "auth": {
+        "title": "Sessão encerrada",
+        "body": "Sua sessão terminou. Entre novamente para continuar."
+      },
+      "forbidden": {
+        "title": "Acesso não permitido",
+        "body": "Você não tem permissão para fazer isso."
+      },
+      "not_found": {
+        "title": "Não encontrado",
+        "body": "Este item não existe ou foi movido."
+      },
+      "conflict": {
+        "title": "Dados desatualizados",
+        "body": "Este item mudou desde que você o carregou. Atualize e tente novamente."
+      },
+      "invalid": {
+        "title": "Verifique os dados",
+        "body": "Alguns dados são inválidos. Revise-os e tente novamente."
+      },
+      "aborted": {
+        "title": "Cancelado",
+        "body": "A solicitação foi cancelada."
+      },
+      "unknown": {
+        "title": "Algo deu errado",
+        "body": "Ocorreu um erro inesperado. Tente novamente."
+      }
+    },
+    "actionFailed": "Não foi possível {{action}}.",
+    "genericAction": "concluir esta ação",
+    "actions": {
+      "load runs": "carregar execuções",
+      "load routine runs": "carregar execuções da rotina",
+      "load the audit log": "carregar o registro de auditoria",
+      "load agents": "carregar agentes",
+      "load tasks": "carregar tarefas",
+      "load projects": "carregar projetos",
+      "load goals": "carregar metas",
+      "load approvals": "carregar aprovações",
+      "load people": "carregar pessoas",
+      "load users": "carregar usuários",
+      "load secrets": "carregar segredos",
+      "load workspaces": "carregar espaços de trabalho",
+      "load routines": "carregar rotinas",
+      "load gateways": "carregar gateways",
+      "load this case": "carregar este caso",
+      "load this agent": "carregar este agente",
+      "load organizations": "carregar organizações",
+      "load organization members": "carregar membros da organização",
+      "load the org chart": "carregar o organograma",
+      "load artifacts": "carregar artefatos",
+      "load your profile": "carregar seu perfil",
+      "load this routine": "carregar esta rotina",
+      "load routine activity": "carregar a atividade da rotina",
+      "load connection instructions": "carregar as instruções da conexão",
+      "load the environment": "carregar o ambiente"
+    }
+  },
+  "queryView": {
+    "retry": "Tentar novamente",
+    "retrying": "Tentando novamente…",
+    "loading": "Carregando",
+    "updatingPaused": "Atualização pausada enquanto reconecta…"
   }
 }

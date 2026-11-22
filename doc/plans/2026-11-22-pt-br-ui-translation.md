@@ -112,7 +112,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Logs e operações de workspace da execução:
   - [x] Traduzir transcript, eventos, navegação de logs, detalhes de invocação e operações de workspace.
   - [x] Traduzir categorias e rótulos de falhas do provedor, preservando mensagens retornadas pelo provedor.
-  - [ ] Revisar o conteúdo do transcript, erros compartilhados de consulta e estados de retry/autorização.
+  - [x] Traduzir mensagens compartilhadas de erro, carregamento, nova tentativa e reconexão usadas pelas consultas.
+  - [ ] Revisar o conteúdo do transcript e mensagens legíveis devolvidas diretamente pela API.
 - Retry e autorização da pessoa responsável:
   - [x] Traduzir estados, motivos conhecidos e resumos do ciclo de retry.
   - [x] Traduzir os avisos de autorização e a orientação de recuperação para a pessoa responsável.
