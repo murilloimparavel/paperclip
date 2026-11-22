@@ -1487,6 +1487,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                     label: id === "xhigh" ? "X-High" : id[0].toUpperCase() + id.slice(1),
                   }))]
                 : claudeThinkingEffortOptions;
+  const localizedThinkingEffortOptions = thinkingEffortOptions.map((option) => ({
+    ...option,
+    label: t(`agentConfig.reasoningEffort.${option.id || "auto"}`, { defaultValue: option.label }),
+  }));
   const currentThinkingEffort = isCreate
     ? val!.thinkingEffort
     : isCodexHarness || (adapterType === "paperclip_runner" && ["claude_local", "grok_local"].includes(harnessType))
@@ -2049,7 +2053,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 <>
                   <ThinkingEffortDropdown
                     value={currentThinkingEffort}
-                    options={thinkingEffortOptions}
+                    options={localizedThinkingEffortOptions}
                     onChange={(v) =>
                       isCreate
                         ? set!({ thinkingEffort: v })
@@ -4051,18 +4055,18 @@ export function AdapterTypeDropdown({
   const adapterList = useMemo(() =>
     [...listAdapterOptions(type => adapterLabels[type] ?? getAdapterLabel(type)),
       ...(openAiDotEnabled ? [{ value: "openai_dot", label: "OpenAI Dot", experimental: true, comingSoon: false }] : []),
-      ...(museEnabled ? [{ value: "muse", label: "Muse — Personal agent", experimental: true, comingSoon: false }] : []),
+      ...(museEnabled ? [{ value: "muse", label: t("agentConfig.musePersonalAgent"), experimental: true, comingSoon: false }] : []),
     ].filter(item => (!cloud || harnessPolicy.isCloudHarnessAllowed(item.value)) && !item.comingSoon && (item.value !== "paperclip_runner" || nativeRunnerEnabled) && !disabledTypes.has(item.value))
       .sort((a, b) => Number(a.value === "paperclip_runner") - Number(b.value === "paperclip_runner")),
     [cloud, harnessPolicy, disabledTypes, openAiDotEnabled, nativeRunnerEnabled, museEnabled]);
-  return <SelectPopover aria-label="Harness" value={value} onValueChange={onChange}
+  return <SelectPopover aria-label={t("agentConfig.harness")} value={value} onValueChange={onChange}
     displayValue={<span className="inline-flex min-w-0 items-center gap-1.5">
       <span aria-hidden="true" className="inline-flex shrink-0"><AdapterMark type={value} className="size-4" /></span>
       <span className="truncate">{adapterLabels[value] ?? getAdapterLabel(value)}</span>
       {selectedDisplay.experimental && <ExperimentalBadge />}
     </span>}
     options={adapterList.map(item => ({ value: item.value,
-      group: item.value === "paperclip_runner" ? "Advanced" : undefined,
+      group: item.value === "paperclip_runner" ? t("agentConfig.advanced") : undefined,
       label: <span className="inline-flex items-center gap-1.5"><span aria-hidden="true" className="inline-flex shrink-0"><AdapterMark type={item.value} className="size-4" /></span><span>{item.label}</span>{item.experimental && <ExperimentalBadge />}</span>,
     }))} />;
 }
@@ -4070,7 +4074,7 @@ export function AdapterTypeDropdown({
 function ExperimentalBadge() {
   return (
     <span className="shrink-0 rounded border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-(length:--text-nano) font-medium leading-none text-amber-700 dark:text-amber-200">
-      Experimental
+      {t("agentConfig.experimental")}
     </span>
   );
 }

@@ -974,6 +974,21 @@
       "select": "Selecionar…",
       "typeOrSelect": "Digite ou selecione…",
       "useAsCustomValue": "Usar “{{value}}” como valor personalizado (pressione Enter)"
+    },
+    "experimental": "Experimental",
+    "musePersonalAgent": "Muse — Agente pessoal",
+    "reasoningEffort": {
+      "auto": "Automático",
+      "minimal": "Mínimo",
+      "low": "Baixo",
+      "medium": "Médio",
+      "high": "Alto",
+      "xhigh": "Extra alto",
+      "max": "Máximo",
+      "off": "Desativado",
+      "plan": "Planejar",
+      "ask": "Perguntar",
+      "extra-high": "Extra alto"
     }
   },
   "reportsTo": {
