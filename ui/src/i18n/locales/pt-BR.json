@@ -2140,6 +2140,34 @@
       "completedWithSummary": "divisão do plano concluída ({{summary}})",
       "completed": "divisão do plano concluída",
       "inFlightWithSummary": "divisão do plano em andamento ({{summary}})"
+    },
+    "changedEntities": {
+      "blocker": "bloqueio",
+      "blockerPlural": "bloqueios",
+      "reviewer": "revisor",
+      "reviewerPlural": "revisores",
+      "approver": "aprovador",
+      "approverPlural": "aprovadores"
+    },
+    "structured": {
+      "addedBlocker": "adicionou {{changed}}",
+      "addedBlockerTo": "adicionou {{changed}} a",
+      "removedBlocker": "removeu {{changed}}",
+      "removedBlockerFrom": "removeu {{changed}} de",
+      "blockersUpdated": "atualizou os bloqueios",
+      "blockersUpdatedOn": "atualizou os bloqueios em",
+      "addedReviewer": "adicionou {{changed}}",
+      "addedReviewerTo": "adicionou {{changed}} a",
+      "removedReviewer": "removeu {{changed}}",
+      "removedReviewerFrom": "removeu {{changed}} de",
+      "reviewersUpdated": "atualizou os revisores",
+      "reviewersUpdatedOn": "atualizou os revisores em",
+      "addedApprover": "adicionou {{changed}}",
+      "addedApproverTo": "adicionou {{changed}} a",
+      "removedApprover": "removeu {{changed}}",
+      "removedApproverFrom": "removeu {{changed}} de",
+      "approversUpdated": "atualizou os aprovadores",
+      "approversUpdatedOn": "atualizou os aprovadores em"
     }
   },
   "reviewPolicy": {

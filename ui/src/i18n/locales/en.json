@@ -2140,6 +2140,34 @@
       "completedWithSummary": "decomposition completed ({{summary}})",
       "completed": "decomposition completed",
       "inFlightWithSummary": "decomposition in flight ({{summary}})"
+    },
+    "changedEntities": {
+      "blocker": "blocker",
+      "blockerPlural": "blockers",
+      "reviewer": "reviewer",
+      "reviewerPlural": "reviewers",
+      "approver": "approver",
+      "approverPlural": "approvers"
+    },
+    "structured": {
+      "addedBlocker": "added {{changed}}",
+      "addedBlockerTo": "added {{changed}} to",
+      "removedBlocker": "removed {{changed}}",
+      "removedBlockerFrom": "removed {{changed}} from",
+      "blockersUpdated": "updated blockers",
+      "blockersUpdatedOn": "updated blockers on",
+      "addedReviewer": "added {{changed}}",
+      "addedReviewerTo": "added {{changed}} to",
+      "removedReviewer": "removed {{changed}}",
+      "removedReviewerFrom": "removed {{changed}} from",
+      "reviewersUpdated": "updated reviewers",
+      "reviewersUpdatedOn": "updated reviewers on",
+      "addedApprover": "added {{changed}}",
+      "addedApproverTo": "added {{changed}} to",
+      "removedApprover": "removed {{changed}}",
+      "removedApproverFrom": "removed {{changed}} from",
+      "approversUpdated": "updated approvers",
+      "approversUpdatedOn": "updated approvers on"
     }
   },
   "reviewPolicy": {

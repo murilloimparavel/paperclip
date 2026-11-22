@@ -328,10 +328,11 @@ function formatIssueReferenceLabel(reference: ActivityIssueReference): string {
 }
 
 function formatChangedEntityLabel(
-  singular: string,
-  plural: string,
+  entity: "blocker" | "reviewer" | "approver",
   labels: string[],
 ): string {
+  const singular = t(`auditFeed.changedEntities.${entity}`);
+  const plural = t(`auditFeed.changedEntities.${entity}Plural`);
   if (labels.length <= 0) return plural;
   if (labels.length === 1) return `${singular} ${labels[0]}`;
   return `${labels.length} ${plural}`;
@@ -466,30 +467,30 @@ function formatStructuredIssueChange(input: {
     const added = readIssueReferences(details, "addedBlockedByIssues").map(formatIssueReferenceLabel);
     const removed = readIssueReferences(details, "removedBlockedByIssues").map(formatIssueReferenceLabel);
     if (added.length > 0 && removed.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      const changed = formatChangedEntityLabel("blocker", added);
+      return t(input.forIssueDetail ? "auditFeed.structured.addedBlocker" : "auditFeed.structured.addedBlockerTo", { changed });
     }
     if (removed.length > 0 && added.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      const changed = formatChangedEntityLabel("blocker", removed);
+      return t(input.forIssueDetail ? "auditFeed.structured.removedBlocker" : "auditFeed.structured.removedBlockerFrom", { changed });
     }
-    return input.forIssueDetail ? "updated blockers" : "updated blockers on";
+    return t(input.forIssueDetail ? "auditFeed.structured.blockersUpdated" : "auditFeed.structured.blockersUpdatedOn");
   }
 
   if (input.action === "issue.reviewers_updated" || input.action === "issue.approvers_updated") {
     const added = readParticipants(details, "addedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
     const removed = readParticipants(details, "removedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
-    const singular = input.action === "issue.reviewers_updated" ? "reviewer" : "approver";
-    const plural = input.action === "issue.reviewers_updated" ? "reviewers" : "approvers";
+    const entity = input.action === "issue.reviewers_updated" ? "reviewer" : "approver";
+    const entityPlural = t(`auditFeed.changedEntities.${entity}Plural`);
     if (added.length > 0 && removed.length === 0) {
-      const changed = formatChangedEntityLabel(singular, plural, added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      const changed = formatChangedEntityLabel(entity, added);
+      return t(input.forIssueDetail ? `auditFeed.structured.added${entity === "reviewer" ? "Reviewer" : "Approver"}` : `auditFeed.structured.added${entity === "reviewer" ? "ReviewerTo" : "ApproverTo"}`, { changed });
     }
     if (removed.length > 0 && added.length === 0) {
-      const changed = formatChangedEntityLabel(singular, plural, removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      const changed = formatChangedEntityLabel(entity, removed);
+      return t(input.forIssueDetail ? `auditFeed.structured.removed${entity === "reviewer" ? "Reviewer" : "Approver"}` : `auditFeed.structured.removed${entity === "reviewer" ? "ReviewerFrom" : "ApproverFrom"}`, { changed });
     }
-    return input.forIssueDetail ? `updated ${plural}` : `updated ${plural} on`;
+    return t(input.forIssueDetail ? `auditFeed.structured.${entityPlural}Updated` : `auditFeed.structured.${entityPlural}UpdatedOn`);
   }
 
   return null;
