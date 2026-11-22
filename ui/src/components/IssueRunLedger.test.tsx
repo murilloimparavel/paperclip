@@ -9,6 +9,7 @@ import type { RunForIssue } from "../api/activity";
 import type { ActiveRunForIssue } from "../api/heartbeats";
 import { IssueRunLedgerContent } from "./IssueRunLedger";
 import { replayLeaks } from "@/lib/analytics/replay-recording.test-utils";
+import { t } from "@/i18n";
 
 vi.mock("@/lib/router", () => ({
   Link: ({ children, to, ...props }: { children: ReactNode; to: string } & ComponentProps<"a">) => (
@@ -643,7 +644,7 @@ describe("IssueRunLedger", () => {
     expect(notice).not.toBeNull();
     expect(notice?.getAttribute("data-denial-tone")).toBe("unauthorized");
     expect(notice?.textContent).toContain("Ada Lovelace");
-    expect(notice?.textContent).toContain("Responsible user not authorized");
+    expect(notice?.textContent).toContain(t("responsibleUserDenial.unauthorizedTitle"));
   });
 
   it("steers the responsible-user-unavailable failure toward marking work blocked", () => {
@@ -663,7 +664,7 @@ describe("IssueRunLedger", () => {
     const notice = container.querySelector('[data-testid="responsible-user-denial-notice"]');
     expect(notice).not.toBeNull();
     expect(notice?.getAttribute("data-denial-tone")).toBe("unavailable");
-    expect(notice?.textContent?.toLowerCase()).toContain("blocked");
+    expect(notice?.textContent).toContain(t("responsibleUserDenial.unavailableAction"));
   });
 
   it("does not render a denial notice for a generic agent failure", () => {

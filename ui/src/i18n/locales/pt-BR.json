@@ -1204,6 +1204,42 @@
     "noTranscript": "Não há transcrição disponível para esta execução.",
     "empty": "Nenhum arquivo"
   },
+  "runRetry": {
+    "reason": {
+      "nativeProviderOverloaded": "Modelo no limite de capacidade",
+      "connectionPoolWait": "Aguardando a normalização do uso do pool",
+      "transientFailure": "Falha temporária",
+      "missingTaskComment": "Comentário da tarefa não encontrado",
+      "processLost": "Processo encerrado inesperadamente",
+      "assignmentRecovery": "Recuperação da atribuição",
+      "continuationNeeded": "Continuação necessária",
+      "maxTurnsContinuation": "Continuação por limite de turnos"
+    },
+    "attempt": "Tentativa {{count}}",
+    "poolExhausted": "Limite do pool atingido",
+    "continuationScheduled": "Continuação agendada",
+    "retryScheduled": "Nova tentativa agendada",
+    "continuationExhausted": "Continuações esgotadas",
+    "retryExhausted": "Tentativas esgotadas",
+    "continuedRun": "Execução continuada",
+    "retriedRun": "Execução repetida",
+    "automaticRetriesExhausted": "Tentativas automáticas esgotadas",
+    "exhaustion": "O limite de {{count}} tentativas agendadas foi atingido; nenhuma nova tentativa automática será agendada",
+    "nextContinuation": "Próxima continuação {{date}}",
+    "nextRetry": "Próxima tentativa {{date}}",
+    "nextContinuationPending": "Próxima continuação aguardando agendamento",
+    "nextRetryPending": "Próxima tentativa aguardando agendamento",
+    "manualIntervention": "É necessária uma intervenção manual."
+  },
+  "responsibleUserDenial": {
+    "genericUser": "a pessoa responsável",
+    "unavailableTitle": "Pessoa responsável indisponível",
+    "unavailableDescription": "Esta execução age em nome de {{user}}, mas essa conta foi removida ou desativada e suas permissões não podem mais ser avaliadas. As permissões do agente, por si só, não bastam. Toda ação ainda exige uma pessoa responsável ativa.",
+    "unavailableAction": "Bloqueie o trabalho e atribua outra pessoa responsável, ou reative a conta, antes de o agente continuar.",
+    "unauthorizedTitle": "Pessoa responsável sem autorização",
+    "unauthorizedDescription": "Esta ação foi negada porque {{user}}, a pessoa em cujo nome esta execução age, não tem permissão para realizá-la. O agente pode ter autorização, mas uma execução nunca pode exceder as permissões da pessoa em cujo nome age. Por isso, a ação foi bloqueada.",
+    "unauthorizedAction": "Conceda a {{user}} a permissão necessária ou peça a alguém autorizado para realizar esta ação."
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "Você deixou este agente. Ele não aparece mais na sua barra lateral.",
     "dismissMembershipNotice": "Dispensar aviso de participação no agente",

@@ -1204,6 +1204,42 @@
     "noTranscript": "No transcript available for this run.",
     "empty": "No files"
   },
+  "runRetry": {
+    "reason": {
+      "nativeProviderOverloaded": "Model at capacity",
+      "connectionPoolWait": "Waiting for pool usage to recover",
+      "transientFailure": "Transient failure",
+      "missingTaskComment": "Missing task comment",
+      "processLost": "Process lost",
+      "assignmentRecovery": "Assignment recovery",
+      "continuationNeeded": "Continuation needed",
+      "maxTurnsContinuation": "Max-turn continuation"
+    },
+    "attempt": "Attempt {{count}}",
+    "poolExhausted": "Pool exhausted",
+    "continuationScheduled": "Continuation scheduled",
+    "retryScheduled": "Retry scheduled",
+    "continuationExhausted": "Continuation exhausted",
+    "retryExhausted": "Retry exhausted",
+    "continuedRun": "Continued run",
+    "retriedRun": "Retried run",
+    "automaticRetriesExhausted": "Automatic retries exhausted",
+    "exhaustion": "Bounded retry exhausted after {{count}} scheduled attempts; no further automatic retry will be queued",
+    "nextContinuation": "Next continuation {{date}}",
+    "nextRetry": "Next retry {{date}}",
+    "nextContinuationPending": "Next continuation pending schedule",
+    "nextRetryPending": "Next retry pending schedule",
+    "manualIntervention": "Manual intervention required."
+  },
+  "responsibleUserDenial": {
+    "genericUser": "the responsible user",
+    "unavailableTitle": "Responsible user unavailable",
+    "unavailableDescription": "This run acts on behalf of {{user}}, but that account was removed or deactivated, so its permissions can no longer be evaluated. The agent's own permissions are not enough on their own. Every action still requires an active responsible user.",
+    "unavailableAction": "Mark the work blocked and reassign a responsible user (or reactivate the account) before the agent continues.",
+    "unauthorizedTitle": "Responsible user not authorized",
+    "unauthorizedDescription": "This action was denied because {{user}}, the user this run acts on behalf of, does not have permission to perform it. The agent may be allowed, but a run can never exceed the permissions of the user it acts for, so the action is blocked.",
+    "unauthorizedAction": "Grant {{user}} the required permission, or have someone who is authorized take this action instead."
+  },
   "agentDetailHeader": {
     "leftAgentNotice": "You left this agent. It no longer appears in your sidebar.",
     "dismissMembershipNotice": "Dismiss agent membership notice",
