@@ -7,6 +7,7 @@ import { ApiError } from "../api/client";
 import { ConnectivityProvider, createConnectivityStore, type ConnectivityStore } from "../lib/connectivity";
 import { LogViewer } from "./AgentDetail";
 import { LogViewer as ProductionLogViewer } from "./AgentDetail.production";
+import { t } from "@/i18n";
 
 const { log, events, empty } = vi.hoisted(() => ({ log: vi.fn(), events: vi.fn(async () => []), empty: [] }));
 vi.mock("../api/heartbeats", () => ({ heartbeatsApi: { log, events } }));
@@ -72,11 +73,11 @@ it.each([LogViewer, ProductionLogViewer])("keeps loaded log lines when the next 
   log.mockResolvedValueOnce({ content: first, nextOffset: first.length });
   await render(Viewer);
   expect(container.textContent).toContain("retained history");
-  expect(container.textContent).toContain("Load more log");
+  expect(container.textContent).toContain(t("runLogs.loadMoreLog"));
 
   log.mockRejectedValue(unavailable());
   await outage();
-  await act(async () => { Array.from(container.querySelectorAll("button")).find(button => button.textContent === "Load more log")!.click(); });
+  await act(async () => { Array.from(container.querySelectorAll("button")).find(button => button.textContent === t("runLogs.loadMoreLog"))!.click(); });
   // Paused, not failed: the lines stay, with no error copy and no raw code.
   expect(container.textContent).toContain("retained history");
   expect(container.querySelector('[data-query-view="error"]')).toBeNull();
@@ -88,14 +89,14 @@ it.each([LogViewer, ProductionLogViewer])("keeps loaded log lines when the next 
   await act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
   expect(log).toHaveBeenLastCalledWith("run-1", first.length, expect.any(Number), expect.anything());
   expect(container.textContent).toContain("retained history new output");
-  expect(container.textContent).not.toContain("Load more log");
+  expect(container.textContent).not.toContain(t("runLogs.loadMoreLog"));
 });
 
 it.each([LogViewer, ProductionLogViewer])("waits quietly when the first page fails during an outage, then fills in (%#)", async (Viewer) => {
   await outage();
   await render(Viewer);
   expect(log).not.toHaveBeenCalled();
-  expect(container.textContent).toContain("Loading run logs...");
+  expect(container.textContent).toContain(t("runLogs.loading"));
   expect(container.querySelector('[data-query-view="error"]')).toBeNull();
 
   const first = row(1, "first page");
@@ -104,7 +105,7 @@ it.each([LogViewer, ProductionLogViewer])("waits quietly when the first page fai
   await act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
   expect(log).toHaveBeenCalledWith("run-1", 0, expect.any(Number), expect.anything());
   expect(container.textContent).toContain("first page");
-  expect(container.textContent).not.toContain("Loading run logs...");
+  expect(container.textContent).not.toContain(t("runLogs.loading"));
 });
 
 it.each([LogViewer, ProductionLogViewer])("shows readable copy for a real failure, leaving out Retry when it cannot help (%#)", async (Viewer) => {
@@ -114,7 +115,7 @@ it.each([LogViewer, ProductionLogViewer])("shows readable copy for a real failur
   expect(alert?.textContent).toContain("Couldn't load the run log");
   expect(alert?.textContent).toContain("Forbidden");
   expect(alert?.querySelector("button")).toBeNull();
-  expect(container.textContent).not.toContain("No log events.");
+  expect(container.textContent).not.toContain(t("runLogs.noEvents"));
 
   const first = row(1, "after retry");
   log.mockResolvedValue({ content: first });
@@ -129,7 +130,7 @@ it.each([LogViewer, ProductionLogViewer])("retries a real failure on request wit
   await render(Viewer);
   expect(container.textContent).toContain("page one");
   log.mockRejectedValueOnce(new ApiError("stale_revision", 409, { error: "stale_revision" }));
-  await act(async () => { Array.from(container.querySelectorAll("button")).find(button => button.textContent === "Load more log")!.click(); });
+  await act(async () => { Array.from(container.querySelectorAll("button")).find(button => button.textContent === t("runLogs.loadMoreLog"))!.click(); });
   const alert = container.querySelector('[data-query-view="error"]');
   expect(alert?.textContent).toContain("Couldn't load the run log");
   expect(alert?.textContent).not.toContain("stale_revision");
@@ -146,7 +147,7 @@ it.each([LogViewer, ProductionLogViewer])("drops a page that arrives after the r
   let completeFirst!: (value: { content: string; nextOffset?: number }) => void;
   log.mockImplementationOnce(() => new Promise(resolve => { completeFirst = resolve; }));
   await render(Viewer);
-  expect(container.textContent).toContain("Loading run logs...");
+  expect(container.textContent).toContain(t("runLogs.loading"));
   const second = row(1, "second run");
   log.mockResolvedValue({ content: second });
   await render(Viewer, { ...run, id: "run-2" });
@@ -154,5 +155,5 @@ it.each([LogViewer, ProductionLogViewer])("drops a page that arrives after the r
   await act(async () => { completeFirst({ content: row(1, "first run"), nextOffset: 40 }); });
   expect(container.textContent).toContain("second run");
   expect(container.textContent).not.toContain("first run");
-  expect(container.textContent).not.toContain("Load more log");
+  expect(container.textContent).not.toContain(t("runLogs.loadMoreLog"));
 });

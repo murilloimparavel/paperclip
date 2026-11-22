@@ -109,6 +109,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir status, ações, resumo, sessão, tarefas afetadas e horários conforme o idioma ativo.
   - [x] Localizar rótulos do rastreamento do provedor e ações de cancelamento compartilhadas.
   - [ ] Revisar mensagens dinâmicas e componentes de tentativa, logs, recuperação e autorização.
+- Logs e operações de workspace da execução:
+  - [x] Traduzir transcript, eventos, navegação de logs, detalhes de invocação e operações de workspace.
+  - [x] Traduzir categorias e rótulos de falhas do provedor, preservando mensagens retornadas pelo provedor.
+  - [ ] Revisar o conteúdo do transcript, erros compartilhados de consulta e estados de retry/autorização.
 - Navegação de detalhes do agente:
   - [x] Traduzir grupos, abas, rótulos acessíveis, breadcrumbs e nomes de rotas legadas.
   - [x] Preservar os segmentos e URLs das rotas.
