@@ -80,4 +80,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados de carregamento, seleção de agente, orientação inicial e recurso desativado.
   - [x] Traduzir navegação, acessibilidade e estados sem agentes.
   - [x] Validar catálogos, testes do fluxo de entrada e typecheck da UI.
+- Visão geral e revisões do agente:
+  - [x] Traduzir métricas, perfil, habilidades, tarefas recentes e sugestões de tarefa.
+  - [x] Traduzir histórico de revisões de configuração e ações disponíveis.
+  - [x] Validar catálogos, testes das telas e typecheck da UI.
 - Em andamento: outras áreas de detalhes do agente, como visão geral, histórico, custos e auditoria.

@@ -991,6 +991,41 @@
       "extra-high": "Extra High"
     }
   },
+  "agentOverview": {
+    "suggestionResearch": "Research a topic and summarize the key findings",
+    "suggestionPlan": "Create a step-by-step plan for a project",
+    "suggestionReview": "Review a document and suggest improvements",
+    "activity": "Activity",
+    "eventsThisWeek": "Events this week",
+    "runs": "Runs",
+    "failedRecently": "{{failures}} failed in the last 2 days",
+    "costs": "Costs",
+    "monthToDate": "Month to date",
+    "budgetUsed": "Budget used",
+    "noMonthlyBudget": "No monthly budget set",
+    "ofBudgetThisMonth": "of {{budget}} this month",
+    "profile": "Profile",
+    "creatorLoadFailed": "Could not load creator",
+    "createdBy": "Created by {{name}} · {{date}}",
+    "created": "Created {{date}}",
+    "directReportsLabel": "Direct reports:",
+    "skills": "Skills",
+    "enabledSkills_one": "{{count}} enabled",
+    "enabledSkills_other": "{{count}} enabled",
+    "exploreSkills": "Explore skills",
+    "recentTasks": "Recent tasks",
+    "seeAllTasks": "See all tasks",
+    "startSuggestedTask": "Start with a suggested task",
+    "suggestedTasks": "Suggested tasks"
+  },
+  "agentRevisions": {
+    "title": "Configuration Revisions",
+    "total": "{{count}} total",
+    "empty": "No configuration revisions yet.",
+    "restore": "Restore",
+    "changed": "Changed",
+    "noTrackedChanges": "no tracked changes"
+  },
   "agentChats": {
     "breadcrumb": "Chat",
     "loadingChat": "Loading chat…",

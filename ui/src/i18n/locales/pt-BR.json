@@ -991,6 +991,41 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentOverview": {
+    "suggestionResearch": "Pesquise um tema e resuma as principais descobertas",
+    "suggestionPlan": "Crie um plano passo a passo para um projeto",
+    "suggestionReview": "Revise um documento e sugira melhorias",
+    "activity": "Atividade",
+    "eventsThisWeek": "Eventos nesta semana",
+    "runs": "Execuções",
+    "failedRecently": "{{failures}} falharam nos últimos 2 dias",
+    "costs": "Custos",
+    "monthToDate": "Desde o início do mês",
+    "budgetUsed": "Orçamento utilizado",
+    "noMonthlyBudget": "Nenhum orçamento mensal definido",
+    "ofBudgetThisMonth": "de {{budget}} neste mês",
+    "profile": "Perfil",
+    "creatorLoadFailed": "Não foi possível carregar quem criou o agente",
+    "createdBy": "Criado por {{name}} · {{date}}",
+    "created": "Criado em {{date}}",
+    "directReportsLabel": "Subordinados diretos:",
+    "skills": "Habilidades",
+    "enabledSkills_one": "{{count}} ativada",
+    "enabledSkills_other": "{{count}} ativadas",
+    "exploreSkills": "Explorar habilidades",
+    "recentTasks": "Tarefas recentes",
+    "seeAllTasks": "Ver todas as tarefas",
+    "startSuggestedTask": "Comece com uma tarefa sugerida",
+    "suggestedTasks": "Tarefas sugeridas"
+  },
+  "agentRevisions": {
+    "title": "Revisões da configuração",
+    "total": "{{count}} no total",
+    "empty": "Ainda não há revisões da configuração.",
+    "restore": "Restaurar",
+    "changed": "Alterado",
+    "noTrackedChanges": "nenhuma alteração registrada"
+  },
   "agentChats": {
     "breadcrumb": "Chat",
     "loadingChat": "Carregando o chat…",
