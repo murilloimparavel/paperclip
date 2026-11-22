@@ -991,6 +991,29 @@
       "extra-high": "Extra High"
     }
   },
+  "agentDetailNav": {
+    "agentSection": "Agent",
+    "auditSection": "Audit",
+    "apps": "Apps",
+    "agentFallback": "Agent",
+    "navigation": "{{name}} navigation",
+    "breadcrumbAgents": "Agents",
+    "overview": "Overview",
+    "identity": "Identity",
+    "runtime": "Harness / Runtime",
+    "secrets": "Secrets & variables",
+    "permissions": "Permissions / Trust",
+    "advanced": "Advanced",
+    "activity": "Activity",
+    "runs": "Runs",
+    "costs": "Costs",
+    "budgets": "Budgets",
+    "skills": "Skills",
+    "tools": "Tools",
+    "channels": "Channels",
+    "apiKeys": "API Keys",
+    "agentHistory": "Agent history"
+  },
   "instructionSettings": {
     "absolutePath": "Use an absolute path that starts with / or ~.",
     "entryMustStayInsideRoot": "The entry file has to sit inside the root path.",

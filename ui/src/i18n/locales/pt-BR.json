@@ -991,6 +991,29 @@
       "extra-high": "Extra alto"
     }
   },
+  "agentDetailNav": {
+    "agentSection": "Agente",
+    "auditSection": "Auditoria",
+    "apps": "Aplicativos",
+    "agentFallback": "Agente",
+    "navigation": "Navegação de {{name}}",
+    "breadcrumbAgents": "Agentes",
+    "overview": "Visão geral",
+    "identity": "Identidade",
+    "runtime": "Executor / Ambiente de execução",
+    "secrets": "Segredos e variáveis",
+    "permissions": "Permissões e confiança",
+    "advanced": "Avançado",
+    "activity": "Atividade",
+    "runs": "Execuções",
+    "costs": "Custos",
+    "budgets": "Orçamentos",
+    "skills": "Habilidades",
+    "tools": "Ferramentas",
+    "channels": "Canais",
+    "apiKeys": "Chaves de API",
+    "agentHistory": "Histórico do agente"
+  },
   "instructionSettings": {
     "absolutePath": "Use um caminho absoluto iniciado por / ou ~.",
     "entryMustStayInsideRoot": "O arquivo de entrada precisa ficar dentro do caminho raiz.",
