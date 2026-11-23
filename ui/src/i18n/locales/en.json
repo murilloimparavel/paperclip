@@ -2924,6 +2924,18 @@
     },
     "details": "Details"
   },
+  "taskChatBlockers": {
+    "blockedBy": "Blocked by",
+    "stillBlockedBy": "Still blocked by",
+    "rootBlockerRemains": "Root blocker remains",
+    "rootBlocker": "Root blocker",
+    "ultimatelyBlockedBy": "Ultimately blocked by",
+    "taskBlockers": "Task blockers",
+    "stillWaitingOnLiveWork": "Still waiting on live work",
+    "waitingOnLiveWork": "Waiting on live work",
+    "tasksWaitingOnLiveWork": "Tasks waiting on live work",
+    "nowRunning": "Now running"
+  },
   "taskChatInteractions": {
     "question": "Question",
     "answerQuestion": "Answer question: {{prompt}}",

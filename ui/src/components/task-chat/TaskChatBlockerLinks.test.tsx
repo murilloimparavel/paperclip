@@ -14,8 +14,9 @@ import {
 } from "@paperclipai/shared";
 import { StatusIcon } from "../StatusIcon";
 import { taskStatusIconProps } from "@/lib/task-status-presentation";
+import { i18n } from "@/i18n";
 import { TaskChatPresentationProvider } from "./presentation-mode";
-import { resolveTaskChatLiveWork, TaskChatLiveWorkLinks } from "./TaskChatBlockerLinks";
+import { resolveTaskChatLiveWork, TaskChatBlockerLinks, TaskChatLiveWorkLinks } from "./TaskChatBlockerLinks";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -148,4 +149,32 @@ describe("TaskChatLiveWorkLinks status glyphs (BUG-07)", () => {
       }
     });
   }
+
+  it("localizes blocker and live-work labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      await renderStrip(true);
+      expect(container.textContent).toContain("Ainda aguardando a execução de outras tarefas");
+      expect(container.textContent).toContain("Em execução agora");
+      expect(container.querySelector('[aria-label="Tarefas aguardando outras execuções"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes direct and root blocker labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      await act(async () => root.render(
+        <TaskChatPresentationProvider mode="streamlined">
+          <TaskChatBlockerLinks directBlocker={blockers[0]!} ultimateBlocker={terminal} placement="bottom" />
+        </TaskChatPresentationProvider>,
+      ));
+      expect(container.textContent).toContain("Continua bloqueada por");
+      expect(container.textContent).toContain("Bloqueio principal permanece");
+      expect(container.querySelector('[aria-label="Bloqueios da tarefa"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
 });

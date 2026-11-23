@@ -2924,6 +2924,18 @@
     },
     "details": "Detalhes"
   },
+  "taskChatBlockers": {
+    "blockedBy": "Bloqueada por",
+    "stillBlockedBy": "Continua bloqueada por",
+    "rootBlockerRemains": "Bloqueio principal permanece",
+    "rootBlocker": "Bloqueio principal",
+    "ultimatelyBlockedBy": "Bloqueada, em última instância, por",
+    "taskBlockers": "Bloqueios da tarefa",
+    "stillWaitingOnLiveWork": "Ainda aguardando a execução de outras tarefas",
+    "waitingOnLiveWork": "Aguardando a execução de outras tarefas",
+    "tasksWaitingOnLiveWork": "Tarefas aguardando outras execuções",
+    "nowRunning": "Em execução agora"
+  },
   "taskChatInteractions": {
     "question": "Pergunta",
     "answerQuestion": "Responder à pergunta: {{prompt}}",
