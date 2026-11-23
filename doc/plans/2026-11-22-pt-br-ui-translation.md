@@ -31,6 +31,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - [x] Confirmação por seleção de opções: filtros, contagem e limites, rejeição com justificativa, estados acessíveis e ações. Validado com `TaskChatInteractionCard.test.tsx` (43 testes) e `@paperclipai/ui typecheck`.
 - [x] Formulário de perguntas revisado: validações, respostas em texto/escolha, filtros, paginação, campos opcionais, envio/cancelamento e acessibilidade já usam o catálogo pt-BR; prompts, opções e instruções dinâmicas permanecem intactos. Conferido com 59 testes em quatro suítes focadas.
 - [x] Casca e recibos de interações: títulos de fallback, badges de status, chamadas de ação e rótulos de recibos localizados. Validado com as mesmas quatro suítes (59 testes) e `@paperclipai/ui typecheck`.
+- [x] Histórico e recibos de perguntas de execuções antigas: estados resolvido/cancelado/expirado e aviso quando a versão antiga não registrou respostas. Validado com quatro suítes focadas (55 testes) e `@paperclipai/ui typecheck`.
 - Manter `en.json` e `pt-BR.json` com a mesma estrutura e placeholders compatíveis.
 - Validar cada lote de forma focada e revisar a interface renderizada em pt-BR.
 - Fazer deploy somente depois da cobertura ampla, validação final e preparação do rollback.

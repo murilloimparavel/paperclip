@@ -2807,7 +2807,21 @@
     "answerBeforeSend": "A pergunta {{count}} precisa de uma resposta antes do envio.",
     "submitError": "Não foi possível enviar as respostas.",
     "cancelError": "Não foi possível cancelar as perguntas.",
-    "attachImageToAnswer": "Anexar imagem à resposta para {{question}}"
+    "attachImageToAnswer": "Anexar imagem à resposta para {{question}}",
+    "olderRuntimeAnswerDetailsUnavailable": "Os detalhes da resposta não foram registrados por esta versão antiga do executor.",
+    "noAnswersSubmitted": "Nenhuma resposta foi enviada; esta solicitação foi {{status}}.",
+    "runtimeStatuses": {
+      "pending": "pendente",
+      "resolved": "resolvida",
+      "cancelled": "cancelada",
+      "expired": "expirada"
+    },
+    "runtimeReceiptLabels": {
+      "pending": "Perguntas resolvidas",
+      "resolved": "Perguntas respondidas",
+      "cancelled": "Perguntas canceladas",
+      "expired": "Perguntas expiradas"
+    }
   },
   "taskChatRunHealth": {
     "serverFailed": "O servidor MCP {{server}} não iniciou",

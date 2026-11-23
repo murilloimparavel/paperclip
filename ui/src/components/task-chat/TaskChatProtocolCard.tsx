@@ -651,6 +651,7 @@ function RuntimeQuestionHistory({
 }: {
   item: TaskChatRuntimeRequestItem;
 }) {
+  const { t } = useTranslation();
   const questionSet = item.questionSet;
   if (!questionSet) return null;
   return (
@@ -677,8 +678,8 @@ function RuntimeQuestionHistory({
           ))}
           <p className="text-xs text-muted-foreground">
             {item.status === "resolved"
-              ? "Answer details were not recorded by this older runtime."
-              : `No answers were submitted; this request was ${item.status}.`}
+              ? t("taskQuestions.olderRuntimeAnswerDetailsUnavailable")
+              : t("taskQuestions.noAnswersSubmitted", { status: t(`taskQuestions.runtimeStatuses.${item.status}`) })}
           </p>
         </div>
       )}
@@ -691,14 +692,8 @@ function RuntimeQuestionReceipt({
 }: {
   item: TaskChatRuntimeRequestItem;
 }) {
-  const label =
-    item.status === "resolved"
-      ? "Questions answered"
-      : item.status === "cancelled"
-        ? "Questions cancelled"
-        : item.status === "expired"
-          ? "Questions expired"
-          : "Questions resolved";
+  const { t } = useTranslation();
+  const label = t(`taskQuestions.runtimeReceiptLabels.${item.status}`);
   return (
     <details className="group" data-testid="task-chat-runtime-request">
       <summary className="flex min-h-8 cursor-pointer list-none items-center gap-2 rounded-sm px-1 py-1.5 text-sm leading-5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">

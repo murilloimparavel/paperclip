@@ -968,6 +968,34 @@ describe("TaskChatProtocolCard", () => {
     );
   });
 
+  it("localizes runtime question receipts and fallback history in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      await act(async () => renderCard(root, {
+        id: "cancelled-input-request-pt",
+        kind: "protocol",
+        surface: "runtime_request",
+        runId: "run-1",
+        requestId: "request-cancelled-input-pt",
+        requestKind: "runtime",
+        turnId: "turn-1",
+        requestType: "input",
+        status: "cancelled",
+        prompt: "Codex needs your input.",
+        choices: [],
+        fields: [],
+        questionSet: {
+          schema: "paperclip.question_set.v1",
+          questions: [{ id: "goal", prompt: "What should the server do?", required: false, answerMode: "text" }],
+        },
+      }));
+      expect(container.querySelector("summary")?.textContent).toBe("Perguntas canceladas");
+      expect(container.textContent).toContain("Nenhuma resposta foi enviada; esta solicitação foi cancelada.");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("requires text when an explicit custom multi-select answer is active", async () => {
     renderCard(
       root,

@@ -2807,7 +2807,21 @@
     "answerBeforeSend": "Question {{count}} needs an answer before you can send.",
     "submitError": "The answers could not be submitted.",
     "cancelError": "The questions could not be cancelled.",
-    "attachImageToAnswer": "Attach image to answer for {{question}}"
+    "attachImageToAnswer": "Attach image to answer for {{question}}",
+    "olderRuntimeAnswerDetailsUnavailable": "Answer details were not recorded by this older runtime.",
+    "noAnswersSubmitted": "No answers were submitted; this request was {{status}}.",
+    "runtimeStatuses": {
+      "pending": "pending",
+      "resolved": "resolved",
+      "cancelled": "cancelled",
+      "expired": "expired"
+    },
+    "runtimeReceiptLabels": {
+      "pending": "Questions resolved",
+      "resolved": "Questions answered",
+      "cancelled": "Questions cancelled",
+      "expired": "Questions expired"
+    }
   },
   "taskChatRunHealth": {
     "serverFailed": "{{server}} MCP server failed to start",
