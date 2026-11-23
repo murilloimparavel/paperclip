@@ -264,4 +264,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados concluídos/interrompidos, atividade histórica e continuação após orientação.
   - [x] Traduzir a contagem de ferramentas, preservando métricas, tokens e alterações de arquivo.
   - [x] Validar catálogos, helper de resumo e renderização explícita em pt-BR.
+- Bolhas de mensagens do transcript:
+  - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
+  - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
+  - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

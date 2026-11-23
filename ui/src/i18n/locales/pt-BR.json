@@ -2924,6 +2924,14 @@
     },
     "details": "Detalhes"
   },
+  "taskChatBubble": {
+    "queued": "Na fila",
+    "sending": "Enviando…",
+    "sentFromIMessage": "Enviada pelo iMessage",
+    "openAttachment": "Abrir {{name}}",
+    "verificationCaveat": "Observação sobre a verificação",
+    "toolUnavailable": "ferramenta indisponível"
+  },
   "taskChatTurn": {
     "stopped": "Interrompido",
     "worked": "Trabalhou",

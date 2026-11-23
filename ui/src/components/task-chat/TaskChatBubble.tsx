@@ -18,6 +18,7 @@ import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { cn } from "@/lib/utils";
 import { agentDetailHref } from "@/pages/agent-detail-navigation";
 import { useStreamlinedTaskChatPresentation } from "./presentation-mode";
+import { useTranslation } from "react-i18next";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import {
   ImageGalleryModal,
@@ -162,6 +163,7 @@ function TaskChatBubbleContent({
   onTryAgainNoLiveExecutionPath,
   tryAgainNoLiveExecutionPathPending,
 }: TaskChatBubbleProps) {
+  const { t } = useTranslation();
   const readRef = useAgentChatRead(item.id, item.createdAtIso, item.author === "agent" && !item.optimistic);
   const streamlined = useStreamlinedTaskChatPresentation();
   const coordinator = useCoordinatorPresentation();
@@ -368,7 +370,7 @@ function TaskChatBubbleContent({
                     </AttachmentDescription>
                   </AttachmentContent>
                   <AttachmentTrigger
-                    aria-label={`Open ${ref.name}`}
+                    aria-label={t("taskChatBubble.openAttachment", { name: ref.name })}
                     onClick={video ? () => openImage(ref.url) : undefined}
                     render={video ? <button type="button" /> :
                       <a
@@ -395,7 +397,7 @@ function TaskChatBubbleContent({
           data-testid="task-chat-verification-caveats"
         >
           <p className="font-medium text-amber-800 dark:text-amber-200">
-            Verification caveat
+            {t("taskChatBubble.verificationCaveat")}
           </p>
           <ul className="mt-1 space-y-1 text-muted-foreground">
             {item.verificationCaveats.map((caveat, index) => (
@@ -404,7 +406,7 @@ function TaskChatBubbleContent({
                   {caveat.commandOrCheck}
                 </span>
                 {caveat.reasonCode
-                  ? ` · ${caveat.reasonCode.replaceAll("_", " ")}`
+                  ? ` · ${caveat.reasonCode === "tool_unavailable" ? t("taskChatBubble.toolUnavailable") : caveat.reasonCode.replaceAll("_", " ")}`
                   : ""}
                 {caveat.detail ? (
                   <span className="block">{caveat.detail}</span>
@@ -417,7 +419,7 @@ function TaskChatBubbleContent({
       {coordinator && recordedTimestamp && attachedTurn ? <span className="px-1 text-(length:--text-micro) text-muted-foreground"><CoordinatorRelativeTime value={recordedTimestamp!} /></span> : null}
       {item.optimistic ? (
         <span className="flex items-center gap-1 px-1 text-(length:--text-micro) text-muted-foreground">
-          <span>{item.optimistic === "queued" ? "Queued" : "Sending…"}</span>
+            <span>{item.optimistic === "queued" ? t("taskChatBubble.queued") : t("taskChatBubble.sending")}</span>
           {item.optimistic === "queued" ? queuedAction : null}
         </span>
       ) : attachedTurn ? (
@@ -438,7 +440,7 @@ function TaskChatBubbleContent({
             <TaskChatBubbleActions copyText={item.text} />
           </div>
           <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-            {sentFromIMessage ? "Sent from iMessage" : null}
+            {sentFromIMessage ? t("taskChatBubble.sentFromIMessage") : null}
             {sentFromIMessage && timestamp ? " · " : null}
             {timestamp}
           </span>
@@ -466,7 +468,7 @@ function TaskChatBubbleContent({
       ) : timestamp || sentFromIMessage ? (
         // Timestamps are always visible (round 9) — no longer hover-revealed.
         <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-          {sentFromIMessage ? "Sent from iMessage" : null}
+          {sentFromIMessage ? t("taskChatBubble.sentFromIMessage") : null}
           {sentFromIMessage && timestamp ? " · " : null}
           {timestamp}
         </span>
