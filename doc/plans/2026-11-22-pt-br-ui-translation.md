@@ -268,6 +268,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
   - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
   - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
+- Seletor de workspaces de execução no compositor:
+  - [x] Traduzir modos de uso/criação, grupos, busca e estados vazio, carregamento, erro e nova tentativa.
+  - [x] Preservar nomes de workspaces e branches fornecidos pelo usuário ou servidor.
+  - [x] Validar catálogos, teste de renderização em pt-BR, typecheck da UI e diff.
 - Cartão de habilidade criada no chat:
   - [x] Traduzir título e rótulo acessível, preservando nome e descrição da habilidade.
   - [x] Validar catálogos, 2 testes focados e typecheck da UI.

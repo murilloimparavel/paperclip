@@ -3146,5 +3146,29 @@
   "taskChatSkillCreatedCard": {
     "title": "Habilidade criada",
     "ariaLabel": "Habilidade criada: {{name}}"
+  },
+  "composerWorktreePicker": {
+    "newWorktree": "Nova árvore de trabalho",
+    "startIsolated": "Iniciar em uma cópia isolada.",
+    "projectWorkspace": "Workspace do projeto",
+    "useShared": "Usar a cópia compartilhada do projeto.",
+    "newBranch": "Nova branch",
+    "createBranch": "Criar uma branch no workspace do projeto.",
+    "agentDefault": "Padrão do agente",
+    "agentChoose": "Deixar o agente escolher o workspace.",
+    "projectDefault": "Padrão do projeto",
+    "useProjectSettings": "Usar as configurações de árvore de trabalho do projeto.",
+    "reuseWorktree": "Reutilizar uma árvore de trabalho",
+    "existingWorkspace": "Workspace existente",
+    "otherOptions": "Outras opções",
+    "worktrees": "Árvores de trabalho",
+    "search": "Buscar árvores de trabalho...",
+    "noMatches": "Nenhuma árvore de trabalho encontrada.",
+    "worktreesPrefix": "Árvores de trabalho",
+    "selectWorktree": "Selecionar árvore de trabalho",
+    "loading": "Carregando árvores de trabalho existentes…",
+    "loadError": "Não foi possível carregar as árvores de trabalho.",
+    "retry": "Tentar novamente",
+    "emptyHint": "Ainda não há árvores de trabalho. Escolha “Nova árvore de trabalho” para criar uma."
   }
 }
