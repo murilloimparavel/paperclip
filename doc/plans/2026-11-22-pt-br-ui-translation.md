@@ -190,4 +190,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir falha de inicialização de servidor MCP e orientação de recuperação.
   - [x] Preservar nomes de servidores e detalhes técnicos devolvidos pelo provedor.
   - [x] Validar catálogos, testes do banner e renderização em pt-BR.
+- Acessibilidade de fases de atividade no transcript:
+  - [x] Traduzir ações acessíveis de expandir e recolher, preservando o resumo da atividade.
+  - [x] Validar catálogos, testes das fases e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

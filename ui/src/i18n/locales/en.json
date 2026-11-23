@@ -2801,5 +2801,9 @@
     "serverFailed": "{{server}} MCP server failed to start",
     "serversFailedCount": "{{count}} MCP servers failed to start",
     "recoveryInstructions": "The agent ran without these tools. Fix the server’s command or credentials, then try again."
+  },
+  "taskChatActivity": {
+    "expand": "Expand activity: {{summary}}",
+    "collapse": "Collapse activity: {{summary}}"
   }
 }

@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { TaskChatActivityPhase } from "./TaskChatActivityPhase";
 import { TaskChatToolCard } from "./TaskChatToolCard";
 import { TaskChatExpansionState } from "./expansion-state";
+import { i18n } from "@/i18n";
 import type { TaskChatToolItem } from "./task-chat-model";
 
 describe("TaskChatActivityPhase", () => {
@@ -81,6 +82,27 @@ describe("TaskChatActivityPhase", () => {
       container.querySelector('[data-testid="task-chat-phase-children"]'),
     ).toBeNull();
     flushSync(() => root.unmount());
+  });
+
+  it("localizes the activity disclosure label in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    try {
+      flushSync(() => root.render(<TaskChatActivityPhase
+        item={{ id: "phase-pt", kind: "activity_phase", active: false, summary: "Leu arquivo", items: [
+          { id: "tool-pt", kind: "tool", name: "Read", status: "completed" },
+        ] }}
+        renderChild={(child) => <span>{child.id}</span>}
+      />));
+      expect(container.querySelector('[data-testid="task-chat-phase-summary"]')?.getAttribute("aria-label"))
+        .toBe("Expandir atividade: Leu arquivo");
+    } finally {
+      flushSync(() => root.unmount());
+      container.remove();
+      await i18n.changeLanguage("en");
+    }
   });
 
   it("uses a representative icon and hover-only right caret in the runner appearance", () => {
