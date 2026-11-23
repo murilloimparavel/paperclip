@@ -214,6 +214,24 @@ describe("ResponsibilityDetail views", () => {
     }
   });
 
+  it("localizes the responsibility header and written status in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      mocks.search = "?view=one_screen";
+      mocks.api.statusReport.mockResolvedValue(statusReportFixture());
+      await render();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="one_screen"]')!;
+      expect(page.textContent).toContain("Pedir uma atualização a CodexCoder");
+      expect(page.textContent).toContain("Escrito por CodexCoder · há 2 dias");
+      expect(page.textContent).toContain("Em risco");
+      expect(page.textContent).toContain("Com base no indicador");
+      expect(page.querySelector('[aria-label="Mais ações para esta responsabilidade"]')).not.toBeNull();
+      expect(page.textContent).toContain("Nova tarefa para um agente");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
+
   it("One screen: the bar beside short capped lists of the work, each item marked with how it bears on the number", async () => {
     mocks.search = "?view=one_screen";
     await render();

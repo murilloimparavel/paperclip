@@ -3366,6 +3366,44 @@
     "statusAtLeastRisk": "A meta está no caminho certo a partir de {{target}}; em atenção a partir de {{limit}}",
     "statusAtLeast": "A meta está no caminho certo a partir de {{target}}; abaixo disso, fora da meta"
   },
+  "responsibilityHealthBadge": {
+    "setByHand": "Definido manualmente"
+  },
+  "responsibilityViewParts": {
+    "proposedThisWaiting": "Esta responsabilidade foi proposta para você e aguarda sua revisão.",
+    "oneProposalWaiting": "1 responsabilidade proposta aguarda sua revisão.",
+    "proposalsWaiting": "{{count}} responsabilidades propostas aguardam sua revisão.",
+    "reviewIt": "Revisar",
+    "reviewThem": "Revisar",
+    "youLetGoOfThis": "Você abriu mão desta responsabilidade.",
+    "youDismissedThis": "Você dispensou esta proposta.",
+    "moreActions": "Mais ações para esta responsabilidade",
+    "letGo": "Abrir mão",
+    "takeItBackOn": "Assumir novamente",
+    "delete": "Excluir…"
+  },
+  "responsibilityStatusLead": {
+    "report": {
+      "behind": "Atrasada",
+      "at_risk": "Em risco",
+      "on_track": "No caminho certo",
+      "unknown": "Não foi possível determinar"
+    },
+    "anAgent": "um agente",
+    "theOwner": "a pessoa responsável",
+    "aTeammate": "outra pessoa da equipe",
+    "agentNoLongerHere": "um agente que não está mais aqui",
+    "today": "hoje",
+    "yesterday": "ontem",
+    "daysAgo": "há {{count}} dias",
+    "onDate": "em {{date}}",
+    "writtenBy": "Escrito por {{who}} · {{age}}",
+    "outOfDate": "Desatualizado",
+    "askedForUpdate": "Você pediu uma atualização a {{name}}",
+    "askForUpdate": "Pedir uma atualização a {{name}}",
+    "couldntAsk": "Não foi possível pedir a atualização.",
+    "fromTheNumber": "Com base no indicador"
+  },
   "responsibilityWorkSignals": {
     "tone": {
       "attention": "precisa de atenção",

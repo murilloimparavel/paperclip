@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
 import type { ResponsibilityHealth } from "@paperclipai/shared";
 import { Clock } from "lucide-react";
-import { RESPONSIBILITY_HEALTH_LABEL, RESPONSIBILITY_HEALTH_STATUS_VAR } from "@/lib/responsibilities";
+import { useTranslation } from "react-i18next";
+import { RESPONSIBILITY_HEALTH_STATUS_VAR } from "@/lib/responsibilities";
 import { cn } from "@/lib/utils";
 
 /** Points the shared `.status-chip` / `.status-fill` recipes at a status hue. */
@@ -27,6 +28,7 @@ export function ResponsibilityHealthBadge({
   label?: string;
   className?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <span
       className={cn(
@@ -34,10 +36,10 @@ export function ResponsibilityHealthBadge({
         className,
       )}
       style={healthStatusStyle(health)}
-      title={overridden ? "Set by hand" : undefined}
+      title={overridden ? t("responsibilityHealthBadge.setByHand") : undefined}
     >
-      {label ?? RESPONSIBILITY_HEALTH_LABEL[health]}
-      {overridden ? <span className="sr-only"> (set by hand)</span> : null}
+      {label ?? t(`responsibilityMeasures.health.${health}`)}
+      {overridden ? <span className="sr-only"> ({t("responsibilityHealthBadge.setByHand")})</span> : null}
     </span>
   );
 }

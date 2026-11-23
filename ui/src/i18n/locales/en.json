@@ -3366,6 +3366,44 @@
     "statusAtLeastRisk": "On track at {{target}} or more; at risk from {{limit}}",
     "statusAtLeast": "On track at {{target}} or more; behind below that"
   },
+  "responsibilityHealthBadge": {
+    "setByHand": "Set by hand"
+  },
+  "responsibilityViewParts": {
+    "proposedThisWaiting": "This responsibility was proposed for you and is waiting for your review.",
+    "oneProposalWaiting": "1 proposed responsibility is waiting for your review.",
+    "proposalsWaiting": "{{count}} proposed responsibilities are waiting for your review.",
+    "reviewIt": "Review it",
+    "reviewThem": "Review them",
+    "youLetGoOfThis": "You let go of this.",
+    "youDismissedThis": "You dismissed this when it was proposed.",
+    "moreActions": "More actions for this responsibility",
+    "letGo": "Let go",
+    "takeItBackOn": "Take it back on",
+    "delete": "Delete…"
+  },
+  "responsibilityStatusLead": {
+    "report": {
+      "behind": "Behind",
+      "at_risk": "At risk",
+      "on_track": "On track",
+      "unknown": "Can't tell yet"
+    },
+    "anAgent": "an agent",
+    "theOwner": "the owner",
+    "aTeammate": "a teammate",
+    "agentNoLongerHere": "an agent no longer here",
+    "today": "today",
+    "yesterday": "yesterday",
+    "daysAgo": "{{count}} days ago",
+    "onDate": "on {{date}}",
+    "writtenBy": "Written by {{who}} · {{age}}",
+    "outOfDate": "Out of date",
+    "askedForUpdate": "Asked {{name}} for an update",
+    "askForUpdate": "Ask {{name}} for an update",
+    "couldntAsk": "Couldn’t ask.",
+    "fromTheNumber": "From the number"
+  },
   "responsibilityWorkSignals": {
     "tone": {
       "attention": "Needs attention",
