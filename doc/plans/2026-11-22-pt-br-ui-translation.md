@@ -336,6 +336,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Cartão de habilidade criada no chat:
   - [x] Traduzir título e rótulo acessível, preservando nome e descrição da habilidade.
   - [x] Validar catálogos, 2 testes focados e typecheck da UI.
+- Cartão de proposta de meta e formulário de feedback:
+  - [x] Traduzir rótulos, ações, mensagens de estado, nomes acessíveis e texto padrão do formulário.
+  - [x] Preservar valores, nomes e conteúdo dinâmico da proposta.
+  - [x] Validar o catálogo pt-BR, 9 testes focados, typecheck da UI e diff.
 - Carregamento do histórico no chat de tarefas:
   - [x] Traduzir falha, nova tentativa, carregamento e orientação para buscar mensagens anteriores.
   - [x] Traduzir nomes acessíveis da conversa e da ação para ir à mensagem mais recente.
