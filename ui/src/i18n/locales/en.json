@@ -2755,6 +2755,11 @@
       "privateTaskExplanation": "Only you and people you share with can read this task",
       "removePrivateTask": "Remove private task",
       "private": "Private"
+    },
+    "fileDrop": {
+      "dropToAttach": "Drop files to attach",
+      "addToNewTask": "Add images and files to your new task",
+      "addToMessage": "Add images and files to your message"
     }
   },
   "taskQuestions": {

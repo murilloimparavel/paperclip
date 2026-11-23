@@ -2755,6 +2755,11 @@
       "privateTaskExplanation": "Somente você e as pessoas com quem compartilhar podem ler esta tarefa",
       "removePrivateTask": "Remover tarefa privada",
       "private": "Privada"
+    },
+    "fileDrop": {
+      "dropToAttach": "Solte os arquivos para anexá-los",
+      "addToNewTask": "Adicionar imagens e arquivos à nova tarefa",
+      "addToMessage": "Adicionar imagens e arquivos à mensagem"
     }
   },
   "taskQuestions": {
