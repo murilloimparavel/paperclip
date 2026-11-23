@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { i18n } from "@/i18n";
 import {
   areaFundraising,
   homeAutomationFixture,
@@ -193,6 +194,24 @@ describe("ResponsibilityDetail views", () => {
     expect(page.textContent).toContain("1 finished item is not listed.");
     expect(page.querySelector('[data-testid="responsibility-strip"]')?.querySelectorAll("li")).toHaveLength(4);
     expect(page.textContent).toContain("And 61 more artifacts.");
+  });
+
+  it("localizes the work summary and signal tones in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      mocks.search = "?view=moving";
+      await render();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="moving"]')!;
+      expect(page.textContent).toContain("Visão do andamento");
+      expect(page.textContent).toContain("Precisa de atenção");
+      expect(page.textContent).toContain("Todo o restante");
+      expect(page.textContent).toContain("Trabalho");
+      expect(page.textContent).toContain("1 item concluído não está listado.");
+      expect(page.textContent).toContain("(precisa de atenção)");
+      expect(page.textContent).toContain("(indo bem)");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
   });
 
   it("One screen: the bar beside short capped lists of the work, each item marked with how it bears on the number", async () => {

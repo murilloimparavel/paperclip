@@ -1,14 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { ResponsibilityWorkSignal } from "@paperclipai/shared";
+import { useTranslation } from "react-i18next";
 import { Link } from "@/lib/router";
 import { RESPONSIBILITY_SIGNAL_TONE_VAR, signalHref } from "@/lib/responsibilities";
 import { cn } from "@/lib/utils";
-
-const TONE_LABEL: Record<ResponsibilityWorkSignal["tone"], string> = {
-  attention: "Needs attention",
-  neutral: "",
-  good: "Going well",
-};
 
 function ToneDot({ tone }: { tone: ResponsibilityWorkSignal["tone"] }) {
   return (
@@ -40,13 +35,14 @@ export function WorkSignalList({
   size?: "xs" | "sm";
   className?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <ul className={cn("flex flex-col", size === "xs" ? "gap-0.5" : "gap-1.5", className)}>
       {signals.map((signal, index) => {
         const href = signal.refType === "responsibility" && signal.refId && responsibilityHref
           ? responsibilityHref(signal.refId)
           : signalHref(signal);
-        const toneLabel = TONE_LABEL[signal.tone];
+        const toneLabel = signal.tone === "neutral" ? "" : t(`responsibilityWorkSignals.tone.${signal.tone}`);
         const text = (
           <>
             {signal.text}

@@ -3366,6 +3366,24 @@
     "statusAtLeastRisk": "A meta está no caminho certo a partir de {{target}}; em atenção a partir de {{limit}}",
     "statusAtLeast": "A meta está no caminho certo a partir de {{target}}; abaixo disso, fora da meta"
   },
+  "responsibilityWorkSignals": {
+    "tone": {
+      "attention": "precisa de atenção",
+      "good": "indo bem"
+    }
+  },
+  "responsibilityWhatsMoving": {
+    "whatsMoving": "Visão do andamento",
+    "nothingToReport": "Ainda não há atualizações. Quando projetos, tarefas ou rotinas forem vinculados aqui, as necessidades aparecerão nesta seção.",
+    "needsAttention": "Precisa de atenção",
+    "noAttention": "Nenhuma atividade precisa de atenção.",
+    "everythingElse": "Todo o restante",
+    "theWork": "Trabalho",
+    "noOpenWork": "Não há projetos, tarefas ou rotinas abertos vinculados a esta responsabilidade.",
+    "oneFinishedNotListed": "1 item concluído não está listado.",
+    "finishedNotListed": "{{count}} itens concluídos não estão listados.",
+    "onlyFirstTasksListed": "Apenas as primeiras {{count}} tarefas são exibidas."
+  },
   "responsibilityHomeSections": {
     "notInArea": "Sem área",
     "archived": "Arquivada",

@@ -3366,6 +3366,24 @@
     "statusAtLeastRisk": "On track at {{target}} or more; at risk from {{limit}}",
     "statusAtLeast": "On track at {{target}} or more; behind below that"
   },
+  "responsibilityWorkSignals": {
+    "tone": {
+      "attention": "Needs attention",
+      "good": "Going well"
+    }
+  },
+  "responsibilityWhatsMoving": {
+    "whatsMoving": "What's moving",
+    "nothingToReport": "Nothing to report yet. Once projects, tasks or routines are filed here, what they need shows up here.",
+    "needsAttention": "Needs attention",
+    "noAttention": "Nothing in the work needs attention.",
+    "everythingElse": "Everything else",
+    "theWork": "The work",
+    "noOpenWork": "No open projects, tasks or routines are filed here.",
+    "oneFinishedNotListed": "1 finished item is not listed.",
+    "finishedNotListed": "{{count}} finished items are not listed.",
+    "onlyFirstTasksListed": "Only the first {{count}} tasks are listed."
+  },
   "responsibilityHomeSections": {
     "notInArea": "Not in an area",
     "archived": "Archived",
