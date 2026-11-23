@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Agent, AttentionFeed, AttentionItem, IssueSummary, Project } from "@paperclipai/shared";
 import { buildPinnedNavigationItems, CoordinatorSidebar } from "./CoordinatorSidebar";
+import { i18n } from "@/i18n";
 import { TooltipProvider } from "./ui/tooltip";
 import { coordinatorAttentionQueryKey, coordinatorAttentionSummaryQueryKey, coordinatorAttentionTasksQueryKey } from "@/lib/coordinator-attention";
 import { queryKeys } from "@/lib/queryKeys";
@@ -47,7 +48,8 @@ function summary(items: AttentionItem[], mineCount = items.length) {
 }
 
 let root: Root, container: HTMLDivElement, client: QueryClient;
-beforeEach(() => {
+beforeEach(async () => {
+  await i18n.changeLanguage("en");
   vi.clearAllMocks(); localStorage.clear(); fixture.userId = "reviewer"; fixture.pathname = "/COO/issues"; fixture.search = "";
   fixture.chats = []; fixture.recentTasks = []; fixture.taskSummaries = []; fixture.projects = []; fixture.enableCases = false; fixture.enableResponsibilities = false; fixture.agents = [];
   fixture.summary.mockResolvedValue(summary([pending("question"), pending("review")]));
@@ -354,13 +356,39 @@ describe("Coordinator pinned pages", () => {
     expect(pinnedPage("/agents/all")?.textContent).toBe("Agents");
   });
 });
-afterEach(async () => { await act(async () => root.unmount()); client.clear(); container.remove(); });
+afterEach(async () => { await act(async () => root.unmount()); await i18n.changeLanguage("en"); client.clear(); container.remove(); });
 async function flush() { await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); }); }
 async function renderSidebar() {
   await act(async () => root.render(<QueryClientProvider client={client}><TooltipProvider><CoordinatorSidebar /></TooltipProvider></QueryClientProvider>));
   await flush();
 }
 const decisionLink = () => container.querySelector('a[href="/decisions"]')!;
+
+describe("Coordinator sidebar localization", () => {
+  it("localizes More, its flyout, recent items, and shell accessibility labels", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    fixture.agents = [{ id: "cto", companyId: "company", name: "CTO", urlKey: "cto", role: "cto", status: "idle" } as Agent];
+    fixture.chats = [{ id: "chat-cto", conversationAgentId: "cto", updatedAt: "2026-11-11T12:00:00Z", isUnreadForMe: false }];
+    localStorage.setItem("paperclip.coordinator.pinned-nav.v1:reviewer", JSON.stringify(["/projects"]));
+
+    await renderSidebar();
+
+    expect(container.querySelector('nav[aria-label="Navegação do espaço de trabalho"]')).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Busca global"]')).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Nova tarefa"]')?.textContent).toBe("Nova tarefa");
+    expect(container.querySelector(".design-sidebar-recents")?.textContent).toContain("Recentes");
+    const more = container.querySelector<HTMLButtonElement>('button[aria-label="Mais páginas do espaço de trabalho"]')!;
+    expect(more.textContent).toContain("Mais");
+    await act(async () => more.click());
+
+    const menu = [...document.querySelectorAll<HTMLElement>('[aria-label="Mais páginas do espaço de trabalho"]')]
+      .find(element => element.querySelector('a[href="/search"]'))!;
+    expect(menu.querySelector('button[aria-label="Desafixar Projetos"]')).not.toBeNull();
+    expect([...menu.querySelectorAll("a")].map(link => link.textContent?.trim())).toEqual([
+      "Buscar", "Painel", "Projetos", "Rotinas", "Artefatos", "Agentes", "Habilidades", "Conectores", "Auditoria", "Configurações",
+    ]);
+  });
+});
 
 describe("Coordinator Inbox badge", () => {
   it("counts outstanding decisions for you even when none arrived today", async () => {

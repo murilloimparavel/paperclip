@@ -1862,6 +1862,7 @@
       "Private project": "Private project",
       "Profile": "Profile",
       "Projects": "Projects",
+      "Recents": "Recents",
       "Review": "Review",
       "Routines": "Routines",
       "Search": "Search",
@@ -1882,7 +1883,15 @@
     },
     "actions": "Actions for {{label}}",
     "collapseSection": "Collapse {{label}}",
-    "expandSection": "Expand {{label}}"
+    "expandSection": "Expand {{label}}",
+    "more": "More",
+    "moreWorkspacePages": "More workspace pages",
+    "workspaceNavigation": "Workspace navigation",
+    "globalSearch": "Global search",
+    "searchTasksAgentsProjects": "Search tasks, agents, projects",
+    "newTask": "New task",
+    "pinItem": "Pin {{label}}",
+    "unpinItem": "Unpin {{label}}"
   },
   "auditRuns": {
     "runs": "Runs",
