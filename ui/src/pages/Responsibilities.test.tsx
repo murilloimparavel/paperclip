@@ -309,15 +309,17 @@ describe("Responsibilities home", () => {
     expect(text()).toContain("Old fund");
   });
 
-  it("localizes the responsibility status summary in Brazilian Portuguese", async () => {
+  it("localizes the responsibility home sections in Brazilian Portuguese", async () => {
     await i18n.changeLanguage("pt-BR");
     try {
-      api.overview.mockResolvedValue(responsibilityOverviewFixture([portfolioOnTrack]));
+      api.overview.mockResolvedValue(homeOverviewFixture);
       await render();
       expect(text()).toContain("Resumo das responsabilidades");
       expect(text()).toContain("Suas responsabilidades");
       expect(text()).toContain("Execução por agentes");
       expect(text()).toContain("No caminho certo");
+      expect(text()).toContain("Precisa de você");
+      expect(text()).toContain("Em andamento sem você");
     } finally {
       await i18n.changeLanguage("en");
     }

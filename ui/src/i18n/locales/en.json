@@ -3366,6 +3366,28 @@
     "statusAtLeastRisk": "On track at {{target}} or more; at risk from {{limit}}",
     "statusAtLeast": "On track at {{target}} or more; behind below that"
   },
+  "responsibilityHomeSections": {
+    "notInArea": "Not in an area",
+    "archived": "Archived",
+    "moreForArea": "More for the {{title}} area",
+    "restoreArea": "Restore area",
+    "addResponsibilityHere": "Add a responsibility here",
+    "renameArea": "Rename area",
+    "archiveArea": "Archive area…",
+    "oneMoreArea": "1 more area in the company",
+    "moreAreas": "{{count}} more areas in the company",
+    "otherAreasDescription": "Areas the company cares about where you own nothing yet.",
+    "newTaskForAgentWithReason": "New task for an agent: {{text}}",
+    "newTaskForAgent": "New task for an agent",
+    "needsYou": "Needs you",
+    "nothingNeedsYou": "Nothing needs you right now. Everything you own is on track or quiet.",
+    "oneItem": " item",
+    "items": " items",
+    "needsYouDescription": "What is holding your responsibilities back. Give any of it to an agent.",
+    "runningWithoutYou": "Running without you",
+    "runningDescription": "What agents and routines are doing under your responsibilities.",
+    "nothingRunning": "Nothing is running without you yet. Give a task, a routine or a project to an agent to start."
+  },
   "responsibilityMeasures": {
     "whereThingsStand": "Where things stand",
     "oneResponsibility": "1 responsibility",

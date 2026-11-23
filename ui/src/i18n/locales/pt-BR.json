@@ -3366,6 +3366,28 @@
     "statusAtLeastRisk": "A meta está no caminho certo a partir de {{target}}; em atenção a partir de {{limit}}",
     "statusAtLeast": "A meta está no caminho certo a partir de {{target}}; abaixo disso, fora da meta"
   },
+  "responsibilityHomeSections": {
+    "notInArea": "Sem área",
+    "archived": "Arquivada",
+    "moreForArea": "Mais opções para a área {{title}}",
+    "restoreArea": "Restaurar área",
+    "addResponsibilityHere": "Adicionar responsabilidade aqui",
+    "renameArea": "Renomear área",
+    "archiveArea": "Arquivar área…",
+    "oneMoreArea": "Mais 1 área na empresa",
+    "moreAreas": "Mais {{count}} áreas na empresa",
+    "otherAreasDescription": "Áreas importantes para a empresa nas quais você ainda não tem responsabilidades.",
+    "newTaskForAgentWithReason": "Nova tarefa para um agente: {{text}}",
+    "newTaskForAgent": "Nova tarefa para um agente",
+    "needsYou": "Precisa de você",
+    "nothingNeedsYou": "Nada precisa da sua atenção agora. Suas responsabilidades estão no caminho certo ou sem pendências.",
+    "oneItem": " item",
+    "items": " itens",
+    "needsYouDescription": "Veja o que está impedindo o avanço das suas responsabilidades. Você pode delegar essas ações a um agente.",
+    "runningWithoutYou": "Em andamento sem você",
+    "runningDescription": "Atividades que os agentes e as rotinas estão executando nas suas responsabilidades.",
+    "nothingRunning": "Nada está sendo executado sem você ainda. Atribua uma tarefa, rotina ou projeto a um agente para começar."
+  },
   "responsibilityMeasures": {
     "whereThingsStand": "Resumo das responsabilidades",
     "oneResponsibility": "1 responsabilidade",
