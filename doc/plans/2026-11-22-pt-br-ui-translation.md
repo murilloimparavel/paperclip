@@ -360,6 +360,14 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir rótulos de status, revisão de propostas, ações do cabeçalho e autoria/data do status escrito.
   - [x] Preservar nomes, mensagens e conteúdo dinâmico informado por agentes e usuários.
   - [x] Validar a tela em pt-BR, 24 testes focados, typecheck da UI e diff.
+- Visão compacta “Uma tela” da responsabilidade:
+  - [x] Traduzir a meta, listas de projetos/tarefas/rotinas, legenda dos indicadores e ações de automação.
+  - [x] Preservar títulos e justificativas dinâmicas dos itens.
+  - [x] Validar a tela em pt-BR, 18 testes focados, typecheck da UI, build de produção da UI e diff.
+- Build completo para publicação:
+  - [ ] `pnpm build` local parou na compilação do runner porque `cargo` não está instalado no host.
+  - [x] Confirmar que o Dockerfile instala o toolchain Rust e compila a UI; build de imagem não executável neste host porque `docker` não está instalado.
+  - [x] Confirmar que `.github/workflows/docker.yml` só inicia automaticamente para `master`/tags; push desta branch não publica imagem.
 - Carregamento do histórico no chat de tarefas:
   - [x] Traduzir falha, nova tentativa, carregamento e orientação para buscar mensagens anteriores.
   - [x] Traduzir nomes acessíveis da conversa e da ação para ir à mensagem mais recente.

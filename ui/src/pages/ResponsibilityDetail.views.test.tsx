@@ -197,7 +197,7 @@ describe("ResponsibilityDetail views", () => {
   });
 
   it("localizes the work summary and signal tones in Brazilian Portuguese", async () => {
-    await i18n.changeLanguage("pt-BR");
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
     try {
       mocks.search = "?view=moving";
       await render();
@@ -210,16 +210,17 @@ describe("ResponsibilityDetail views", () => {
       expect(page.textContent).toContain("(precisa de atenção)");
       expect(page.textContent).toContain("(indo bem)");
     } finally {
-      await i18n.changeLanguage("en");
+      await act(async () => { await i18n.changeLanguage("en"); });
     }
   });
 
   it("localizes the responsibility header and written status in Brazilian Portuguese", async () => {
-    await i18n.changeLanguage("pt-BR");
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
     try {
       mocks.search = "?view=one_screen";
       mocks.api.statusReport.mockResolvedValue(statusReportFixture());
       await render();
+      await flush();
       const page = host.querySelector<HTMLElement>('[data-responsibility-view="one_screen"]')!;
       expect(page.textContent).toContain("Pedir uma atualização a CodexCoder");
       expect(page.textContent).toContain("Escrito por CodexCoder · há 2 dias");
@@ -228,7 +229,28 @@ describe("ResponsibilityDetail views", () => {
       expect(page.querySelector('[aria-label="Mais ações para esta responsabilidade"]')).not.toBeNull();
       expect(page.textContent).toContain("Nova tarefa para um agente");
     } finally {
-      await i18n.changeLanguage("en");
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes the One screen sections, legends and automation actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      mocks.search = "?view=one_screen";
+      await render();
+      await flush();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="one_screen"]')!;
+      expect(page.textContent).toContain("A meta");
+      expect(page.textContent).toContain("Editar a meta");
+      expect(page.textContent).toContain("Projetos");
+      expect(page.textContent).toContain("Tarefas");
+      expect(page.textContent).toContain("Rotinas");
+      expect(page.textContent).toContain("Impede o avanço da meta");
+      expect(page.textContent).toContain("Contribui para a meta");
+      expect(page.querySelector('[aria-label^="Automatizar com CodexCoder"]')).not.toBeNull();
+      expect(page.querySelector('[aria-label^="Configurar"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
     }
   });
 

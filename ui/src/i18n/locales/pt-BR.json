@@ -3366,6 +3366,42 @@
     "statusAtLeastRisk": "A meta está no caminho certo a partir de {{target}}; em atenção a partir de {{limit}}",
     "statusAtLeast": "A meta está no caminho certo a partir de {{target}}; abaixo disso, fora da meta"
   },
+  "responsibilityOneScreen": {
+    "theBar": "A meta",
+    "editTheBar": "Editar a meta",
+    "noBarYet": "Nenhuma meta definida.",
+    "whatAffectsTheNumber": "O que afeta o indicador",
+    "kind": {
+      "project": "Projetos",
+      "task": "Tarefas",
+      "routine": "Rotinas"
+    },
+    "empty": {
+      "project": "Nenhum projeto aberto.",
+      "task": "Nenhuma tarefa aberta.",
+      "routine": "Nenhuma rotina."
+    },
+    "bearing": {
+      "holding": "Impede o avanço da meta",
+      "moving": "Contribui para a meta",
+      "movingAccessible": "Contribui para a meta"
+    },
+    "oneMore": "e mais 1",
+    "moreItems": "e mais {{count}} itens",
+    "automateItem": "{{label}}: “{{title}}”",
+    "setUpItemByHand": "Configurar “{{title}}” manualmente",
+    "setItUpByHand": "Configurar manualmente",
+    "yourAgent": "seu agente",
+    "reviewAgentProposal": "Revisar a proposta de {{agent}}",
+    "continueWithAgent": "Continuar com {{agent}}",
+    "automateWithAgent": "Automatizar com {{agent}}",
+    "oneAutomation": "1 automação",
+    "automations": "{{count}} automações",
+    "oneManualTask": "1 tarefa manual",
+    "manualTasks": "{{count}} tarefas manuais",
+    "automationShare": "{{percent}}% automatizado",
+    "couldntOpenConversation": "Não foi possível abrir a conversa."
+  },
   "responsibilityHealthBadge": {
     "setByHand": "Definido manualmente"
   },

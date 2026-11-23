@@ -3366,6 +3366,42 @@
     "statusAtLeastRisk": "On track at {{target}} or more; at risk from {{limit}}",
     "statusAtLeast": "On track at {{target}} or more; behind below that"
   },
+  "responsibilityOneScreen": {
+    "theBar": "The bar",
+    "editTheBar": "Edit the bar",
+    "noBarYet": "No bar yet.",
+    "whatAffectsTheNumber": "What is affecting the number",
+    "kind": {
+      "project": "Projects",
+      "task": "Tasks",
+      "routine": "Routines"
+    },
+    "empty": {
+      "project": "No open projects.",
+      "task": "No open tasks.",
+      "routine": "No routines."
+    },
+    "bearing": {
+      "holding": "Holding the number back",
+      "moving": "Moving it",
+      "movingAccessible": "Moving the number"
+    },
+    "oneMore": "and 1 more",
+    "moreItems": "and {{count}} more",
+    "automateItem": "{{label}}: “{{title}}”",
+    "setUpItemByHand": "Set up “{{title}}” by hand",
+    "setItUpByHand": "Set it up by hand",
+    "yourAgent": "your agent",
+    "reviewAgentProposal": "Review {{agent}}’s proposal",
+    "continueWithAgent": "Continue with {{agent}}",
+    "automateWithAgent": "Automate with {{agent}}",
+    "oneAutomation": "1 automation",
+    "automations": "{{count}} automations",
+    "oneManualTask": "1 manual task",
+    "manualTasks": "{{count}} manual tasks",
+    "automationShare": "{{percent}}% automated",
+    "couldntOpenConversation": "Couldn’t open the conversation."
+  },
   "responsibilityHealthBadge": {
     "setByHand": "Set by hand"
   },
