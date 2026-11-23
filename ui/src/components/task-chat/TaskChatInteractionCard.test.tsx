@@ -225,7 +225,7 @@ describe("TaskChatInteractionCard", () => {
         </TooltipProvider>,
       ));
 
-      expect(container.textContent).toContain("0 selecionada(s)");
+      expect(container.textContent).toContain("0 opções selecionadas");
       expect(container.textContent).toContain("Recusar");
       expect(container.textContent).toContain("Confirmar seleção");
       await act(async () => {
@@ -233,6 +233,25 @@ describe("TaskChatInteractionCard", () => {
       });
       expect(container.querySelector("label[for$='-reject-reason']")?.textContent).toBe("O que deve mudar?");
       expect(container.querySelector("textarea")?.placeholder).toBe("Adicione uma observação breve");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes fallback interaction titles and status badges in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const interaction = createRequestConfirmation({ title: null, status: "failed" });
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard item={interactionItem(interaction)} presentation="takeover" />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+      expect(container.textContent).toContain("Confirmação");
+      expect(container.querySelector('[data-testid="interaction-status-badge"]')?.textContent).toContain("falhou");
+      expect(container.querySelector("summary")?.textContent).toContain("Ver solicitação original e resolução");
     } finally {
       await act(async () => { await i18n.changeLanguage("en"); });
     }

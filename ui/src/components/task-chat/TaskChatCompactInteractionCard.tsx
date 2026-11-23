@@ -86,6 +86,7 @@ import { TaskChatPlanPreviewCard } from "./TaskChatPlanPreviewCard";
 import { TaskChatRichInput } from "./TaskChatRichInput";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 import { useTranslation } from "react-i18next";
+import { t as i18nT } from "@/i18n";
 
 const TAKEOVER_TEXTAREA_CLASS =
   "min-h-16 resize-y border-0 bg-muted/35 text-sm shadow-none focus-visible:ring-0 focus-visible:ring-offset-0";
@@ -105,61 +106,17 @@ export interface TaskChatCompactInteractionCardProps extends SharedInteractionPr
 }
 
 const KIND_COPY = {
-  suggest_tasks: {
-    fallbackTitle: "Suggested tasks",
-    label: "Tasks",
-    icon: GitBranch,
-  },
-  ask_user_questions: {
-    fallbackTitle: "Questions",
-    label: "Questions",
-    icon: CircleHelp,
-  },
-  request_confirmation: {
-    fallbackTitle: "Confirmation",
-    label: "Confirmation",
-    icon: CheckCircle2,
-  },
-  request_checkbox_confirmation: {
-    fallbackTitle: "Choose options",
-    label: "Selection",
-    icon: ListChecks,
-  },
-  request_item_verdicts: {
-    fallbackTitle: "Review items",
-    label: "Review",
-    icon: MessageSquareQuote,
-  },
-  connection_intent: {
-    fallbackTitle: "Connect service",
-    label: "Connection",
-    icon: Plug,
-  },
-  suggest_routine: {
-    fallbackTitle: "Routine offer",
-    label: "Routine",
-    icon: Repeat,
-  },
-  propose_responsibility_bar: {
-    fallbackTitle: "Proposed bar",
-    label: "Bar",
-    icon: Target,
-  },
-  propose_automation: {
-    fallbackTitle: "Proposed automation",
-    label: "Automation",
-    icon: Zap,
-  },
-  propose_dashboard_changes: {
-    fallbackTitle: "Proposed dashboard changes",
-    label: "Dashboard",
-    icon: LayoutList,
-  },
+  suggest_tasks: GitBranch,
+  ask_user_questions: CircleHelp,
+  request_confirmation: CheckCircle2,
+  request_checkbox_confirmation: ListChecks,
+  request_item_verdicts: MessageSquareQuote,
+  connection_intent: Plug,
+  suggest_routine: Repeat,
+  propose_responsibility_bar: Target,
+  propose_automation: Zap,
+  propose_dashboard_changes: LayoutList,
 } as const;
-
-function statusLabel(status: IssueThreadInteraction["status"]): string {
-  return status.replaceAll("_", " ");
-}
 
 function statusTone(status: IssueThreadInteraction["status"]): string {
   if (status === "pending") return "text-(--status-agent-running)";
@@ -202,13 +159,13 @@ function InteractionShell({
   presentation: "timeline" | "takeover";
   children: ReactNode;
 }) {
-  const kind = KIND_COPY[interaction.kind];
-  const Icon = kind.icon;
+  const { t } = useTranslation();
+  const Icon = KIND_COPY[interaction.kind];
   const title = (
     <div className="flex min-w-0 items-center gap-2">
       <Icon aria-hidden className="h-4 w-4 shrink-0 text-muted-foreground" />
       <strong className="min-w-0 truncate text-sm font-medium text-foreground">
-        {interaction.title ?? kind.fallbackTitle}
+        {interaction.title ?? t(`taskChatInteractions.kindLabels.${interaction.kind}`)}
       </strong>
       {interaction.kind === "request_confirmation" &&
       interaction.payload.target?.type === "issue_document" &&
@@ -221,7 +178,7 @@ function InteractionShell({
           data-testid="interaction-status-badge"
         >
           <StatusIcon status={interaction.status} />
-          {statusLabel(interaction.status)}
+          {t(`taskChatInteractions.statusLabels.${interaction.status}`)}
         </span>
       ) : null}
     </div>
@@ -318,7 +275,7 @@ function targetLabel(
   // detection (e.g. `github:org/repo:pull:16`), not display copy. Only show a
   // custom target when the agent supplied a human label.
   if (target.type === "custom" && !target.label) return null;
-  const label = target.label ?? (target.type === "issue_attachment" ? "Attachment" : target.key);
+  const label = target.label ?? (target.type === "issue_attachment" ? i18nT("taskChatInteractions.attachment") : target.key);
   const revision =
     target.type === "issue_attachment" || target.revisionNumber == null ? null : `v${target.revisionNumber}`;
   return [label, revision].filter(Boolean).join(" · ");
@@ -370,6 +327,7 @@ function PlanReviewPreview({
   interaction: RequestConfirmationInteraction;
   planDocument?: IssueDocument | null;
 }) {
+  const { t } = useTranslation();
   const coordinator = useCoordinatorPresentation();
   const target = interaction.payload.target;
   if (target?.type !== "issue_document" || target.key !== "plan") return null;
@@ -394,7 +352,7 @@ function PlanReviewPreview({
       }}
       href={coordinator ? decisionReceiptHref({ issueHref: `/issues/${interaction.issueId}`, interactionId: interaction.id, target }) : "#document-plan"}
       testId="plan-review-preview"
-      ariaLabel={`Open ${target.label ?? (targetRevision == null ? "plan" : `plan revision ${targetRevision}`)}`}
+      ariaLabel={t("taskChatInteractions.openTarget", { target: target.label ?? (targetRevision == null ? t("taskChatInteractions.plan") : t("taskChatInteractions.planRevision", { revision: targetRevision })) })}
     />
   );
 }
@@ -567,7 +525,7 @@ function ReceiptDisclosure({
           </ul>
         ) : interaction.status === "accepted" ? (
           <p className="text-sm font-medium text-foreground">
-            No tasks created
+            {t("taskChatInteractions.noTasksCreated")}
           </p>
         ) : null}
       </div>
@@ -681,18 +639,18 @@ function ReceiptDisclosure({
       {request}
       {answerReason ? (
         <p className="text-sm text-muted-foreground">
-          <span className="font-medium">Reason:</span> {answerReason}
+          <span className="font-medium">{t("taskChatInteractions.reasonLabel")}:</span> {answerReason}
         </p>
       ) : null}
     </div>
   );
 
   if (compact) {
-    const Icon = KIND_COPY[interaction.kind].icon;
+    const Icon = KIND_COPY[interaction.kind];
     const summary =
       interaction.kind === "ask_user_questions" &&
       interaction.status === "answered"
-        ? "Questions answered"
+        ? t("taskChatInteractions.questionsAnswered")
         : planReviewReceiptSummary(interaction, answerReason)
           ?? buildIssueThreadInteractionSummary(interaction);
     return (
@@ -731,7 +689,7 @@ function ReceiptDisclosure({
   return (
     <details className="mt-2">
       <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-        View original request and resolution
+        {t("taskChatInteractions.viewOriginalRequestAndResolution")}
       </summary>
       {detail}
     </details>
@@ -1650,7 +1608,7 @@ function SuggestedTasksCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {coordinator ? "Create" : "Create selected"}
+              {coordinator ? t("taskChatInteractions.create") : t("taskChatInteractions.createSelected")}
             </Button>
           </>
         )}
@@ -2004,19 +1962,20 @@ export function TaskChatCompactInteractionCard({
   draftKey,
   mentions,
 }: TaskChatCompactInteractionCardProps) {
+  const { t } = useTranslation();
   const { enabled: coordinatorEnabled } = useCoordinatorWorkspaceEnabled();
   const creatorLabel = interaction.createdByAgentId
     ? agentMap?.get(interaction.createdByAgentId)?.name
     : interaction.createdByUserId
       ? interaction.createdByUserId === currentUserId
-        ? "You"
+        ? t("taskChatInteractions.you")
         : userLabelMap?.get(interaction.createdByUserId)
       : null;
   const addresseeLabel = interaction.addresseeAgentId
     ? agentMap?.get(interaction.addresseeAgentId)?.name
     : interaction.addresseeUserId
       ? interaction.addresseeUserId === currentUserId
-        ? "You"
+        ? t("taskChatInteractions.you")
         : (userLabelMap?.get(interaction.addresseeUserId) ??
           interaction.addresseeUserId)
       : null;
@@ -2041,7 +2000,7 @@ export function TaskChatCompactInteractionCard({
   if (coordinatorEnabled && interaction.kind === "suggest_tasks") {
     return <CoordinatorTaskCommitment interaction={interaction}>
       {interaction.status === "pending" ? <div className="p-4 space-y-3">
-        <h3 className="text-sm font-medium text-foreground">Suggested Task</h3>
+        <h3 className="text-sm font-medium text-foreground">{t("taskChatInteractions.suggestedTask")}</h3>
         {audienceLabel ? <p className="text-xs text-muted-foreground">{audienceLabel}</p> : null}
         <SuggestedTasksCard interaction={interaction} onAcceptInteraction={onAcceptInteraction}
           onRejectInteraction={onRejectInteraction} errorMessage={errorMessage} draftKey={draftKey} coordinator />
