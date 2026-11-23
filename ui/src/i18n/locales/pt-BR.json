@@ -3366,6 +3366,37 @@
     "statusAtLeastRisk": "A meta está no caminho certo a partir de {{target}}; em atenção a partir de {{limit}}",
     "statusAtLeast": "A meta está no caminho certo a partir de {{target}}; abaixo disso, fora da meta"
   },
+  "responsibilityMeasures": {
+    "whereThingsStand": "Resumo das responsabilidades",
+    "oneResponsibility": "1 responsabilidade",
+    "responsibilities": "{{count}} responsabilidades",
+    "filterByStatus": "Filtrar por status",
+    "health": {
+      "behind": "Atrasada",
+      "at_risk": "Em risco",
+      "on_track": "No caminho certo",
+      "not_measured": "Sem medição"
+    },
+    "agentPowered": "Execução por agentes",
+    "openTasksRunByAgent": "Tarefas abertas executadas por agentes",
+    "openTasksShare": "{{share}} tarefas abertas",
+    "noOpenTasks": "Nenhuma tarefa aberta",
+    "runByAgent": "Executadas por agentes",
+    "onYouAlone": "Sob sua responsabilidade"
+  },
+  "responsibilitiesHome": {
+    "whatYouOwn": "Suas responsabilidades",
+    "meetingItsBar": "Cada uma está atingindo sua meta?",
+    "hideLetGo": "Ocultar responsabilidades das quais você abriu mão",
+    "showLetGo": "Mostrar responsabilidades das quais você abriu mão",
+    "showingOnly": "Exibindo apenas responsabilidades com status: {{status}}.",
+    "showAll": "Mostrar todas",
+    "noneWithStatus": "Nenhuma responsabilidade corresponde a esse status.",
+    "nothingToShow": "Nada para exibir.",
+    "nothingFiledHere": "Você ainda não tem responsabilidades nesta área.",
+    "addResponsibilityHere": "Adicionar responsabilidade aqui",
+    "noLetGoResponsibilities": "Você ainda não abriu mão de nenhuma responsabilidade."
+  },
   "taskChatStatusWhimsy": {
     "Clipping": "Recortando",
     "Organizing": "Organizando",

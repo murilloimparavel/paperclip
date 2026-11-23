@@ -3366,6 +3366,37 @@
     "statusAtLeastRisk": "On track at {{target}} or more; at risk from {{limit}}",
     "statusAtLeast": "On track at {{target}} or more; behind below that"
   },
+  "responsibilityMeasures": {
+    "whereThingsStand": "Where things stand",
+    "oneResponsibility": "1 responsibility",
+    "responsibilities": "{{count}} responsibilities",
+    "filterByStatus": "Filter by status",
+    "health": {
+      "behind": "Behind",
+      "at_risk": "At risk",
+      "on_track": "On track",
+      "not_measured": "Not measured"
+    },
+    "agentPowered": "Agent-powered",
+    "openTasksRunByAgent": "Open tasks run by an agent",
+    "openTasksShare": "{{share}} open tasks",
+    "noOpenTasks": "No open tasks",
+    "runByAgent": "Run by an agent",
+    "onYouAlone": "On you alone"
+  },
+  "responsibilitiesHome": {
+    "whatYouOwn": "What you own",
+    "meetingItsBar": "Is each one meeting its bar?",
+    "hideLetGo": "Hide let-go responsibilities",
+    "showLetGo": "Show let-go responsibilities",
+    "showingOnly": "Showing only responsibilities with status: {{status}}.",
+    "showAll": "Show all",
+    "noneWithStatus": "None of your responsibilities match this status.",
+    "nothingToShow": "Nothing to show.",
+    "nothingFiledHere": "Nothing you own is filed here yet.",
+    "addResponsibilityHere": "Add a responsibility here",
+    "noLetGoResponsibilities": "You have not let go of any responsibilities."
+  },
   "taskChatStatusWhimsy": {
     "Clipping": "Clipping",
     "Organizing": "Organizing",

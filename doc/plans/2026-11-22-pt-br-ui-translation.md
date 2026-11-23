@@ -344,6 +344,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir título, área, campos, opções, exemplos, erros locais e leitura automática do status.
   - [x] Preservar conteúdo digitado e nomes de áreas fornecidos pela organização.
   - [x] Validar renderização em pt-BR, 46 testes focados, typecheck da UI e diff.
+- Resumo e filtros da página de responsabilidades:
+  - [x] Traduzir indicadores de status, resumo de execução por agentes, filtros e estados vazios.
+  - [x] Preservar contagens e dados das responsabilidades.
+  - [x] Validar a página em pt-BR, 16 testes focados, typecheck da UI e diff.
 - Carregamento do histórico no chat de tarefas:
   - [x] Traduzir falha, nova tentativa, carregamento e orientação para buscar mensagens anteriores.
   - [x] Traduzir nomes acessíveis da conversa e da ação para ir à mensagem mais recente.

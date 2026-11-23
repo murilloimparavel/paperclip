@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Agent } from "@paperclipai/shared";
 import { PrimaryAgentPresentationProvider } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { i18n } from "@/i18n";
 import {
   EMPTY_LOOSE_WORK,
   fundraisingBehind,
@@ -210,7 +211,7 @@ describe("Responsibilities home", () => {
     expect(onTrack.getAttribute("aria-pressed")).toBe("true");
     expect([...owned.querySelectorAll("li[data-responsibility-id]")].map((row) => row.getAttribute("data-responsibility-id")))
       .toEqual([portfolioOnTrack.id]);
-    expect(owned.textContent).toContain("Showing only on track.");
+    expect(owned.textContent).toContain("Showing only responsibilities with status: on track.");
   });
 
   it("lists what needs you: the named project or task can be given to an agent, anything else becomes a new task", async () => {
@@ -306,5 +307,19 @@ describe("Responsibilities home", () => {
     await flush();
     expect(api.overview).toHaveBeenLastCalledWith("company-storybook", { includeLetGo: true, ownerUserId: "user-storybook" });
     expect(text()).toContain("Old fund");
+  });
+
+  it("localizes the responsibility status summary in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      api.overview.mockResolvedValue(responsibilityOverviewFixture([portfolioOnTrack]));
+      await render();
+      expect(text()).toContain("Resumo das responsabilidades");
+      expect(text()).toContain("Suas responsabilidades");
+      expect(text()).toContain("Execução por agentes");
+      expect(text()).toContain("No caminho certo");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
   });
 });
