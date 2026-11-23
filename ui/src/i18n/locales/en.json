@@ -3181,5 +3181,12 @@
     "showDetails": "Show details",
     "hideDetailsAria": "Hide details: {{title}}",
     "showDetailsAria": "Show details: {{title}}"
+  },
+  "taskChatResultCard": {
+    "title": "Run result",
+    "blocked": "Blocked: {{reason}}",
+    "verificationResults": "Verification results",
+    "blocksCompletion": "blocks completion",
+    "runEnded": "Run ended"
   }
 }

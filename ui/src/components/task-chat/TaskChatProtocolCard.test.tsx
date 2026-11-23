@@ -158,6 +158,27 @@ describe("TaskChatProtocolCard", () => {
     expect(stats?.className).toContain("whitespace-nowrap");
   });
 
+  it("renders run verification labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      renderCard(root, {
+        id: "result", kind: "protocol", surface: "run_result", disposition: "yielded",
+        summary: "Resumo do agente", objectiveSatisfied: false,
+        verification: [{ commandOrCheck: "pnpm test", status: "passed", detail: "all tests passed" }],
+        remainingWork: [{ description: "Revisão visual", blocksCompletion: true }],
+        blocker: { reasonCode: "waiting_for_input", unblockAction: "Aguardar resposta", scope: "task_wide" }, artifacts: [],
+      });
+      expect(container.textContent).toContain("Resultado da execução");
+      expect(container.querySelector('[aria-label="Resultados da verificação"]')).not.toBeNull();
+      expect(container.textContent).toContain("Bloqueado: waiting_for_input");
+      expect(container.textContent).toContain("impede a conclusão");
+      expect(container.textContent).toContain("pnpm test");
+      expect(container.textContent).toContain("all tests passed");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("shows pending artifacts with a dashed Pending chip", () => {
     const product = workProduct({
       type: "artifact",

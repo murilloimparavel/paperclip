@@ -268,6 +268,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
   - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
   - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
+- Resultado e encerramento da execução no transcript:
+  - [x] Traduzir título, rótulo acessível de verificações, bloqueio e pendências que impedem conclusão.
+  - [x] Preservar comandos, códigos de motivo, detalhes e mensagens das ferramentas.
+  - [x] Validar catálogos, 39 testes focados, typecheck da UI e diff.
 - Cartões de resultados de execução no chat:
   - [x] Traduzir detalhes, descrição salva, metadados e controles acessíveis para expandir/recolher.
   - [x] Preservar títulos, estados e metadados dinâmicos do provedor.

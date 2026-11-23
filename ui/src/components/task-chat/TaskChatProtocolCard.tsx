@@ -58,6 +58,7 @@ import { parseUnifiedDiffLines } from "./diff-lines";
 import { useArtifactsV1Enabled } from "@/hooks/useArtifactsV1Enabled";
 import { ArtifactFileRow, ArtifactRow, fileRowSourceFromAttachment, fileRowSourceFromWorkProduct, subjectFromAttachment, subjectFromDocumentSummary, subjectFromWorkProduct, workProductStateBadge } from "@/components/artifacts/v1";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { useTranslation } from "react-i18next";
 
 export interface TaskChatProtocolCardProps {
   item: TaskChatProtocolItem;
@@ -988,6 +989,7 @@ function ResultCard({
 }: {
   item: Extract<TaskChatProtocolItem, { surface: "run_result" }>;
 }) {
+  const { t } = useTranslation();
   const hasDetails =
     item.verification.length > 0 ||
     item.remainingWork.length > 0 ||
@@ -996,7 +998,7 @@ function ResultCard({
   return (
     <CardShell
       icon={PackageCheck}
-      title="Run result"
+      title={t("taskChatResultCard.title")}
       status={item.disposition}
       summary={item.summary}
       testId="task-chat-run-result"
@@ -1005,7 +1007,7 @@ function ResultCard({
         <div className="flex flex-col gap-3 text-sm">
           {item.blocker ? (
             <div className="rounded-sm bg-muted/50 p-2">
-              <strong>Blocked: {item.blocker.reasonCode}</strong>
+              <strong>{t("taskChatResultCard.blocked", { reason: item.blocker.reasonCode })}</strong>
               <p className="mt-1 text-muted-foreground">
                 {item.blocker.unblockAction}
               </p>
@@ -1014,7 +1016,7 @@ function ResultCard({
           {item.verification.length > 0 ? (
             <ul
               className="flex flex-col gap-1"
-              aria-label="Verification results"
+              aria-label={t("taskChatResultCard.verificationResults")}
             >
               {item.verification.map((check, index) => (
                 <li
@@ -1044,7 +1046,7 @@ function ResultCard({
               {item.remainingWork.map((work, index) => (
                 <li key={`${work.description}:${index}`}>
                   {work.description}
-                  {work.blocksCompletion ? " · blocks completion" : ""}
+                  {work.blocksCompletion ? ` · ${t("taskChatResultCard.blocksCompletion")}` : ""}
                 </li>
               ))}
             </ul>
@@ -1072,10 +1074,11 @@ function TerminalCard({
 }: {
   item: Extract<TaskChatProtocolItem, { surface: "run_terminal" }>;
 }) {
+  const { t } = useTranslation();
   return (
     <CardShell
       icon={TerminalSquare}
-      title="Run ended"
+      title={t("taskChatResultCard.runEnded")}
       status={item.runState}
       summary={[item.disposition.replaceAll("_", " "), item.stopReason]
         .filter(Boolean)
