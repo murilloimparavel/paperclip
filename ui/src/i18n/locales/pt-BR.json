@@ -3249,7 +3249,11 @@
     "activityCount_other": "{{count}} atividades",
     "collapse": "Recolher",
     "expand": "Expandir",
-    "history": "Histórico de atividades"
+    "history": "Histórico de atividades",
+    "blocked": "Bloqueado",
+    "thinking": "Pensando",
+    "thought": "Pensou",
+    "tokenUsage": "Uso de tokens"
   },
   "runnerGoal": {
     "ariaLabel": "Meta da sessão do agente",

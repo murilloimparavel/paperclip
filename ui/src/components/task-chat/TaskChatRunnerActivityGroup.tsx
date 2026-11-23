@@ -108,7 +108,7 @@ function providerTrailing(item: Extract<Activity, { kind: "protocol" }>): Pick<A
   return {};
 }
 
-function presentation(item: Activity, active: boolean, taskLabel?: string): ActivityRowPresentation | null {
+function presentation(item: Activity, active: boolean, t: (key: string) => string, taskLabel?: string): ActivityRowPresentation | null {
   if (item.kind === "tool") {
     const tool = toolPresentation(item);
     const running =
@@ -139,7 +139,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     if (item.blockedReason) {
       return {
         icon: ShieldX,
-        label: "Blocked",
+        label: t("taskChatRunnerActivity.blocked"),
         target: subject ? (terminal ? `$ ${subject}` : subject) : undefined,
         mono: true,
         running: false,
@@ -161,7 +161,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? t("taskChatRunnerActivity.thinking") : t("taskChatRunnerActivity.thought"),
       target:
         latestReasoningHeadline(item.lines.join("\n")) ??
         item.lines
@@ -208,7 +208,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     .join(" · ");
   return {
     icon: Gauge,
-    label: item.label ?? "Token usage",
+    label: item.label ?? t("taskChatRunnerActivity.tokenUsage"),
     target: usage || item.detail,
     mono: false,
     running: false,
@@ -251,7 +251,8 @@ function ActivityRowContent({
   active: boolean;
   taskLabel?: string;
 }) {
-  const row = presentation(item, active, taskLabel);
+  const { t } = useTranslation();
+  const row = presentation(item, active, t, taskLabel);
   const shimmer = useTaskChatShimmer(item.id);
   if (!row) return null;
   const Icon = row.icon;
@@ -471,6 +472,7 @@ function ExpandedActivity({
   item: Activity;
   active: boolean;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useTaskChatExpansion(
     `runner-detail:${item.id}`,
     false,
@@ -478,7 +480,7 @@ function ExpandedActivity({
   const detailId = useId();
   const expandable = hasActivityDetails(item);
   const content = <ActivityContent item={item} active={active} />;
-  const row = presentation(item, active);
+  const row = presentation(item, active, t);
   const note = row?.note;
   return (
     <li className="min-w-0" data-activity-item-id={item.id}>
@@ -600,7 +602,7 @@ export function TaskChatRunnerActivityGroup({
   );
   const historyId = useId();
   const activities = item.items.filter(
-    (activity) => presentation(activity, false) !== null,
+    (activity) => presentation(activity, false, t) !== null,
   );
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
