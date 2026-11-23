@@ -2924,6 +2924,15 @@
     },
     "details": "Details"
   },
+  "taskChatTurn": {
+    "stopped": "Stopped",
+    "worked": "Worked",
+    "activity": "Activity",
+    "continuedAfterSteering": "Continued after steering",
+    "durationFor": "for {{duration}}",
+    "tools_one": "{{count}} tool",
+    "tools_other": "{{count}} tools"
+  },
   "providerLimitMessage": {
     "expectedReset": "The provider usage limit for this agent is expected to reset",
     "unknownResetWait": "(no reset time was reported, so Paperclip waits one hour)",

@@ -2924,6 +2924,15 @@
     },
     "details": "Detalhes"
   },
+  "taskChatTurn": {
+    "stopped": "Interrompido",
+    "worked": "Trabalhou",
+    "activity": "Atividade",
+    "continuedAfterSteering": "Continuou após orientação",
+    "durationFor": "por {{duration}}",
+    "tools_one": "{{count}} ferramenta",
+    "tools_other": "{{count}} ferramentas"
+  },
   "providerLimitMessage": {
     "expectedReset": "O limite de uso do provedor para este agente deve ser redefinido",
     "unknownResetWait": "(nenhum horário de redefinição foi informado, então o Paperclip aguardará uma hora)",

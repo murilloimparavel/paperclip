@@ -260,4 +260,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Formatar contagem regressiva, data e horário no idioma selecionado.
   - [x] Preservar mensagens fora dos padrões reconhecidos e diagnósticos dinâmicos.
   - [x] Validar catálogos, mensagens de sistema/marcador e atualização do contador.
+- Resumos de turnos no transcript clássico:
+  - [x] Traduzir estados concluídos/interrompidos, atividade histórica e continuação após orientação.
+  - [x] Traduzir a contagem de ferramentas, preservando métricas, tokens e alterações de arquivo.
+  - [x] Validar catálogos, helper de resumo e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

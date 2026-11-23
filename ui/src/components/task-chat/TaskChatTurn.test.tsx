@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TaskChatTurn, turnSummaryText } from "./TaskChatTurn";
 import { buildTurnSummary } from "./transcript-adapter";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { MemoryRouter } from "@/lib/router";
 import type { TranscriptEntry } from "@/adapters";
 import type {
@@ -170,6 +171,19 @@ describe("TaskChatTurn", () => {
     container.querySelector<HTMLButtonElement>(
       '[data-testid="task-chat-live-turn"]',
     );
+
+  it("localizes settled and historical turn summaries in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      renderTurn(SETTLED);
+      expect(summaryBtn()?.textContent).toContain("Trabalhou");
+      expect(summaryBtn()?.textContent).toContain("3 ferramentas");
+      renderTurn({ ...SETTLED, historical: true });
+      expect(summaryBtn()?.textContent).toContain("Atividade");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
 
   it("keeps historical activity expandable without a failure or completion status", () => {
     renderTurn({ ...SETTLED, historical: true, summary: { ...SETTLED.summary, failed: true } });
