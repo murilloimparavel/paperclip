@@ -11,6 +11,7 @@ import {
 } from "@paperclipai/shared";
 import { parseRunnerGoalCommand, TaskChatComposer } from "./TaskChatComposer";
 import { TaskChatPausedTakeover } from "./TaskChatPausedTakeover";
+import { ComposerImageAttachments } from "./ComposerImageAttachments";
 import { ComposerAddMenu } from "./ComposerAddMenu";
 import { i18n } from "@/i18n";
 import { QuestionForm } from "./QuestionForm";
@@ -325,6 +326,21 @@ describe("TaskChatComposer", () => {
     act(() => root?.unmount());
     root = null;
     await i18n.changeLanguage("en");
+  });
+  it("localizes image attachment errors and accessible actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      render(<ComposerImageAttachments
+        images={[{ id: "image-1", name: "captura.png", status: "error" }]}
+        onRemove={vi.fn()} onRetry={vi.fn()}
+      />);
+      expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Anexos de imagem");
+      expect(container.querySelector('[role="alert"]')?.textContent).toBe("Falha no envio");
+      expect(container.querySelector('button[aria-label="Remover captura.png"]')).not.toBeNull();
+      expect(container.querySelector('button[aria-label="Tentar enviar captura.png novamente"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
   it("localizes the task composer send controls in Brazilian Portuguese", async () => {
     await i18n.changeLanguage("pt-BR");
