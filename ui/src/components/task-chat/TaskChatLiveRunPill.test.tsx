@@ -139,6 +139,25 @@ describe("TaskChatLiveRunPill", () => {
     expect(container.querySelector("a")?.getAttribute("href")).toBe("/agents/codie/advanced");
   });
 
+  it("localizes the agent queue wait details in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const execution = {
+        phase: "queued", label: "Waiting for Codie", cause: "agent_at_capacity",
+        agentQueue: { agentId: "agent-1", agentName: "Codie", maxConcurrentRuns: 1, runningCount: 1, position: 2, queuedCount: 5 },
+      } as ExecutionProjection;
+      act(() => root.render(
+        <MemoryRouter>
+          <TaskChatLiveRunPill status="queued" execution={execution} startedAtMs={Date.now()} toolSummary={null} />
+        </MemoryRouter>,
+      ));
+      expect(container.textContent).toContain("Aguardando vaga para Codie·1 vaga no máximo·2 de 5 na fila·Configurar");
+      expect(container.querySelector("a")?.getAttribute("aria-label")).toBe("Configurar o limite de execuções simultâneas de Codie");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("says a queued run with no named hold is waiting to start once the startup grace passes", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-13T17:46:13Z"));

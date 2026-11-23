@@ -14,12 +14,19 @@ export function isWaitingToStart(run: { status: string; startedAt?: string | Dat
   return run.status === "queued" && !run.startedAt;
 }
 
-/** "Waiting for Codie", "20 slots max", "41 of 295 in line". */
-export function agentQueueWaitParts(queue: ExecutionAgentQueue): [string, string, string] {
+/** The localized explanation that an agent run is waiting for capacity. */
+export function agentQueueWaitParts(
+  queue: ExecutionAgentQueue,
+  translate: (key: string, options: Record<string, string | number>) => string = (key, options) => {
+    if (key === "agentQueueWait.waitingFor") return `Waiting for ${options.name}`;
+    if (key === "agentQueueWait.slotsMax") return `${options.count} ${options.count === 1 ? "slot" : "slots"} max`;
+    return `${options.position} of ${options.total} in line`;
+  },
+): [string, string, string] {
   return [
-    `Waiting for ${queue.agentName}`,
-    `${queue.maxConcurrentRuns} ${queue.maxConcurrentRuns === 1 ? "slot" : "slots"} max`,
-    `${queue.position} of ${queue.queuedCount} in line`,
+    translate("agentQueueWait.waitingFor", { name: queue.agentName }),
+    translate("agentQueueWait.slotsMax", { count: queue.maxConcurrentRuns }),
+    translate("agentQueueWait.queuePosition", { position: queue.position, total: queue.queuedCount }),
   ];
 }
 

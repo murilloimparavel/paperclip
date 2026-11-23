@@ -2924,6 +2924,16 @@
     },
     "details": "Detalhes"
   },
+  "agentQueueWait": {
+    "waitingFor": "Aguardando vaga para {{name}}",
+    "slotsMax_one": "{{count}} vaga no máximo",
+    "slotsMax_other": "{{count}} vagas no máximo",
+    "queuePosition": "{{position}} de {{total}} na fila",
+    "configure": "Configurar",
+    "configureAria": "Configurar o limite de execuções simultâneas de {{name}}",
+    "waitingToStart": "Aguardando para iniciar",
+    "waiting": "Na fila"
+  },
   "taskChatLiveRun": {
     "commandsRun_one": "executou {{count}} comando",
     "commandsRun_other": "executou {{count}} comandos",

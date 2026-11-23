@@ -2924,6 +2924,16 @@
     },
     "details": "Details"
   },
+  "agentQueueWait": {
+    "waitingFor": "Waiting for {{name}}",
+    "slotsMax_one": "{{count}} slot max",
+    "slotsMax_other": "{{count}} slots max",
+    "queuePosition": "{{position}} of {{total}} in line",
+    "configure": "Configure",
+    "configureAria": "Configure {{name}}'s concurrent run limit",
+    "waitingToStart": "Waiting to start",
+    "waiting": "Waiting"
+  },
   "taskChatLiveRun": {
     "commandsRun_one": "ran {{count}} command",
     "commandsRun_other": "ran {{count}} commands",

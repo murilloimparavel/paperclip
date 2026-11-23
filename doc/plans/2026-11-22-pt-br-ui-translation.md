@@ -213,4 +213,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir contagem de comandos e ferramentas, incluindo formas singulares/plurais.
   - [x] Atualizar o resumo quando o idioma da interface mudar durante a conversa.
   - [x] Validar catálogos, testes do pill e renderização explícita em pt-BR.
+- Espera por limite de execuções simultâneas do agente:
+  - [x] Traduzir aviso detalhado, posição na fila, configuração e nomes acessíveis.
+  - [x] Traduzir o chip compacto exibido em listas e cabeçalhos.
+  - [x] Validar catálogos e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
