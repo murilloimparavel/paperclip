@@ -2924,6 +2924,21 @@
     },
     "details": "Detalhes"
   },
+  "providerLimitMessage": {
+    "expectedReset": "O limite de uso do provedor para este agente deve ser redefinido",
+    "unknownResetWait": "(nenhum horário de redefinição foi informado, então o Paperclip aguardará uma hora)",
+    "startWorkThen": "O Paperclip iniciará este trabalho nesse momento.",
+    "waitingForReset": "Aguardando a redefinição do limite de uso do provedor",
+    "beforeStartingWork": "antes de iniciar o trabalho",
+    "limitResets": "O limite de uso do provedor será redefinido",
+    "retryCouldNotBeScheduled": "; não foi possível agendar a nova tentativa, e a tarefa foi liberada",
+    "waitingForAgentReset": "Aguardando a redefinição do limite de uso do provedor do agente; o trabalho começará",
+    "noResetTimeReported": "Não há horário informado para a redefinição do limite de uso deste agente. O trabalho está suspenso; uma nova tentativa poderá verificar a disponibilidade",
+    "limitMayStillApply": "; o limite ainda poderá se aplicar nesse momento.",
+    "waitingToRecheck": "Aguardando para verificar novamente o limite de uso do provedor",
+    "paperclipWillRecheck": "O Paperclip verificará novamente o limite de uso do provedor do agente",
+    "waitingForResetLabel": "Aguardando a redefinição do limite de uso"
+  },
   "taskChatComposer": {
     "planPlaceholderMobile": "Planeje com {{agent}}…",
     "askPlaceholderMobile": "Pergunte a {{agent}}…",

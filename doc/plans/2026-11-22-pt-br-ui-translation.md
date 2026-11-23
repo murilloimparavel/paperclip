@@ -255,4 +255,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir erro de envio, estado de progresso, grupo e ações acessíveis para remover/tentar novamente.
   - [x] Preservar nomes de arquivo e mensagens dinâmicas de erro.
   - [x] Validar catálogos, testes do composer e renderização explícita em pt-BR.
+- Avisos conhecidos de limite de uso do provedor:
+  - [x] Traduzir padrões reconhecidos de espera, nova tentativa e retomada.
+  - [x] Formatar contagem regressiva, data e horário no idioma selecionado.
+  - [x] Preservar mensagens fora dos padrões reconhecidos e diagnósticos dinâmicos.
+  - [x] Validar catálogos, mensagens de sistema/marcador e atualização do contador.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

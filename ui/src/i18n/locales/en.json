@@ -2924,6 +2924,21 @@
     },
     "details": "Details"
   },
+  "providerLimitMessage": {
+    "expectedReset": "The provider usage limit for this agent is expected to reset",
+    "unknownResetWait": "(no reset time was reported, so Paperclip waits one hour)",
+    "startWorkThen": "Paperclip will start this work then.",
+    "waitingForReset": "Waiting for the provider usage limit to reset",
+    "beforeStartingWork": "before starting work",
+    "limitResets": "The provider usage limit resets",
+    "retryCouldNotBeScheduled": "; this wake could not schedule its retry and released the task",
+    "waitingForAgentReset": "Waiting for the agent's provider usage limit to reset; the work starts",
+    "noResetTimeReported": "This agent's provider usage limit has no reported reset time. Work is held; a retry can recheck availability",
+    "limitMayStillApply": "; the limit may still apply then.",
+    "waitingToRecheck": "Waiting to recheck the provider usage limit",
+    "paperclipWillRecheck": "Paperclip will recheck the agent's provider usage limit",
+    "waitingForResetLabel": "Waiting for usage limit reset"
+  },
   "taskChatComposer": {
     "planPlaceholderMobile": "Plan with {{agent}}…",
     "askPlaceholderMobile": "Ask {{agent}}…",
