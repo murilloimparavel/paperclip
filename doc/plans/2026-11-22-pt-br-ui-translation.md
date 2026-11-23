@@ -233,4 +233,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir relações de bloqueio direto/principal e estados de espera por tarefas relacionadas.
   - [x] Traduzir rótulos acessíveis e o estado de tarefa em execução.
   - [x] Validar catálogos, variantes streamlined/production e renderização explícita em pt-BR.
+- Bolha de descrição da tarefa:
+  - [x] Traduzir placeholder, linha vazia, ação de edição e controles de expansão.
+  - [x] Validar catálogos, teste do componente e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

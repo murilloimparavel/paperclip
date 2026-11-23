@@ -2924,6 +2924,12 @@
     },
     "details": "Detalhes"
   },
+  "taskChatDescription": {
+    "addDescription": "Adicionar uma descrição...",
+    "editDescription": "Editar descrição",
+    "showMore": "Mostrar mais",
+    "showLess": "Mostrar menos"
+  },
   "taskChatBlockers": {
     "blockedBy": "Bloqueada por",
     "stillBlockedBy": "Continua bloqueada por",

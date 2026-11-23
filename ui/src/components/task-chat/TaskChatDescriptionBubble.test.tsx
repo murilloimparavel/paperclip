@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/components/MarkdownEditor", () => ({
   MarkdownEditor: forwardRef<
     { focus: () => void },
-    { value: string; onChange: (value: string) => void }
+    { value: string; onChange: (value: string) => void; placeholder?: string }
   >(function MarkdownEditorMock(props, ref) {
     const taRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => ({
@@ -20,6 +20,7 @@ vi.mock("@/components/MarkdownEditor", () => ({
         ref={taRef}
         data-testid="description-md-editor"
         value={props.value}
+        placeholder={props.placeholder}
         onChange={(e) => props.onChange(e.target.value)}
       />
     );
@@ -27,6 +28,7 @@ vi.mock("@/components/MarkdownEditor", () => ({
 }));
 
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { CoordinatorPresentation } from "../coordinator/CoordinatorPresentation";
 import { TaskChatDescriptionBubble, type TaskChatIssueBrief } from "./TaskChatDescriptionBubble";
 
@@ -154,6 +156,22 @@ describe("TaskChatDescriptionBubble (PAP-375)", () => {
     expect(
       container.querySelector('[data-testid="task-chat-description-editor"] [data-testid="description-md-editor"]'),
     ).not.toBeNull();
+  });
+
+  it("localizes description editing controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      render(makeBrief({ description: "", author: "agent", authorName: "CEO" }));
+      const ghost = container.querySelector('[data-testid="task-chat-description-ghost"]');
+      expect(ghost?.textContent).toContain("Adicionar uma descrição");
+      click(ghost);
+      const textarea = container.querySelector<HTMLTextAreaElement>('[data-testid="description-md-editor"]');
+      expect(textarea?.placeholder).toBe("Adicionar uma descrição...");
+      act(() => root!.render(<ThemeProvider><TaskChatDescriptionBubble key="agent-description" brief={makeBrief({ author: "agent", authorName: "CEO" })} /></ThemeProvider>));
+      expect(container.querySelector('[data-testid="task-chat-description-edit"]')?.getAttribute("aria-label")).toBe("Editar descrição");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   describe("folding", () => {
