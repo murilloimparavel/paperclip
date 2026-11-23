@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ExecutionProjection } from "@paperclipai/shared";
 import type { TranscriptEntry } from "../../adapters";
 import { MemoryRouter } from "@/lib/router";
+import { i18n } from "@/i18n";
 
 vi.mock("@/context/CompanyContext", () => ({ useCompany: () => ({ selectedCompany: null }) }));
 import { TaskChatLiveRunPill, toolCountSummaryFromEntries } from "./TaskChatLiveRunPill";
@@ -55,6 +56,24 @@ describe("TaskChatLiveRunPill", () => {
     act(() => root.unmount());
     container.remove();
     vi.useRealTimers();
+  });
+
+  it("renders live status, elapsed time, and tool counts in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const startedAtMs = Date.now() - 65_000;
+      const entries = [
+        toolCall({ name: "bash", input: { command: "ls" }, toolUseId: "command" }),
+        toolCall({ name: "read_file", input: { path: "a.ts" }, toolUseId: "read" }),
+      ];
+      act(() => root.render(<TaskChatLiveRunPill status="running" startedAtMs={startedAtMs} toolSummary={toolCountSummaryFromEntries(entries)} />));
+      expect(container.textContent).toContain("Trabalhando");
+      expect(container.textContent).toContain("por 1 minuto");
+      expect(container.textContent).toContain("executou 1 comando");
+      expect(container.textContent).toContain("chamou 1 ferramenta");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("shimmers 'Working' with elapsed + tool summary while streaming", () => {

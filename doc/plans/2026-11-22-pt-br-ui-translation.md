@@ -208,4 +208,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir alterações de arquivos, operações, pré-visualizações e mensagens de truncamento/indisponibilidade.
   - [x] Traduzir níveis e controles de avisos, preservando mensagens e metadados do provedor.
   - [x] Validar catálogos, testes dos cartões e renderização explícita em pt-BR.
+- Status e resumo da execução em tempo real:
+  - [x] Traduzir em andamento, aguardando, concluído, interrompido e duração decorrida.
+  - [x] Traduzir contagem de comandos e ferramentas, incluindo formas singulares/plurais.
+  - [x] Atualizar o resumo quando o idioma da interface mudar durante a conversa.
+  - [x] Validar catálogos, testes do pill e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

@@ -2923,5 +2923,27 @@
       "warning": "Aviso"
     },
     "details": "Detalhes"
+  },
+  "taskChatLiveRun": {
+    "commandsRun_one": "executou {{count}} comando",
+    "commandsRun_other": "executou {{count}} comandos",
+    "toolsCalled_one": "chamou {{count}} ferramenta",
+    "toolsCalled_other": "chamou {{count}} ferramentas",
+    "seconds_one": "{{count}} segundo",
+    "seconds_other": "{{count}} segundos",
+    "minutes_one": "{{count}} minuto",
+    "minutes_other": "{{count}} minutos",
+    "hours_one": "{{count}} hora",
+    "hours_other": "{{count}} horas",
+    "working": "Trabalhando",
+    "waitingToStart": "Aguardando para iniciar",
+    "stopped": "Interrompido",
+    "worked": "Trabalhou",
+    "elapsedFor": "por {{duration}}",
+    "elapsedAfter": "após {{duration}}",
+    "hoursMinutes_hourOne_minuteOne": "{{hours}} hora e {{minutes}} minuto",
+    "hoursMinutes_hourOne_minuteOther": "{{hours}} hora e {{minutes}} minutos",
+    "hoursMinutes_hourOther_minuteOne": "{{hours}} horas e {{minutes}} minuto",
+    "hoursMinutes_hourOther_minuteOther": "{{hours}} horas e {{minutes}} minutos"
   }
 }

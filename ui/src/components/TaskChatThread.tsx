@@ -18,6 +18,7 @@ import {
 import { hasWorkspaceRestoreFailure } from "@paperclipai/shared";
 import { workspaceRestoreMarkerDetail } from "@/lib/workspace-restore-marker";
 import { credentialAccessNotice } from "@/lib/credential-access-notice";
+import { useTranslation } from "@/i18n";
 import type { ActivityEvent, Issue, IssueQueuedCommentQueue, TaskBrowser } from "@paperclipai/shared";
 import { useProjectCreatedItems } from "@/hooks/useProjectCreatedItems";
 import { skillCreatedItems } from "@/components/task-chat/skill-created-items";
@@ -501,6 +502,7 @@ function durableInputLabel(
  * folded row. flag-OFF remains byte-for-byte IssueChatThread.
  */
 export function TaskChatThread(props: TaskChatThreadProps) {
+  const { i18n } = useTranslation();
   const coordinatorEnabled = useCoordinatorPresentation();
   const { status: connectionStatus } = useConnectivity();
   const { enabled: streamlinedPreference } = useStreamlinedUiEnabled();
@@ -2602,7 +2604,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     () => (tailRunId ? toolCountSummaryFromEntries(tailEntries) : null),
     // tailEntries is a fresh array each render; tailContentKey tracks its content.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tailRunId, tailContentKey],
+    [tailRunId, tailContentKey, i18n.language],
   );
 
   // The tail's clean rows (PAP-463 C1): the streaming transcript parsed through
