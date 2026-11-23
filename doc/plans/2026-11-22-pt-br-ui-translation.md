@@ -198,4 +198,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir modo rápido, níveis de esforço, padrões e nomes acessíveis.
   - [x] Preservar nomes de provedores, modelos, agentes e a sintaxe técnica de IDs.
   - [x] Validar catálogos, testes do seletor e renderização explícita em pt-BR.
+- Plano e progresso da execução no transcript:
+  - [x] Traduzir cabeçalhos, progresso, rótulos acessíveis dos status e contagem de arquivos alterados.
+  - [x] Traduzir controles para revelar etapas anteriores/adicionais e recolher a lista.
+  - [x] Preservar os nomes das etapas definidos pelo agente.
+  - [x] Validar catálogos, testes do plano e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

@@ -2856,5 +2856,36 @@
       "ultra": "Ultra"
     },
     "processHarness": "Processo"
+  },
+  "taskChatTurnPlan": {
+    "stepDone": "Etapa concluída",
+    "allStepsDone": "Todas as {{count}} etapas concluídas",
+    "blocked": "Bloqueada: {{label}}",
+    "upNext": "Próxima: {{label}}",
+    "plan": "Plano",
+    "filesChanged": "{{count}} arquivo alterado",
+    "earlier": "{{count}} etapa anterior",
+    "earlierDone": "{{count}} etapa anterior concluída",
+    "more": "+{{count}} etapa adicional",
+    "progress": "{{completed}} de {{total}} etapas concluídas",
+    "agentPlan": "Plano do agente",
+    "progressLabel": "Progresso do plano",
+    "checklist": "Lista de etapas desta execução",
+    "showFewer": "Mostrar menos",
+    "status": {
+      "completed": "concluída",
+      "in_progress": "em andamento",
+      "pending": "não iniciada",
+      "blocked": "bloqueada",
+      "failed": "falhou"
+    },
+    "filesChanged_one": "{{count}} arquivo alterado",
+    "filesChanged_other": "{{count}} arquivos alterados",
+    "earlier_one": "{{count}} etapa anterior",
+    "earlier_other": "{{count}} etapas anteriores",
+    "earlierDone_one": "{{count}} etapa anterior concluída",
+    "earlierDone_other": "{{count}} etapas anteriores concluídas",
+    "more_one": "+{{count}} etapa adicional",
+    "more_other": "+{{count}} etapas adicionais"
   }
 }

@@ -2856,5 +2856,36 @@
       "ultra": "Ultra"
     },
     "processHarness": "Process"
+  },
+  "taskChatTurnPlan": {
+    "stepDone": "Step done",
+    "allStepsDone": "All {{count}} steps done",
+    "blocked": "Blocked: {{label}}",
+    "upNext": "Up next: {{label}}",
+    "plan": "Plan",
+    "filesChanged": "{{count}} file changed",
+    "earlier": "{{count}} earlier step",
+    "earlierDone": "{{count}} earlier step done",
+    "more": "+{{count}} more step",
+    "progress": "{{completed}} of {{total}} steps done",
+    "agentPlan": "Agent plan",
+    "progressLabel": "Plan progress",
+    "checklist": "Within-turn checklist",
+    "showFewer": "Show fewer",
+    "status": {
+      "completed": "done",
+      "in_progress": "in progress",
+      "pending": "not started",
+      "blocked": "blocked",
+      "failed": "failed"
+    },
+    "filesChanged_one": "{{count}} file changed",
+    "filesChanged_other": "{{count}} files changed",
+    "earlier_one": "{{count}} earlier step",
+    "earlier_other": "{{count}} earlier steps",
+    "earlierDone_one": "{{count}} earlier step done",
+    "earlierDone_other": "{{count}} earlier steps done",
+    "more_one": "+{{count}} more step",
+    "more_other": "+{{count}} more steps"
   }
 }
