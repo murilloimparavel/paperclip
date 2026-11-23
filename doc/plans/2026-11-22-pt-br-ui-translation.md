@@ -203,4 +203,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir controles para revelar etapas anteriores/adicionais e recolher a lista.
   - [x] Preservar os nomes das etapas definidos pelo agente.
   - [x] Validar catálogos, testes do plano e renderização explícita em pt-BR.
+- Detalhes de pesquisa, alterações de workspace e avisos do provedor:
+  - [x] Traduzir consultas, contagem e expansão de resultados, listas de fontes e rótulos acessíveis.
+  - [x] Traduzir alterações de arquivos, operações, pré-visualizações e mensagens de truncamento/indisponibilidade.
+  - [x] Traduzir níveis e controles de avisos, preservando mensagens e metadados do provedor.
+  - [x] Validar catálogos, testes dos cartões e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

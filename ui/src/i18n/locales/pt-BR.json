@@ -2887,5 +2887,41 @@
     "earlierDone_other": "{{count}} etapas anteriores concluídas",
     "more_one": "+{{count}} etapa adicional",
     "more_other": "+{{count}} etapas adicionais"
+  },
+  "taskChatProtocol": {
+    "query": "Consulta",
+    "results_one": "{{count}} resultado",
+    "results_other": "{{count}} resultados",
+    "researchSources": "Fontes da pesquisa",
+    "showMoreResults_one": "Mostrar mais {{count}} resultado",
+    "showMoreResults_other": "Mostrar mais {{count}} resultados",
+    "showFewerResults": "Mostrar menos resultados",
+    "additionalProviderOutput": "Há mais saída do provedor disponível no inspetor do Runner.",
+    "planSteps": "Etapas do plano",
+    "delegatedAgents": "Agentes delegados",
+    "outputTruncated": "Saída limitada a 8 KiB.",
+    "noChangedFiles": "Nenhum detalhe dos arquivos alterados foi informado.",
+    "changedFiles": "Arquivos alterados",
+    "moreFilesNotShown_one": "Mais {{count}} arquivo não exibido",
+    "moreFilesNotShown_other": "Mais {{count}} arquivos não exibidos",
+    "fileOperations": {
+      "create": "Criado",
+      "modify": "Modificado",
+      "delete": "Excluído",
+      "rename": "Renomeado",
+      "mode_change": "Modo alterado"
+    },
+    "previewUnavailable": "Pré-visualização indisponível.",
+    "previewTruncated": "Pré-visualização limitada pelo Runner.",
+    "moreSources_one": "+{{count}} outra fonte",
+    "moreSources_other": "+{{count}} outras fontes",
+    "timeLeft": "faltam {{duration}}",
+    "emptyProviderNotice": "O provedor enviou um aviso sem mensagem.",
+    "severity": {
+      "error": "Erro",
+      "info": "Atualização do provedor",
+      "warning": "Aviso"
+    },
+    "details": "Detalhes"
   }
 }

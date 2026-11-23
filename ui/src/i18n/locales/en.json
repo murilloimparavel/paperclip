@@ -2887,5 +2887,41 @@
     "earlierDone_other": "{{count}} earlier steps done",
     "more_one": "+{{count}} more step",
     "more_other": "+{{count}} more steps"
+  },
+  "taskChatProtocol": {
+    "query": "Query",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "researchSources": "Research sources",
+    "showMoreResults_one": "Show {{count}} more result",
+    "showMoreResults_other": "Show {{count}} more results",
+    "showFewerResults": "Show fewer results",
+    "additionalProviderOutput": "Additional provider output is available in Runner Inspector.",
+    "planSteps": "Plan steps",
+    "delegatedAgents": "Delegated agents",
+    "outputTruncated": "Output truncated to 8 KiB.",
+    "noChangedFiles": "No changed-file details were reported.",
+    "changedFiles": "Changed files",
+    "moreFilesNotShown_one": "{{count}} more file not shown",
+    "moreFilesNotShown_other": "{{count}} more files not shown",
+    "fileOperations": {
+      "create": "Created",
+      "modify": "Modified",
+      "delete": "Deleted",
+      "rename": "Renamed",
+      "mode_change": "Mode changed"
+    },
+    "previewUnavailable": "Preview unavailable.",
+    "previewTruncated": "Preview truncated by the runner.",
+    "moreSources_one": "+{{count}} more source",
+    "moreSources_other": "+{{count}} more sources",
+    "timeLeft": "{{duration}} left",
+    "emptyProviderNotice": "The provider reported a notice without a message.",
+    "severity": {
+      "error": "Error",
+      "info": "Provider update",
+      "warning": "Warning"
+    },
+    "details": "Details"
   }
 }
