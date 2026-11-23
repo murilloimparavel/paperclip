@@ -240,4 +240,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir ação de nova tentativa, estado pendente e rótulo acessível de atualização.
   - [x] Preservar títulos e mensagens dinâmicas de recuperação do servidor.
   - [x] Validar catálogos, testes do aviso e renderização explícita em pt-BR.
+- Campo e ações do compositor da tarefa:
+  - [x] Traduzir placeholders por modo, meta de sessão, nova sessão e entrada pendente.
+  - [x] Traduzir atribuição, edição de mensagem enfileirada, envio/interrupção e estados de upload.
+  - [x] Traduzir nomes acessíveis e ajuda das ações de envio/anexo.
+  - [x] Validar catálogos, testes do compositor e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

@@ -325,6 +325,16 @@ describe("TaskChatComposer", () => {
     root = null;
     await i18n.changeLanguage("en");
   });
+  it("localizes the task composer send controls in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      renderComposer({ onAdd: vi.fn(), workMode: "standard" });
+      expect(sendButton().getAttribute("aria-label")).toBe("Enviar");
+      expect(sendButton().title).toBe("Enviar (Enter)");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
   describe("plain HTTP without randomUUID", () => {
     beforeEach(() => {
       vi.stubGlobal("crypto", { getRandomValues: crypto.getRandomValues.bind(crypto) });
