@@ -3248,6 +3248,15 @@
     "questionAsked": "1 pergunta feita",
     "questionsAsked": "{{count}} perguntas feitas"
   },
+  "routineSuggestionCard": {
+    "routineSetUp": "Rotina configurada:",
+    "settingUp": "Configurando a rotina…",
+    "yourAgent": "Seu agente",
+    "offerToRepeat": "Sugestão para repetir {{title}}",
+    "defaultOffer": "Parece que isso acontece com frequência. Quer que eu agende?",
+    "noThanks": "Agora não",
+    "makeItRoutine": "Transformar em rotina"
+  },
   "taskChatStatusWhimsy": {
     "Clipping": "Recortando",
     "Organizing": "Organizando",

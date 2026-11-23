@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { SuggestRoutineInteraction } from "@paperclipai/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RoutineSuggestionCard } from "./RoutineSuggestionCard";
+import { i18n } from "@/i18n";
 
 const acceptMock = vi.hoisted(() => vi.fn());
 const declineMock = vi.hoisted(() => vi.fn());
@@ -107,6 +108,22 @@ describe("RoutineSuggestionCard", () => {
     expect(text).toContain("Weekly pricing summary");
     expect(text).toContain("Every Monday at 9 AM");
     expect(text).not.toMatch(/\bissue\b/i);
+  });
+
+  it("localizes the routine offer fallback, actions, and accessible name in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const interaction = offer({
+        payload: { ...offer().payload, message: null },
+      });
+      await render(interaction);
+      expect(container.textContent).toContain("Parece que isso acontece com frequência. Quer que eu agende?");
+      expect(container.querySelector("article")?.getAttribute("aria-label")).toBe("Sugestão para repetir Weekly pricing summary");
+      expect(button("Agora não")).toBeDefined();
+      expect(button("Transformar em rotina")).toBeDefined();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("accepts in one tap with the person's time zone", async () => {
