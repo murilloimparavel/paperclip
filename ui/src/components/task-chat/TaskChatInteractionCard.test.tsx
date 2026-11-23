@@ -15,6 +15,7 @@ import type {
   RequestConfirmationInteraction,
 } from "@/lib/issue-thread-interactions";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   expiredSecretProposalInteraction,
@@ -356,6 +357,24 @@ describe("TaskChatInteractionCard", () => {
     expect(takeover!.id).toBe("");
     const ids = [...container.querySelectorAll("[id]")].map(node => node.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("localizes unanswered question labels and accessible text in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard item={interactionItem(pendingAskUserQuestionsInteraction)} showUnansweredQuestion onReviewRequest={() => {}} />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+      const button = container.querySelector('[data-testid="task-chat-unanswered-question"]');
+      expect(button?.textContent).toContain("Pergunta sem resposta");
+      expect(button?.getAttribute("aria-label")).toContain("Responder à pergunta:");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("renders a plan confirmation as a linked document preview", () => {

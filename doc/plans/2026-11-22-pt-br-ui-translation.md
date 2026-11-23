@@ -225,4 +225,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir os verbos lúdicos exibidos durante execuções genéricas.
   - [x] Preservar a seleção determinística e a rotação temporal existentes.
   - [x] Validar catálogos, teste do status e renderização explícita em pt-BR.
+- Cartões compactos de interação no chat da tarefa:
+  - [x] Traduzir pergunta sem resposta, solicitação de revisão e tarefa sugerida.
+  - [x] Traduzir rótulos acessíveis e fallbacks locais, preservando títulos e prompts dinâmicos.
+  - [x] Validar catálogos, testes do cartão e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

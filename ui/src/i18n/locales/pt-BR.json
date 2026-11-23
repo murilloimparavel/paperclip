@@ -2924,6 +2924,14 @@
     },
     "details": "Detalhes"
   },
+  "taskChatInteractions": {
+    "question": "Pergunta",
+    "answerQuestion": "Responder à pergunta: {{prompt}}",
+    "unansweredQuestion": "Pergunta sem resposta",
+    "reviewRequest": "Revisar solicitação",
+    "suggestedTasks": "Tarefas sugeridas",
+    "openRequest": "Abrir solicitação: {{label}}"
+  },
   "taskChatStatusWhimsy": {
     "Clipping": "Recortando",
     "Organizing": "Organizando",
