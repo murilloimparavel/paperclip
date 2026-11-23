@@ -85,6 +85,7 @@ import {
 import { TaskChatPlanPreviewCard } from "./TaskChatPlanPreviewCard";
 import { TaskChatRichInput } from "./TaskChatRichInput";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { useTranslation } from "react-i18next";
 
 const TAKEOVER_TEXTAREA_CLASS =
   "min-h-16 resize-y border-0 bg-muted/35 text-sm shadow-none focus-visible:ring-0 focus-visible:ring-offset-0";
@@ -1460,6 +1461,7 @@ function SuggestedTasksCard({
   draftKey?: string;
   coordinator?: boolean;
 }) {
+  const { t } = useTranslation();
   const roots = useMemo(
     () => buildSuggestedTaskTree(interaction.payload.tasks),
     [interaction.payload.tasks],
@@ -1543,7 +1545,7 @@ function SuggestedTasksCard({
 
   return (
     <div>
-      {(!coordinator || interaction.payload.tasks.length > 1) ? <p className="text-sm leading-5 text-foreground">Select the tasks to create.</p> : null}
+      {(!coordinator || interaction.payload.tasks.length > 1) ? <p className="text-sm leading-5 text-foreground">{t("taskChatInteractions.selectTasksToCreate")}</p> : null}
       {interaction.payload.tasks.length > 10 ? (
         <label className="relative mt-3 block">
           <Search
@@ -1553,15 +1555,15 @@ function SuggestedTasksCard({
           <Input
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            placeholder="Filter suggested tasks"
-            aria-label="Filter suggested tasks"
+            placeholder={t("taskChatInteractions.filterSuggestedTasks")}
+            aria-label={t("taskChatInteractions.filterSuggestedTasks")}
             className="pl-8"
           />
         </label>
       ) : null}
       <ul
         className="mt-2 max-h-(--sz-28dvh) overflow-y-auto scrollbar-auto-hide"
-        aria-label="Suggested tasks"
+        aria-label={t("taskChatInteractions.suggestedTasks")}
       >
         {visibleRoots.map((node) => (
           <SuggestedTaskRow
@@ -1578,13 +1580,13 @@ function SuggestedTasksCard({
             htmlFor={`${interaction.id}-reject-reason`}
             className="text-xs font-medium text-foreground"
           >
-            {coordinator ? "What should change?" : "Why should these tasks change? (optional)"}
+            {coordinator ? t("taskChatInteractions.whatShouldChange") : t("taskChatInteractions.whyTasksShouldChange")}
           </label>
           <Textarea
             id={`${interaction.id}-reject-reason`}
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="Add a short note"
+            placeholder={t("taskChatInteractions.addShortNote")}
             className={TAKEOVER_TEXTAREA_CLASS}
             autoFocus
           />
@@ -1606,7 +1608,7 @@ function SuggestedTasksCard({
               disabled={working !== null}
               onClick={() => setRejecting(false)}
             >
-              {coordinator ? "Cancel" : "Back"}
+              {coordinator ? t("taskChatInteractions.cancel") : t("taskChatInteractions.back")}
             </Button>
             <Button
               type="button"
@@ -1618,13 +1620,13 @@ function SuggestedTasksCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {coordinator ? "Request revision" : "Send back"}
+              {coordinator ? t("taskChatInteractions.requestRevision") : t("taskChatInteractions.sendBack")}
             </Button>
           </>
         ) : (
           <>
             {coordinator ? <Button type="button" size="sm" variant="ghost" disabled={working !== null || !onRejectInteraction}
-              onClick={() => { setReason(""); void resolve("reject", ""); }}>Reject</Button> : null}
+              onClick={() => { setReason(""); void resolve("reject", ""); }}>{t("taskChatInteractions.reject")}</Button> : null}
             <Button
               type="button"
               size="sm"
@@ -1632,7 +1634,7 @@ function SuggestedTasksCard({
               disabled={working !== null || !onRejectInteraction}
               onClick={() => setRejecting(true)}
             >
-              {coordinator ? "Revise…" : "Revise"}
+              {coordinator ? t("taskChatInteractions.reviseEllipsis") : t("taskChatInteractions.revise")}
             </Button>
             <Button
               type="button"

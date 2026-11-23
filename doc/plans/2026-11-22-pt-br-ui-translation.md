@@ -22,6 +22,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 
 - Traduzir por fluxo e marcar cada área aqui após a implementação e validação.
 - Criar commits pequenos por área concluída, sem mudanças não relacionadas.
+
+## Progresso por fluxo
+
+- [x] Cartões de tarefas sugeridas no chat: instruções, filtro acessível e ações de revisão/rejeição. Validado com `TaskChatInteractionCard.test.tsx` (40 testes) e `@paperclipai/ui typecheck`.
 - Manter `en.json` e `pt-BR.json` com a mesma estrutura e placeholders compatíveis.
 - Validar cada lote de forma focada e revisar a interface renderizada em pt-BR.
 - Fazer deploy somente depois da cobertura ampla, validação final e preparação do rollback.

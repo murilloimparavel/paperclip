@@ -356,6 +356,7 @@
     "chooseNativeHarness": "Choose a native harness…",
     "cancel": "Cancel",
     "back": "Back",
+    "cancel": "Cancel",
     "saving": "Saving…",
     "chooseAdapterAction": "Choose adapter",
     "configureAgent": "Configure agent"
@@ -3060,7 +3061,18 @@
     "unansweredQuestion": "Unanswered question",
     "reviewRequest": "Review request",
     "suggestedTasks": "Suggested tasks",
-    "openRequest": "Open request: {{label}}"
+    "openRequest": "Open request: {{label}}",
+    "selectTasksToCreate": "Select the tasks to create.",
+    "filterSuggestedTasks": "Filter suggested tasks",
+    "whatShouldChange": "What should change?",
+    "whyTasksShouldChange": "Why should these tasks change? (optional)",
+    "addShortNote": "Add a short note",
+    "back": "Back",
+    "requestRevision": "Request revision",
+    "sendBack": "Send back",
+    "reject": "Reject",
+    "reviseEllipsis": "Revise…",
+    "revise": "Revise"
   },
   "taskChatStatusWhimsy": {
     "Clipping": "Clipping",

@@ -356,6 +356,7 @@
     "chooseNativeHarness": "Escolha um executor nativo…",
     "cancel": "Cancelar",
     "back": "Voltar",
+    "cancel": "Cancelar",
     "saving": "Salvando…",
     "chooseAdapterAction": "Escolher adaptador",
     "configureAgent": "Configurar agente"
@@ -3060,7 +3061,18 @@
     "unansweredQuestion": "Pergunta sem resposta",
     "reviewRequest": "Revisar solicitação",
     "suggestedTasks": "Tarefas sugeridas",
-    "openRequest": "Abrir solicitação: {{label}}"
+    "openRequest": "Abrir solicitação: {{label}}",
+    "selectTasksToCreate": "Selecione as tarefas que deseja criar.",
+    "filterSuggestedTasks": "Filtrar tarefas sugeridas",
+    "whatShouldChange": "O que deve mudar?",
+    "whyTasksShouldChange": "Por que essas tarefas devem mudar? (opcional)",
+    "addShortNote": "Adicione uma observação breve",
+    "back": "Voltar",
+    "requestRevision": "Solicitar revisão",
+    "sendBack": "Devolver",
+    "reject": "Rejeitar",
+    "reviseEllipsis": "Revisar…",
+    "revise": "Revisar"
   },
   "taskChatStatusWhimsy": {
     "Clipping": "Recortando",
