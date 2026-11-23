@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TaskChatRunnerActivityGroup, foldReadRuns, formatToolDuration } from "./TaskChatRunnerActivityGroup";
 import type { TaskChatActivityPhaseItem, TaskChatToolItem } from "./task-chat-model";
+import { i18n } from "@/i18n";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -24,6 +25,7 @@ describe("tool row grammar", () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+    void i18n.changeLanguage("en");
   });
 
   it("formats durations compactly", () => {
@@ -76,5 +78,15 @@ describe("tool row grammar", () => {
     const blocked = container.querySelector('[data-activity-row="t2"]');
     expect(blocked?.textContent).toContain("Blocked");
     expect(blocked?.querySelector("[data-tool-blocked-reason]")?.textContent).toBe("Denied by rule");
+  });
+
+  it("localizes grouped file reads and their accessible history label", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    act(() => root.render(<TaskChatRunnerActivityGroup defaultExpanded item={phase([
+      read("pt-1", "src/a.ts"), read("pt-2", "src/b.ts"), read("pt-3", "src/c.ts"),
+    ])} />));
+    expect(container.querySelector("[data-activity-read-run]")?.textContent).toContain("Leu 3 arquivos");
+    act(() => container.querySelector<HTMLButtonElement>('[data-activity-read-run] button')!.click());
+    expect(container.querySelector('[aria-label="Arquivos lidos"]')).not.toBeNull();
   });
 });

@@ -3240,5 +3240,15 @@
     "discardError": "Não foi possível descartar. A mensagem continua na fila.",
     "queuedMessages": "Mensagens na fila",
     "savedResponse": "Resposta salva"
+  },
+  "taskChatRunnerActivity": {
+    "readFiles_one": "Leu {{count}} arquivo",
+    "readFiles_other": "Leu {{count}} arquivos",
+    "filesRead": "Arquivos lidos",
+    "activityCount_one": "{{count}} atividade",
+    "activityCount_other": "{{count}} atividades",
+    "collapse": "Recolher",
+    "expand": "Expandir",
+    "history": "Histórico de atividades"
   }
 }

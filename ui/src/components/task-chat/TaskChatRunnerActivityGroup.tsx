@@ -13,6 +13,7 @@ import { useReducedMotion } from "motion/react";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import { cn } from "@/lib/utils";
 import { useTaskChatExpansion } from "./expansion-state";
+import { useTranslation } from "react-i18next";
 import type { TaskChatActivityPhaseItem, TaskChatAutoReview } from "./task-chat-model";
 import { AutoApprovedBadge, AutoReviewDetail } from "./TaskChatAutoReview";
 import {
@@ -549,6 +550,7 @@ function readRunPreview(items: ToolActivity[]): string {
 }
 
 function ReadRunActivity({ items }: { items: ToolActivity[] }) {
+  const { t } = useTranslation();
   const id = `runner-reads:${items[0]!.id}`;
   const [open, setOpen] = useTaskChatExpansion(id, false);
   const listId = useId();
@@ -566,14 +568,14 @@ function ReadRunActivity({ items }: { items: ToolActivity[] }) {
             <BookOpen className="size-3.5" aria-hidden="true" />
           </span>
           <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden whitespace-nowrap">
-            <span className="shrink-0 text-xs">Read {items.length} files</span>
+            <span className="shrink-0 text-xs">{t("taskChatRunnerActivity.readFiles", { count: items.length })}</span>
             <span className="truncate font-mono text-xs text-muted-foreground">{readRunPreview(items)}</span>
           </span>
         </span>
         <ChevronRight className={cn("size-3.5 shrink-0", open && "rotate-90")} aria-hidden="true" />
       </button>
       {open ? (
-        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label="Files read">
+        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label={t("taskChatRunnerActivity.filesRead")}>
           {items.map((item) => (
             <ExpandedActivity key={item.id} item={item} active={false} />
           ))}
@@ -591,6 +593,7 @@ export function TaskChatRunnerActivityGroup({
   item: TaskChatActivityPhaseItem;
   defaultExpanded?: boolean;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useTaskChatExpansion(
     item.id,
     defaultExpanded,
@@ -602,7 +605,7 @@ export function TaskChatRunnerActivityGroup({
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
   const SummaryIcon = summary.icon;
-  const countLabel = `${activities.length} ${activities.length === 1 ? "activity" : "activities"}`;
+  const countLabel = t("taskChatRunnerActivity.activityCount", { count: activities.length });
   const editTotals = activities.reduce(
     (sum, activity) =>
       activity.kind === "tool" && activity.diff
@@ -637,7 +640,7 @@ export function TaskChatRunnerActivityGroup({
             onClick={() => setExpanded(!expanded)}
             aria-expanded={expanded}
             aria-controls={expanded ? historyId : undefined}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.active ? countLabel : `${summary.fullLabel.toLowerCase()} (${countLabel})`}`}
+            aria-label={`${t(expanded ? "taskChatRunnerActivity.collapse" : "taskChatRunnerActivity.expand")} ${item.active ? countLabel : `${summary.fullLabel.toLowerCase()} (${countLabel})`}`}
           >
             {!item.active ? (
               <span
@@ -680,7 +683,7 @@ export function TaskChatRunnerActivityGroup({
             <ol
               id={historyId}
               className="flex min-w-0 flex-col gap-1"
-              aria-label="Activity history"
+              aria-label={t("taskChatRunnerActivity.history")}
               data-testid="task-chat-runner-activity-list"
             >
               {foldReadRuns(activities).map((row) =>

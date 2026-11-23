@@ -3240,5 +3240,15 @@
     "discardError": "Couldn’t discard. Message is still queued.",
     "queuedMessages": "Queued messages",
     "savedResponse": "Saved response"
+  },
+  "taskChatRunnerActivity": {
+    "readFiles_one": "Read {{count}} file",
+    "readFiles_other": "Read {{count}} files",
+    "filesRead": "Files read",
+    "activityCount_one": "{{count}} activity",
+    "activityCount_other": "{{count}} activities",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "history": "Activity history"
   }
 }
