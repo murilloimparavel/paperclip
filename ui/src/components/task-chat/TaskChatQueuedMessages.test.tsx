@@ -8,6 +8,7 @@ import type { IssueQueuedCommentQueue } from "@paperclipai/shared";
 import { mergePendingIssueQueuedComments } from "@/lib/issue-queued-comment-queue";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { MemoryRouter } from "@/lib/router";
+import { i18n } from "@/i18n";
 import {
   reorderQueuedMessageEntries,
   TaskChatQueuedMessages,
@@ -66,6 +67,7 @@ describe("TaskChatQueuedMessages", () => {
   afterEach(() => {
     flushSync(() => root.unmount());
     container.remove();
+    void i18n.changeLanguage("en");
   });
 
   function render(
@@ -117,6 +119,15 @@ describe("TaskChatQueuedMessages", () => {
     ).toHaveLength(2);
     expect(container.textContent).toContain("First queued message");
     expect(container.textContent).toContain("Second queued message");
+  });
+
+  it("renders queued message controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    render();
+    expect(container.querySelector('[aria-label="Mensagens na fila"]')).not.toBeNull();
+    expect(container.textContent).toContain("Direcionar");
+    expect(container.querySelector('[aria-label="Descartar mensagem da fila: First queued message"]')).not.toBeNull();
+    expect(container.querySelector('[aria-label="Ações da mensagem na fila: First queued message"]')).not.toBeNull();
   });
 
   it("renders queued Markdown and screenshot thumbnails without showing image syntax", () => {
