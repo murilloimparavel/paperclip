@@ -247,4 +247,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Validar catálogos, testes do compositor e renderização explícita em pt-BR.
   - [x] Traduzir validações locais de metas de sessão, falha ao ignorar pedidos e tipos de anexo não permitidos.
   - [x] Preservar mensagens não reconhecidas recebidas do servidor.
+- Estados de pausa e retomada no composer:
+  - [x] Traduzir explicações para tarefa/árvore pausada, rascunho salvo e ações de retomada.
+  - [x] Traduzir contagens e controles acessíveis do takeover de interações pendentes.
+  - [x] Validar catálogos, teste do composer e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

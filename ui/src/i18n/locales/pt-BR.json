@@ -2946,6 +2946,7 @@
     "fileTypeCannotBeAttached": "Este tipo de arquivo não pode ser anexado aqui",
     "skip": "Pular",
     "pendingInput": "Entrada pendente",
+    "dismissTakeover": "Dispensar {{label}}",
     "pendingCount_one": "{{count}} pendente",
     "pendingCount_other": "{{count}} pendentes",
     "newSessionHint": "Envie /new para iniciar uma nova sessão e continuar esta conversa.",
@@ -2974,6 +2975,16 @@
     "removeFailedAttachment": "Remova o anexo com falha para enviar",
     "sendShortcut": "{{label}} ({{shortcut}})",
     "send": "Enviar"
+  },
+  "taskChatPaused": {
+    "subtreePaused": "A árvore de tarefas está pausada.",
+    "taskPaused": "A tarefa está pausada.",
+    "resumeSubtreeHint": "Retome esta árvore de tarefas para enviar uma mensagem.",
+    "resumeTaskHint": "Retome esta tarefa para enviar uma mensagem.",
+    "draftSaved": "Seu rascunho foi salvo.",
+    "resumeSubtree": "Retomar árvore de tarefas",
+    "resuming": "Retomando…",
+    "resumeTask": "Retomar tarefa"
   },
   "taskChatSystemNotice": {
     "systemUpdate": "Atualização do sistema: {{title}}",

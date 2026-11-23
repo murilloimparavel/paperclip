@@ -10,6 +10,7 @@ import {
   instanceExperimentalSettingsSchema,
 } from "@paperclipai/shared";
 import { parseRunnerGoalCommand, TaskChatComposer } from "./TaskChatComposer";
+import { TaskChatPausedTakeover } from "./TaskChatPausedTakeover";
 import { ComposerAddMenu } from "./ComposerAddMenu";
 import { i18n } from "@/i18n";
 import { QuestionForm } from "./QuestionForm";
@@ -2596,6 +2597,22 @@ describe("TaskChatComposer", () => {
   });
 
   describe("paused task takeover", () => {
+    it("localizes pause explanations, saved draft, and resume states in Brazilian Portuguese", async () => {
+      await act(async () => { await i18n.changeLanguage("pt-BR"); });
+      try {
+        render(<TaskChatPausedTakeover scope="subtree" hasDraft pending onResume={vi.fn()} />);
+        expect(container.textContent).toContain("A árvore de tarefas está pausada.");
+        expect(container.textContent).toContain("Retome esta árvore de tarefas para enviar uma mensagem.");
+        expect(container.textContent).toContain("Seu rascunho foi salvo.");
+        expect(container.querySelector("button")?.textContent).toContain("Retomando…");
+        render(<TaskChatPausedTakeover scope="leaf" onResume={vi.fn()} />);
+        expect(container.textContent).toContain("A tarefa está pausada.");
+        expect(container.querySelector("button")?.textContent).toContain("Retomar tarefa");
+      } finally {
+        await act(async () => { await i18n.changeLanguage("en"); });
+      }
+    });
+
     it("allows only standalone /new to resume a paused conversation through the normal composer", async () => {
       const onAdd = vi.fn().mockResolvedValue(undefined);
       render(<TaskChatComposer onAdd={onAdd} conversationMode workMode="standard" pause={{ scope: "leaf" }} />);

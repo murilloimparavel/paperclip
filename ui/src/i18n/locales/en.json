@@ -2946,6 +2946,7 @@
     "fileTypeCannotBeAttached": "This file type cannot be attached here",
     "skip": "Skip",
     "pendingInput": "Pending input",
+    "dismissTakeover": "Dismiss {{label}}",
     "pendingCount_one": "{{count}} pending",
     "pendingCount_other": "{{count}} pending",
     "newSessionHint": "Send /new to start a fresh session and resume this conversation.",
@@ -2974,6 +2975,16 @@
     "removeFailedAttachment": "Remove the failed attachment to send",
     "sendShortcut": "{{label}} ({{shortcut}})",
     "send": "Send"
+  },
+  "taskChatPaused": {
+    "subtreePaused": "Subtree is paused.",
+    "taskPaused": "Task is paused.",
+    "resumeSubtreeHint": "Resume this subtree to send a message.",
+    "resumeTaskHint": "Resume this task to send a message.",
+    "draftSaved": "Your draft is saved.",
+    "resumeSubtree": "Resume subtree",
+    "resuming": "Resuming…",
+    "resumeTask": "Resume task"
   },
   "taskChatSystemNotice": {
     "systemUpdate": "System update: {{title}}",
