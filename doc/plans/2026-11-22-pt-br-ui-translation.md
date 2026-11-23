@@ -245,4 +245,6 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir atribuição, edição de mensagem enfileirada, envio/interrupção e estados de upload.
   - [x] Traduzir nomes acessíveis e ajuda das ações de envio/anexo.
   - [x] Validar catálogos, testes do compositor e renderização explícita em pt-BR.
+  - [x] Traduzir validações locais de metas de sessão, falha ao ignorar pedidos e tipos de anexo não permitidos.
+  - [x] Preservar mensagens não reconhecidas recebidas do servidor.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

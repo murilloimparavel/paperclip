@@ -336,6 +336,21 @@ function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean
   }
 }
 
+function localizeComposerError(message: string, t: TFunction): string {
+  const goalArguments = message.match(/^\/goal (\S+) does not accept extra arguments\.$/);
+  if (goalArguments) return t("taskChatComposer.goalExtraArguments", { command: `/goal ${goalArguments[1]}` });
+  const knownErrors: Record<string, string> = {
+    "Create a separate task for work that needs an ongoing execution goal.": "createTaskForSessionGoal",
+    "Remove attachments before using /goal.": "removeAttachmentsBeforeGoal",
+    "Select an agent before starting a session goal.": "selectAgentForSessionGoal",
+    "The goal action could not be applied.": "goalActionFailed",
+    "This request could not be skipped.": "skipRequestFailed",
+    "This file type cannot be attached here": "fileTypeCannotBeAttached",
+  };
+  const key = knownErrors[message];
+  return key ? t(`taskChatComposer.${key}`) : message;
+}
+
 type ComposerAttachment = {
   id: string;
   attachmentId?: string;
@@ -948,7 +963,7 @@ export function TaskChatComposer({
       ? ({ matched: false } as const)
       : parseRunnerGoalCommand(submittedBody);
     if (goalCommand.matched && conversationMode) {
-      setActionError("Create a separate task for work that needs an ongoing execution goal.");
+      setActionError(t("taskChatComposer.createTaskForSessionGoal"));
       return;
     }
     if (goalCommand.matched) {
@@ -957,7 +972,7 @@ export function TaskChatComposer({
         return;
       }
       if (attachmentsRef.current.length > 0) {
-        setActionError("Remove attachments before using /goal.");
+        setActionError(t("taskChatComposer.removeAttachmentsBeforeGoal"));
         return;
       }
       if (!onRunnerGoalCommand) {
@@ -983,7 +998,7 @@ export function TaskChatComposer({
         if (hasReassignment && goalCommand.command.action !== "focus") {
           const reassignment = parseAssigneeValue(assigneeValue);
           if (!reassignment?.assigneeAgentId || !onRunnerGoalReassign) {
-            setActionError("Select an agent before starting a session goal.");
+            setActionError(t("taskChatComposer.selectAgentForSessionGoal"));
             return;
           }
           await onRunnerGoalReassign(reassignment);
@@ -1001,7 +1016,7 @@ export function TaskChatComposer({
         setActionError(
           error instanceof Error
             ? error.message
-            : "The goal action could not be applied.",
+            : t("taskChatComposer.goalActionFailed"),
         );
       }
       return;
@@ -1254,7 +1269,7 @@ export function TaskChatComposer({
       setTakeoverError(
         cause instanceof Error
           ? cause.message
-          : "This request could not be skipped.",
+          : t("taskChatComposer.skipRequestFailed"),
       );
     });
   }
@@ -1270,7 +1285,7 @@ export function TaskChatComposer({
       {takeoverBusy ? (
         <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
       ) : null}
-      Skip
+      {t("taskChatComposer.skip")}
     </Button>
   ) : null;
 
@@ -1345,7 +1360,7 @@ export function TaskChatComposer({
               {takeover.content}
             </TaskChatComposerTakeoverActionsContext.Provider>
           </div>
-          {takeoverError ? <p className="mt-2 text-sm text-destructive" role="alert">{takeoverError}</p> : null}
+          {takeoverError ? <p className="mt-2 text-sm text-destructive" role="alert">{localizeComposerError(takeoverError, t)}</p> : null}
           {!takeover.inlineSkip && !takeover.hideSkip ? (
             <div className="mt-3 flex items-center justify-end gap-2">{takeoverSkipButton}</div>
           ) : null}
@@ -1464,7 +1479,7 @@ export function TaskChatComposer({
               role="alert"
               data-testid={creation ? "task-chat-create-error" : queuedEdit ? "task-chat-queued-edit-error" : "task-chat-goal-error"}
             >
-              {actionError}
+              {localizeComposerError(actionError, t)}
             </p>
           ) : null}
 
@@ -1504,7 +1519,7 @@ export function TaskChatComposer({
                         {attachment.status === "uploading"
                           ? t("taskChatComposer.uploading")
                           : attachment.status === "error"
-                            ? (attachment.error ?? t("taskChatComposer.uploadFailed"))
+                            ? (attachment.error ? localizeComposerError(attachment.error, t) : t("taskChatComposer.uploadFailed"))
                             : [kind.label, sizeLabel]
                                 .filter(Boolean)
                                 .join(" · ")}

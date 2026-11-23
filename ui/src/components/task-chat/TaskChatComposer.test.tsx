@@ -2094,6 +2094,22 @@ describe("TaskChatComposer", () => {
       });
     });
 
+    it("localizes known goal validation errors in Brazilian Portuguese", async () => {
+      await i18n.changeLanguage("pt-BR");
+      try {
+        renderComposer({
+          onAdd: vi.fn(), workMode: "standard", runnerGoalCapability: capability,
+          onRunnerGoalCommand: vi.fn(),
+        });
+        typeText("/goal pause extra");
+        pressKey("Enter", { metaKey: true });
+        await flushAsync();
+        expect(container.querySelector('[role="alert"]')?.textContent).toBe("/goal pause não aceita argumentos adicionais.");
+      } finally {
+        await i18n.changeLanguage("en");
+      }
+    });
+
     it("dispatches a goal action without posting a comment", async () => {
       const onAdd = vi.fn().mockResolvedValue(undefined);
       const onRunnerGoalCommand = vi.fn().mockResolvedValue(undefined);
