@@ -3142,5 +3142,9 @@
     "loadingEarlier": "Loading earlier messages…",
     "scrollUpForEarlier": "Scroll up for earlier messages",
     "scrollToLatest": "Scroll to latest"
+  },
+  "taskChatSkillCreatedCard": {
+    "title": "Skill created",
+    "ariaLabel": "Skill created: {{name}}"
   }
 }

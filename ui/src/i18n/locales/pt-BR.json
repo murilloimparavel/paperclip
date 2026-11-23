@@ -3142,5 +3142,9 @@
     "loadingEarlier": "Carregando mensagens anteriores…",
     "scrollUpForEarlier": "Role para cima para ver mensagens anteriores",
     "scrollToLatest": "Ir para a mensagem mais recente"
+  },
+  "taskChatSkillCreatedCard": {
+    "title": "Habilidade criada",
+    "ariaLabel": "Habilidade criada: {{name}}"
   }
 }
