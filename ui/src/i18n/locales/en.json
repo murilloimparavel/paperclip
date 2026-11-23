@@ -3134,5 +3134,13 @@
     "credentialAccess": "{{name}} is configured to use {{credential}}, but {{deniedUser}} don’t have access to that credential.",
     "chooseCredential": "Choose an AI connection {{canUse}}, or ask an administrator to update {{name}}’s connection. Then try again.",
     "changeAiConnection": "Change AI connection"
+  },
+  "taskMessageScroller": {
+    "conversationMessages": "Conversation messages",
+    "earlierMessagesError": "Earlier messages couldn’t load.",
+    "retry": "Retry",
+    "loadingEarlier": "Loading earlier messages…",
+    "scrollUpForEarlier": "Scroll up for earlier messages",
+    "scrollToLatest": "Scroll to latest"
   }
 }

@@ -3134,5 +3134,13 @@
     "credentialAccess": "{{name}} está configurado para usar {{credential}}, mas {{deniedUser}} não tem acesso a essa credencial.",
     "chooseCredential": "Escolha uma conexão de IA que {{canUse}}, ou peça a um administrador para atualizar a conexão de {{name}}. Depois, tente novamente.",
     "changeAiConnection": "Alterar conexão de IA"
+  },
+  "taskMessageScroller": {
+    "conversationMessages": "Mensagens da conversa",
+    "earlierMessagesError": "Não foi possível carregar as mensagens anteriores.",
+    "retry": "Tentar novamente",
+    "loadingEarlier": "Carregando mensagens anteriores…",
+    "scrollUpForEarlier": "Role para cima para ver mensagens anteriores",
+    "scrollToLatest": "Ir para a mensagem mais recente"
   }
 }
