@@ -3296,5 +3296,28 @@
       "clearing": "Limpando",
       "continuing": "Continuando em uma nova execução"
     }
+  },
+  "taskChatSubagent": {
+    "status": {
+      "running": "Em execução",
+      "completed": "Concluído",
+      "failed": "Falhou",
+      "stopped": "Interrompido"
+    },
+    "prompt": "Instrução",
+    "seconds_one": "{{count}}s",
+    "seconds_other": "{{count}}s",
+    "minutes_one": "{{count}}min",
+    "minutes_other": "{{count}}min",
+    "minutesSeconds": "{{minutes}}min {{seconds}}s",
+    "tools_one": "{{count}} ferramenta",
+    "tools_other": "{{count}} ferramentas",
+    "runningSummary_one": "{{count}} subagente em execução · {{done}} concluídos",
+    "runningSummary_other": "{{count}} subagentes em execução · {{done}} concluídos",
+    "failedSummary_one": "{{count}} subagente executado · {{failed}} falharam",
+    "failedSummary_other": "{{count}} subagentes executados · {{failed}} falharam",
+    "completedSummary_one": "{{count}} subagente executado",
+    "completedSummary_other": "{{count}} subagentes executados",
+    "subagents": "Subagentes"
   }
 }

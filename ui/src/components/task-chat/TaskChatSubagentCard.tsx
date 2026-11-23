@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { useTranslation } from "react-i18next";
 import { Bot, ChevronRight } from "lucide-react";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import { useSecondTick } from "@/hooks/useSecondTick";
@@ -21,23 +22,21 @@ export type { TaskChatSubagent, TaskChatSubagentStatus } from "./task-chat-model
  * parent turn, one level in.
  */
 
-function formatElapsed(ms: number | null): string | null {
+function formatElapsed(ms: number | null, t: (key: string, options?: Record<string, unknown>) => string): string | null {
   if (ms == null || !Number.isFinite(ms)) return null;
   const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-  if (totalSeconds < 60) return `${totalSeconds}s`;
+  if (totalSeconds < 60) return t("taskChatSubagent.seconds", { count: totalSeconds });
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return seconds === 0 ? `${minutes}m` : `${minutes}m ${seconds}s`;
+  return seconds === 0 ? t("taskChatSubagent.minutes", { count: minutes }) : t("taskChatSubagent.minutesSeconds", { minutes, seconds });
 }
 
-const STATUS_LABEL: Record<TaskChatSubagentStatus, string> = {
-  running: "Running",
-  completed: "Done",
-  failed: "Failed",
-  cancelled: "Stopped",
+const STATUS_KEY: Record<TaskChatSubagentStatus, string> = {
+  running: "running", completed: "completed", failed: "failed", cancelled: "stopped",
 };
 
 export function TaskChatSubagentStatusDot({ status }: { status: TaskChatSubagentStatus }) {
+  const { t } = useTranslation();
   return (
     <span className="relative flex size-5 shrink-0 items-center justify-center" data-subagent-status={status}>
       {status === "running" ? (
@@ -53,7 +52,7 @@ export function TaskChatSubagentStatusDot({ status }: { status: TaskChatSubagent
         )}
         aria-hidden
       />
-      <span className="sr-only">{STATUS_LABEL[status]}</span>
+      <span className="sr-only">{t(`taskChatSubagent.status.${STATUS_KEY[status]}`)}</span>
     </span>
   );
 }
@@ -63,22 +62,25 @@ function toolCount(subagent: TaskChatSubagent): number {
 }
 
 function useElapsed(subagent: TaskChatSubagent): string | null {
+  const { t } = useTranslation();
   const running = subagent.status === "running";
   useSecondTick(running);
   if (subagent.startedAtMs == null) return null;
   const end = running ? Date.now() : (subagent.finishedAtMs ?? null);
-  return end == null ? null : formatElapsed(end - subagent.startedAtMs);
+  return end == null ? null : formatElapsed(end - subagent.startedAtMs, t);
 }
 
 function SubagentMeta({ subagent }: { subagent: TaskChatSubagent }) {
+  const { t } = useTranslation();
   const elapsed = useElapsed(subagent);
   const tools = toolCount(subagent);
-  const parts = [tools > 0 ? `${tools} ${tools === 1 ? "tool" : "tools"}` : null, elapsed].filter(Boolean);
+  const parts = [tools > 0 ? t("taskChatSubagent.tools", { count: tools }) : null, elapsed].filter(Boolean);
   if (parts.length === 0) return null;
   return <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">{parts.join(" · ")}</span>;
 }
 
 function SubagentBody({ subagent }: { subagent: TaskChatSubagent }) {
+  const { t } = useTranslation();
   const running = subagent.status === "running";
   const phase: TaskChatActivityPhaseItem = {
     id: `${subagent.id}:activity`,
@@ -93,7 +95,7 @@ function SubagentBody({ subagent }: { subagent: TaskChatSubagent }) {
         <details className="group min-w-0 text-xs text-muted-foreground">
           <summary className="flex cursor-pointer list-none items-center gap-1 hover:text-foreground">
             <ChevronRight className="size-3.5 shrink-0 group-open:rotate-90" aria-hidden />
-            Prompt{subagent.model ? <span className="font-mono"> · {subagent.model}</span> : null}
+            {t("taskChatSubagent.prompt")}{subagent.model ? <span className="font-mono"> · {subagent.model}</span> : null}
           </summary>
           <div className="mt-1 whitespace-pre-wrap break-words rounded-md bg-muted/40 p-2 leading-relaxed">{subagent.prompt}</div>
         </details>
@@ -119,6 +121,7 @@ export function TaskChatSubagentCard({
   /** Inside a parallel tree: drop the outer border, the tree draws it. */
   nested?: boolean;
 }) {
+  const { t } = useTranslation();
   const running = subagent.status === "running";
   const [open, setOpen] = useTaskChatExpansion(`subagent:${subagent.id}`, defaultExpanded ?? false);
   const bodyId = useId();
@@ -159,7 +162,7 @@ export function TaskChatSubagentCard({
               {liveLine}
             </span>
           ) : !running && !open && subagent.status !== "completed" ? (
-            <span className="text-xs text-(--status-task-icon-blocked)">{STATUS_LABEL[subagent.status]}</span>
+            <span className="text-xs text-(--status-task-icon-blocked)">{t(`taskChatSubagent.status.${STATUS_KEY[subagent.status]}`)}</span>
           ) : null}
         </span>
         <span className="flex h-5 shrink-0 items-center gap-1.5">
@@ -176,22 +179,23 @@ export function TaskChatSubagentCard({
 /** Parallel subagents dispatched together, shown as a small tree. A single
  * subagent renders as its own card with no group header. */
 export function TaskChatSubagentTree({ subagents }: { subagents: readonly TaskChatSubagent[] }) {
+  const { t } = useTranslation();
   if (subagents.length === 0) return null;
   if (subagents.length === 1) return <TaskChatSubagentCard subagent={subagents[0]!} />;
   const running = subagents.filter((subagent) => subagent.status === "running").length;
   const failed = subagents.filter((subagent) => subagent.status === "failed").length;
   const label = running > 0
-    ? `Running ${subagents.length} subagents · ${subagents.length - running} done`
+    ? t("taskChatSubagent.runningSummary", { count: subagents.length, done: subagents.length - running })
     : failed > 0
-      ? `Ran ${subagents.length} subagents · ${failed} failed`
-      : `Ran ${subagents.length} subagents`;
+      ? t("taskChatSubagent.failedSummary", { count: subagents.length, failed })
+      : t("taskChatSubagent.completedSummary", { count: subagents.length });
   return (
     <section className="min-w-0 rounded-lg border border-border bg-card" data-testid="task-chat-subagent-tree">
       <div className="flex min-h-9 items-center gap-2 px-3 pt-2 text-xs text-muted-foreground">
         <span className="flex size-5 items-center justify-center"><Bot className="size-3.5" aria-hidden /></span>
         <span className={cn(running > 0 && "text-foreground")}>{label}</span>
       </div>
-      <ol className="ml-5 flex min-w-0 flex-col gap-0.5 border-l border-border py-1 pl-2 pr-1 pb-2" aria-label="Subagents">
+      <ol className="ml-5 flex min-w-0 flex-col gap-0.5 border-l border-border py-1 pl-2 pr-1 pb-2" aria-label={t("taskChatSubagent.subagents")}>
         {subagents.map((subagent) => (
           <li key={subagent.id} className="min-w-0">
             <TaskChatSubagentCard subagent={subagent} nested />

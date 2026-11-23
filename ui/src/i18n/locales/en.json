@@ -3296,5 +3296,28 @@
       "clearing": "Clearing",
       "continuing": "Continuing in a new run"
     }
+  },
+  "taskChatSubagent": {
+    "status": {
+      "running": "Running",
+      "completed": "Done",
+      "failed": "Failed",
+      "stopped": "Stopped"
+    },
+    "prompt": "Prompt",
+    "seconds_one": "{{count}}s",
+    "seconds_other": "{{count}}s",
+    "minutes_one": "{{count}}m",
+    "minutes_other": "{{count}}m",
+    "minutesSeconds": "{{minutes}}m {{seconds}}s",
+    "tools_one": "{{count}} tool",
+    "tools_other": "{{count}} tools",
+    "runningSummary_one": "Running {{count}} subagent · {{done}} done",
+    "runningSummary_other": "Running {{count}} subagents · {{done}} done",
+    "failedSummary_one": "Ran {{count}} subagent · {{failed}} failed",
+    "failedSummary_other": "Ran {{count}} subagents · {{failed}} failed",
+    "completedSummary_one": "Ran {{count}} subagent",
+    "completedSummary_other": "Ran {{count}} subagents",
+    "subagents": "Subagents"
   }
 }
