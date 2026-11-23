@@ -7878,7 +7878,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     "text-(length:--text-nano)",
                     workModeMeta.classes.badge,
                   )}
-                  title={`This task is in ${workModeMeta.label.toLowerCase()}.`}
+                  title={workModeMeta.label}
                 >
                   <WorkModeIcon className="h-3 w-3" aria-hidden />
                   {workModeMeta.label}

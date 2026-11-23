@@ -2754,12 +2754,18 @@
       "removeMode": "Remover {{mode}}",
       "privateTaskExplanation": "Somente você e as pessoas com quem compartilhar podem ler esta tarefa",
       "removePrivateTask": "Remover tarefa privada",
-      "private": "Privada"
+      "private": "Privada",
+      "autoMode": "Modo automático"
     },
     "fileDrop": {
       "dropToAttach": "Solte os arquivos para anexá-los",
       "addToNewTask": "Adicionar imagens e arquivos à nova tarefa",
       "addToMessage": "Adicionar imagens e arquivos à mensagem"
+    },
+    "modeTooltip": {
+      "standard": "Modo automático para este envio. Clique para alterar.",
+      "planning": "Modo de planejamento ativado para este envio. Clique para alterar.",
+      "ask": "Modo de perguntas para este envio. Clique para alterar. A pessoa responsável responderá nesta conversa, sem realizar implementação."
     }
   },
   "taskQuestions": {

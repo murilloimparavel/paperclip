@@ -2754,12 +2754,18 @@
       "removeMode": "Remove {{mode}}",
       "privateTaskExplanation": "Only you and people you share with can read this task",
       "removePrivateTask": "Remove private task",
-      "private": "Private"
+      "private": "Private",
+      "autoMode": "Auto mode"
     },
     "fileDrop": {
       "dropToAttach": "Drop files to attach",
       "addToNewTask": "Add images and files to your new task",
       "addToMessage": "Add images and files to your message"
+    },
+    "modeTooltip": {
+      "standard": "Auto mode for this submission. Click to change.",
+      "planning": "Plan mode is on for this submission. Click to change.",
+      "ask": "Ask mode for this submission. Click to change. The responsible will answer in this thread; no implementation work."
     }
   },
   "taskQuestions": {
