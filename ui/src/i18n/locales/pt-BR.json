@@ -3124,5 +3124,15 @@
     "hoursMinutes_hourOne_minuteOther": "{{hours}} hora e {{minutes}} minutos",
     "hoursMinutes_hourOther_minuteOne": "{{hours}} horas e {{minutes}} minuto",
     "hoursMinutes_hourOther_minuteOther": "{{hours}} horas e {{minutes}} minutos"
+  },
+  "taskChatMarker": {
+    "tryAgain": "Tentar novamente",
+    "tryingAgain": "Tentando novamente...",
+    "viewRun": "Ver execução",
+    "viewSavedPlan": "Ver plano salvo",
+    "agentCouldntStart": "{{name}} não pôde iniciar",
+    "credentialAccess": "{{name}} está configurado para usar {{credential}}, mas {{deniedUser}} não tem acesso a essa credencial.",
+    "chooseCredential": "Escolha uma conexão de IA que {{canUse}}, ou peça a um administrador para atualizar a conexão de {{name}}. Depois, tente novamente.",
+    "changeAiConnection": "Alterar conexão de IA"
   }
 }

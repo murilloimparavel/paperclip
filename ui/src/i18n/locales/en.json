@@ -3124,5 +3124,15 @@
     "hoursMinutes_hourOne_minuteOther": "{{hours}} hour {{minutes}} minutes",
     "hoursMinutes_hourOther_minuteOne": "{{hours}} hours {{minutes}} minute",
     "hoursMinutes_hourOther_minuteOther": "{{hours}} hours {{minutes}} minutes"
+  },
+  "taskChatMarker": {
+    "tryAgain": "Try again",
+    "tryingAgain": "Trying again...",
+    "viewRun": "View run",
+    "viewSavedPlan": "View saved plan",
+    "agentCouldntStart": "{{name}} couldn’t start",
+    "credentialAccess": "{{name}} is configured to use {{credential}}, but {{deniedUser}} don’t have access to that credential.",
+    "chooseCredential": "Choose an AI connection {{canUse}}, or ask an administrator to update {{name}}’s connection. Then try again.",
+    "changeAiConnection": "Change AI connection"
   }
 }
