@@ -268,6 +268,10 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
   - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
   - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
+- Prévia do plano no transcript:
+  - [x] Traduzir títulos de fallback, status de escrita, ações de abrir e estados vazios.
+  - [x] Traduzir links acessíveis com revisão e destino na barra lateral.
+  - [x] Preservar títulos e etapas escritos no plano; validar catálogo, 8 testes focados e typecheck da UI.
 - Rótulos locais de atividade do Runner:
   - [x] Traduzir estados de bloqueio/pensamento e o fallback de uso de tokens.
   - [x] Preservar motivos, texto de raciocínio e contagens técnicas.

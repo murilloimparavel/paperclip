@@ -11,6 +11,7 @@ import {
 } from "./TaskChatPlanPreviewCard";
 import type { TaskChatProviderActivityItem } from "./task-chat-model";
 import { CoordinatorPresentation } from "@/components/coordinator/CoordinatorPresentation";
+import { i18n } from "@/i18n";
 
 vi.mock("@/lib/router", () => ({ Link: ({ to, children, disableIssueQuicklook: _quicklook, ...props }: any) => <a href={to} {...props}>{children}</a> }));
 
@@ -103,6 +104,19 @@ describe("TaskChatPlanPreviewCard", () => {
     expect(preview?.textContent).toContain("Streaming task UX");
     expect(preview?.textContent).toContain("Extract the shared card.");
     expect(preview?.textContent).not.toContain("Verify the mobile layout.");
+  });
+
+  it("localizes plan actions and accessible revision links in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      act(() => root.render(<ThemeProvider><TaskChatPlanPreviewCard source={{ kind: "saved", document: planDocument() }} /></ThemeProvider>));
+      const preview = container.querySelector('[data-testid="task-chat-plan-preview"]');
+      expect(preview?.getAttribute("aria-label")).toBe("Abrir plano revisão 4");
+      expect(preview?.textContent).toContain("Plano· rev. 4");
+      expect(preview?.textContent).toContain("Streaming task UX");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("replaces saved preview content when the canonical revision updates", () => {

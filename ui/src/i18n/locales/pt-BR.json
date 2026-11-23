@@ -3323,5 +3323,19 @@
     "completedSummary_one": "{{count}} subagente executado",
     "completedSummary_other": "{{count}} subagentes executados",
     "subagents": "Subagentes"
+  },
+  "taskChatPlan": {
+    "plan": "Plano",
+    "writing": "Escrevendo",
+    "open": "Abrir",
+    "inSidebar": "na barra lateral",
+    "writingPlan": "Escrevendo o plano",
+    "revision": "rev. {{revision}}",
+    "waitingForFirstStep": "Aguardando a primeira etapa do plano…",
+    "openSyncedPlan": "Abra o plano sincronizado para revisá-lo.",
+    "openInSidebarAria": "Abrir {{title}}{{revision}} na barra lateral da tarefa",
+    "openPlanAria": "Abrir plano{{revision}}",
+    "streamingPreviewAria": "Prévia do plano em geração",
+    "revisionAria": "revisão {{revision}}"
   }
 }

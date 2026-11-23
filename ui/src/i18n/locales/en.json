@@ -3323,5 +3323,19 @@
     "completedSummary_one": "Ran {{count}} subagent",
     "completedSummary_other": "Ran {{count}} subagents",
     "subagents": "Subagents"
+  },
+  "taskChatPlan": {
+    "plan": "Plan",
+    "writing": "Writing",
+    "open": "Open",
+    "inSidebar": "in the sidebar",
+    "writingPlan": "Writing plan",
+    "revision": "rev {{revision}}",
+    "waitingForFirstStep": "Waiting for the first plan step…",
+    "openSyncedPlan": "Open the synchronized plan to review it.",
+    "openInSidebarAria": "Open {{title}}{{revision}} in task sidebar",
+    "openPlanAria": "Open Plan{{revision}}",
+    "streamingPreviewAria": "Streaming Plan preview",
+    "revisionAria": "revision {{revision}}"
   }
 }
