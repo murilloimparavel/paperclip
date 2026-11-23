@@ -193,4 +193,9 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Acessibilidade de fases de atividade no transcript:
   - [x] Traduzir ações acessíveis de expandir e recolher, preservando o resumo da atividade.
   - [x] Validar catálogos, testes das fases e renderização explícita em pt-BR.
+- Seletor de responsável, modelo e esforço do compositor:
+  - [x] Traduzir estados sem agente, indisponibilidade, seleção, busca, catálogo e IDs personalizados.
+  - [x] Traduzir modo rápido, níveis de esforço, padrões e nomes acessíveis.
+  - [x] Preservar nomes de provedores, modelos, agentes e a sintaxe técnica de IDs.
+  - [x] Validar catálogos, testes do seletor e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
