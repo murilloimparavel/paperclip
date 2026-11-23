@@ -1258,6 +1258,34 @@ describe("TaskChatInteractionCard", () => {
     expect(container.textContent).toContain("Founder's note on reliability");
   });
 
+  it("localizes item verdict navigation and actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard
+              item={interactionItem(pendingRequestItemVerdictsInteraction)}
+              presentation="takeover"
+              onSubmitInteractionVerdicts={() => undefined}
+            />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+
+      expect(container.textContent).toContain("1 de 5");
+      expect(container.querySelector('[aria-label="Paginação dos itens"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Item anterior"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Próximo item"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Decisão para Spring launch recap"]')).not.toBeNull();
+      expect(container.textContent).toContain("aprovar");
+      expect(container.textContent).toContain("rejeitar");
+      expect(container.textContent).toContain("Aplicar decisões");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("collapses an expired confirmation receipt at the request position", () => {
     flushSync(() => {
       root.render(

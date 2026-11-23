@@ -3072,7 +3072,21 @@
     "sendBack": "Send back",
     "reject": "Reject",
     "reviseEllipsis": "Revise…",
-    "revise": "Revise"
+    "revise": "Revise",
+    "noReviewItems": "No review items were provided.",
+    "decisionsMade": "{{count}} decided",
+    "itemPagination": "Item pagination",
+    "previousItem": "Previous item",
+    "nextItem": "Next item",
+    "pageOf": "{{page}} of {{total}}",
+    "open": "Open",
+    "verdictFor": "Verdict for {{label}}",
+    "verdicts": { "approve": "approve", "reject": "reject" },
+    "reason": "Reason",
+    "addShortReason": "Add a short reason",
+    "submitRejectionReason": "Submit rejection reason",
+    "applyCount": "Apply {{count}}",
+    "applyDecisions": "Apply decisions"
   },
   "taskChatStatusWhimsy": {
     "Clipping": "Clipping",

@@ -1675,6 +1675,7 @@ function ItemVerdictsCard({
   errorMessage: (error: unknown) => string;
   draftKey?: string;
 }) {
+  const { t } = useTranslation();
   const takeoverActions = useTaskChatComposerTakeoverActions();
   const items = interaction.payload.items;
   const resolvedById = useMemo(
@@ -1729,7 +1730,7 @@ function ItemVerdictsCard({
   if (!item)
     return (
       <p className="text-sm text-muted-foreground">
-        No review items were provided.
+        {t("taskChatInteractions.noReviewItems")}
       </p>
     );
   const resolved = resolvedById.get(item.id);
@@ -1818,30 +1819,30 @@ function ItemVerdictsCard({
   return (
     <div>
       <div className="mb-2 flex items-center text-xs text-muted-foreground">
-        <span>{drafts.size + resolvedById.size} decided</span>
+        <span>{t("taskChatInteractions.decisionsMade", { count: drafts.size + resolvedById.size })}</span>
         <TaskChatComposerTakeoverControls>
           <nav
             className="flex shrink-0 items-center gap-1"
-            aria-label="Item pagination"
+            aria-label={t("taskChatInteractions.itemPagination")}
           >
             <Button
               type="button"
               size="icon-xs"
               variant="ghost"
-              aria-label="Previous item"
+              aria-label={t("taskChatInteractions.previousItem")}
               disabled={working || page === 0}
               onClick={() => setPage((current) => current - 1)}
             >
               <ChevronLeft aria-hidden />
             </Button>
             <span className="min-w-10 text-center tabular-nums">
-              {page + 1} of {items.length}
+              {t("taskChatInteractions.pageOf", { page: page + 1, total: items.length })}
             </span>
             <Button
               type="button"
               size="icon-xs"
               variant="ghost"
-              aria-label="Next item"
+              aria-label={t("taskChatInteractions.nextItem")}
               disabled={
                 working ||
                 page === items.length - 1 ||
@@ -1866,7 +1867,7 @@ function ItemVerdictsCard({
           ) : null}
         </div>
         {itemHref && !itemHref.startsWith("/api/") && (itemHref.startsWith("/") || itemHref.startsWith("#")) ? (
-          <Link to={itemHref} disableIssueQuicklook className="text-xs font-medium text-primary hover:underline">Open</Link>
+          <Link to={itemHref} disableIssueQuicklook className="text-xs font-medium text-primary hover:underline">{t("taskChatInteractions.open")}</Link>
         ) : itemHref ? (
           <a
             href={itemHref}
@@ -1874,7 +1875,7 @@ function ItemVerdictsCard({
             rel="noreferrer"
             className="text-xs font-medium text-primary hover:underline"
           >
-            Open
+            {t("taskChatInteractions.open")}
           </a>
         ) : null}
       </div>
@@ -1894,7 +1895,7 @@ function ItemVerdictsCard({
         <div
           className="mt-3 flex flex-wrap gap-1.5"
           role="group"
-          aria-label={`Verdict for ${item.label}`}
+            aria-label={t("taskChatInteractions.verdictFor", { label: item.label })}
         >
           {enabledVerdicts.map((verdict) => (
             <Button
@@ -1922,7 +1923,7 @@ function ItemVerdictsCard({
               {verdict === "reject" ? (
                 <X aria-hidden className="h-4 w-4" />
               ) : null}
-              {verdict}
+              {t(`taskChatInteractions.verdicts.${verdict}`)}
             </Button>
           ))}
         </div>
@@ -1933,13 +1934,13 @@ function ItemVerdictsCard({
             htmlFor={`${interaction.id}-${item.id}-reason`}
             className="text-xs font-medium text-foreground"
           >
-            {interaction.payload.reasonLabel ?? "Reason"}
+            {interaction.payload.reasonLabel ?? t("taskChatInteractions.reason")}
           </label>
           <Textarea
             id={`${interaction.id}-${item.id}-reason`}
             value={draft.reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="Add a short reason"
+            placeholder={t("taskChatInteractions.addShortReason")}
             className={TAKEOVER_TEXTAREA_CLASS}
             autoFocus
           />
@@ -1951,7 +1952,7 @@ function ItemVerdictsCard({
               disabled={!draft.reason.trim() || working}
               onClick={confirmRejectionReason}
             >
-              Submit rejection reason
+              {t("taskChatInteractions.submitRejectionReason")}
             </Button>
           </div>
         </div>
@@ -1975,7 +1976,7 @@ function ItemVerdictsCard({
           {working ? (
             <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
           ) : null}
-          {drafts.size > 0 ? `Apply ${drafts.size}` : "Apply decisions"}
+          {drafts.size > 0 ? t("taskChatInteractions.applyCount", { count: drafts.size }) : t("taskChatInteractions.applyDecisions")}
         </Button>
       </ActionRow>
     </div>

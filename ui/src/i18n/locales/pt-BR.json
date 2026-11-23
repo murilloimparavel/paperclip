@@ -3072,7 +3072,21 @@
     "sendBack": "Devolver",
     "reject": "Rejeitar",
     "reviseEllipsis": "Revisar…",
-    "revise": "Revisar"
+    "revise": "Revisar",
+    "noReviewItems": "Nenhum item para revisão foi informado.",
+    "decisionsMade": "{{count}} decidido(s)",
+    "itemPagination": "Paginação dos itens",
+    "previousItem": "Item anterior",
+    "nextItem": "Próximo item",
+    "pageOf": "{{page}} de {{total}}",
+    "open": "Abrir",
+    "verdictFor": "Decisão para {{label}}",
+    "verdicts": { "approve": "aprovar", "reject": "rejeitar" },
+    "reason": "Motivo",
+    "addShortReason": "Adicione um motivo breve",
+    "submitRejectionReason": "Enviar motivo da rejeição",
+    "applyCount": "Aplicar {{count}}",
+    "applyDecisions": "Aplicar decisões"
   },
   "taskChatStatusWhimsy": {
     "Clipping": "Recortando",
