@@ -434,6 +434,7 @@ function ReceiptDisclosure({
   externalReferences?: SharedInteractionProps["externalReferences"];
   compact?: boolean;
 }) {
+  const { t } = useTranslation();
   const reason = receiptReason(interaction);
   const answerReason =
     reason ??
@@ -476,7 +477,7 @@ function ReceiptDisclosure({
                 </p>
               ) : null}
               <p className="mt-1 text-sm font-medium text-foreground">
-                Answer: {values.length > 0 ? values.join(", ") : "No answer"}
+              {t("taskChatInteractions.answer")}: {values.length > 0 ? values.join(", ") : t("taskChatInteractions.noAnswer")}
               </p>
             </div>
           );
@@ -495,10 +496,10 @@ function ReceiptDisclosure({
         </MarkdownBody>
         {interaction.status === "accepted" ? (
           <p className="mt-1 text-sm font-medium text-foreground">
-            Answer:{" "}
+            {t("taskChatInteractions.answer")}: {" "}
             {selectedLabels.length > 0
               ? selectedLabels.join(", ")
-              : "No options selected"}
+              : t("taskChatInteractions.noOptionsSelected")}
           </p>
         ) : null}
         {interaction.payload.detailsMarkdown ? (
@@ -535,7 +536,7 @@ function ReceiptDisclosure({
           </ul>
         ) : (
           <p className="mt-1 text-sm font-medium text-foreground">
-            No verdicts submitted
+            {t("taskChatInteractions.noVerdictsSubmitted")}
           </p>
         )}
         {interaction.payload.detailsMarkdown ? (
@@ -619,10 +620,10 @@ function ReceiptDisclosure({
           <div className="rounded-sm bg-muted/45 px-3 py-2.5 text-sm">
             <p>
               <strong>{interaction.payload.toolAction.toolDisplayName}</strong>{" "}
-              · {interaction.payload.toolAction.risk} risk
+              · {t(`taskChatInteractions.risk.${interaction.payload.toolAction.risk}`)} {t("taskChatInteractions.riskSuffix")}
             </p>
             {interaction.payload.toolAction.expiresAt ? <p className="mt-1">
-              Expires{" "}
+              {t("taskChatInteractions.expires")} {" "}
               {new Date(
                 interaction.payload.toolAction.expiresAt,
               ).toLocaleString()}
@@ -641,22 +642,22 @@ function ReceiptDisclosure({
         {interaction.payload.secretProposal ? (
           <dl className="grid gap-1 rounded-sm bg-muted/45 px-3 py-2.5 text-sm">
             <div>
-              <dt className="text-xs text-muted-foreground">Secret</dt>
+              <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.secret")}</dt>
               <dd>{interaction.payload.secretProposal.sourceSecretLabel}</dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">Binding</dt>
+              <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.binding")}</dt>
               <dd className="font-mono text-xs">
                 {interaction.payload.secretProposal.configPath} →{" "}
                 {interaction.payload.secretProposal.targetAgentName}
               </dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">Why</dt>
+              <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.why")}</dt>
               <dd>{interaction.payload.secretProposal.justification}</dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">Expires</dt>
+              <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.expires")}</dt>
               <dd>
                 {new Date(
                   interaction.payload.secretProposal.expiresAt,
@@ -903,6 +904,7 @@ function ConfirmationCard({
   onUploadImage?: SharedInteractionProps["onUploadImage"];
   mentions?: MentionOption[];
 }) {
+  const { t } = useTranslation();
   const preparingApproval = isInteractionPreparingApproval(interaction);
   const target = interaction.payload.target;
   const sharedKey = reviseDraftKey(interaction.id, target?.type === "issue_document" ? target.revisionId : null);
@@ -965,7 +967,7 @@ function ConfirmationCard({
         <div className="space-y-2">
           <MarkdownBody className="text-sm leading-5 text-foreground" externalReferences={externalReferences} mediaMode="reference">
             {isPlanConfirmation
-              ? "Do you accept this plan?"
+              ? t("taskChatInteractions.acceptPlanPrompt")
               : interaction.payload.prompt}
           </MarkdownBody>
           {!isPlanConfirmation ? (
@@ -992,10 +994,10 @@ function ConfirmationCard({
                   : "text-muted-foreground",
               )}
             >
-              {interaction.payload.toolAction.risk} risk
+              {t(`taskChatInteractions.risk.${interaction.payload.toolAction.risk}`)} {t("taskChatInteractions.riskSuffix")}
             </span>
             {interaction.payload.toolAction.expiresAt ? <span className="ml-auto text-xs text-muted-foreground">
-              Expires{" "}
+              {t("taskChatInteractions.expires")} {" "}
               {new Date(
                 interaction.payload.toolAction.expiresAt,
               ).toLocaleString()}
@@ -1006,7 +1008,7 @@ function ConfirmationCard({
           </MarkdownBody>
           <details>
             <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-              Arguments
+              {t("taskChatInteractions.arguments")}
             </summary>
             <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
               {interaction.payload.toolAction.argumentsSummaryJson}
@@ -1018,22 +1020,22 @@ function ConfirmationCard({
       {interaction.payload.secretProposal ? (
         <dl className="mt-3 grid gap-2 rounded-sm bg-muted/45 px-3 py-2.5 text-sm">
           <div>
-            <dt className="text-xs text-muted-foreground">Secret</dt>
+            <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.secret")}</dt>
             <dd>{interaction.payload.secretProposal.sourceSecretLabel}</dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Binding</dt>
+            <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.binding")}</dt>
             <dd className="font-mono text-xs">
               {interaction.payload.secretProposal.configPath} →{" "}
               {interaction.payload.secretProposal.targetAgentName}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Why</dt>
+            <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.why")}</dt>
             <dd>{interaction.payload.secretProposal.justification}</dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Expires</dt>
+            <dt className="text-xs text-muted-foreground">{t("taskChatInteractions.expires")}</dt>
             <dd>
               {new Date(
                 interaction.payload.secretProposal.expiresAt,
@@ -1048,8 +1050,8 @@ function ConfirmationCard({
             id={`${interaction.id}-reject-reason-label`}
             className="text-xs font-medium leading-4 text-foreground"
           >
-            {interaction.payload.rejectReasonLabel ?? "What should change?"}
-            {interaction.payload.rejectRequiresReason ? "" : " (optional)"}
+            {interaction.payload.rejectReasonLabel ?? t("taskChatInteractions.whatShouldChange")}
+            {interaction.payload.rejectRequiresReason ? "" : ` (${t("taskChatInteractions.optional")})`}
           </p>
           {isPlanConfirmation ? (
             <TaskChatRichInput
@@ -1057,7 +1059,7 @@ function ConfirmationCard({
               onChange={setReason}
               placeholder={
                 interaction.payload.declineReasonPlaceholder ??
-                "Describe what should change"
+                t("taskChatInteractions.describeWhatShouldChange")
               }
               imageUploadHandler={onUploadImage}
               mentions={mentions}
@@ -1078,7 +1080,7 @@ function ConfirmationCard({
               onChange={(event) => setReason(event.target.value)}
               placeholder={
                 interaction.payload.declineReasonPlaceholder ??
-                "Add a short note"
+                t("taskChatInteractions.addShortNote")
               }
               className={TAKEOVER_TEXTAREA_CLASS}
               autoFocus
@@ -1100,7 +1102,7 @@ function ConfirmationCard({
                 setRejecting(false);
               }}
             >
-              Back
+              {t("taskChatInteractions.back")}
             </Button>
             <Button
               type="button"
@@ -1118,7 +1120,7 @@ function ConfirmationCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.rejectLabel ?? "Reject"}
+              {interaction.payload.rejectLabel ?? t("taskChatInteractions.reject")}
             </Button>
           </>
         ) : (
@@ -1134,7 +1136,7 @@ function ConfirmationCard({
                   : void resolve("reject")
               }
             >
-              {interaction.payload.rejectLabel ?? "Reject"}
+              {interaction.payload.rejectLabel ?? t("taskChatInteractions.reject")}
             </Button>
             <Button
               type="button"
@@ -1145,7 +1147,7 @@ function ConfirmationCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.acceptLabel ?? "Approve"}
+              {interaction.payload.acceptLabel ?? t("taskChatInteractions.approve")}
             </Button>
           </>
         )}

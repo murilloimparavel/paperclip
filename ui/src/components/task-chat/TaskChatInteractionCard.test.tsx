@@ -162,6 +162,42 @@ describe("TaskChatInteractionCard", () => {
     expect(reject).not.toHaveBeenCalled();
   });
 
+  it("localizes tool approval and secret labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    expect(i18n.t("taskChatInteractions.arguments")).toBe("Argumentos");
+    try {
+      await act(async () => flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard
+              item={interactionItem(pendingToolActionLongProposalInteraction)}
+              presentation="takeover"
+              onAcceptInteraction={() => undefined}
+              onRejectInteraction={() => undefined}
+            />
+          </ThemeProvider>
+        </TooltipProvider>,
+      )));
+      expect(container.querySelector("summary")?.textContent).toBe("Argumentos");
+      expect(container.textContent).toContain("Recusar");
+      expect(container.textContent).toContain("Aprovar e executar");
+
+      await act(async () => flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard item={interactionItem(expiredSecretProposalInteraction)} />
+          </ThemeProvider>
+        </TooltipProvider>,
+      )));
+      expect(container.textContent).toContain("Segredo");
+      expect(container.textContent).toContain("Vinculação");
+      expect(container.textContent).toContain("Motivo");
+      expect(container.textContent).toContain("Expira");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("keeps raw tool ids and the audit hash out of the tool approval card text", async () => {
     // Shape of the GitHub create_repository approval from the Nov 5 staging run.
     const rawToolName = "mcp.app-gallery-github-42e51e3f-9377-447b-ad45-333beda8a50a-b873f178:create-repository";
