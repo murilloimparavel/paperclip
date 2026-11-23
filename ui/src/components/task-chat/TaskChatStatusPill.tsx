@@ -5,6 +5,7 @@ import type { TaskChatStatusItem } from "./task-chat-model";
 import { statusLabelIcon, toolTaxonomy } from "./tool-taxonomy";
 import { isGenericStatusLabel, whimsyWord } from "./status-whimsy";
 import { parseCssTimeMs } from "./motion-tokens";
+import { useTranslation } from "react-i18next";
 
 function elapsedLabel(ms?: number): string | null {
   if (ms == null) return null;
@@ -289,6 +290,7 @@ export function TaskChatStatusPill({
   chevronOpen,
   onToggle,
 }: TaskChatStatusPillProps) {
+  const { t } = useTranslation();
   const { Icon, spin, tone } = CONFIG[item.status];
   const awaiting = item.status === "awaiting_approval";
   const live = item.status === "running" || item.status === "working";
@@ -313,7 +315,7 @@ export function TaskChatStatusPill({
     // gerund (seeded by the run-scoped item id, rotating ~10s via the live
     // tick).
     const label = streamingInterstitial || isGenericStatusLabel(item.label)
-      ? whimsyWord(item.id, liveElapsedMs ?? item.elapsedMs ?? 0)
+      ? t(`taskChatStatusWhimsy.${whimsyWord(item.id, liveElapsedMs ?? item.elapsedMs ?? 0)}`)
       : item.label;
     const statusLine = (
       <div className="tc-enter-status flex items-center gap-2 py-0.5 text-xs text-muted-foreground">

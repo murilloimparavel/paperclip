@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { lineScrollOffset, TaskChatStatusPill } from "./TaskChatStatusPill";
+import { i18n } from "@/i18n";
 import { whimsyWord, WHIMSY_ROTATE_MS } from "./status-whimsy";
 import type { TaskChatStatusItem } from "./task-chat-model";
 
@@ -49,6 +50,19 @@ describe("TaskChatStatusPill whimsy", () => {
     const expected = whimsyWord(item.id, 0);
     expect(container.textContent).toContain(`${expected}…`);
     expect(container.textContent).not.toContain("Running…");
+  });
+
+  it("shows the rotating whimsical status words in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const item = liveStatus();
+      render(item);
+      const expected = i18n.t(`taskChatStatusWhimsy.${whimsyWord(item.id, 0)}`);
+      expect(container.textContent).toContain(`${expected}…`);
+      expect(container.textContent).not.toContain(`${whimsyWord(item.id, 0)}…`);
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("rotates the word roughly every 10s while live", () => {

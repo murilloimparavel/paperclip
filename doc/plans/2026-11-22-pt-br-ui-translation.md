@@ -221,4 +221,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados em andamento, pensando, concluído e interrompido.
   - [x] Traduzir duração e continuação após orientação, mantendo rótulos dinâmicos do servidor.
   - [x] Validar catálogos, teste do turno e renderização explícita em pt-BR.
+- Palavras rotativas de status do Runner:
+  - [x] Traduzir os verbos lúdicos exibidos durante execuções genéricas.
+  - [x] Preservar a seleção determinística e a rotação temporal existentes.
+  - [x] Validar catálogos, teste do status e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
