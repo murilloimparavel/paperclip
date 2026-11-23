@@ -3116,7 +3116,12 @@
     "declining": "Declining…",
     "decline": "Decline",
     "approving": "Approving…",
-    "approveAndRun": "Approve & run"
+    "approveAndRun": "Approve & run",
+    "filterOptions": "Filter options",
+    "selectedCount": "{{count}} selected",
+    "selectedChooseRange": "{{count}} selected · choose {{minimum}}–{{maximum}}",
+    "selectedAtLeast": "{{count}} selected · at least {{minimum}}",
+    "confirmSelection": "Confirm selection"
   },
   "taskChatStatusWhimsy": {
     "Clipping": "Clipping",

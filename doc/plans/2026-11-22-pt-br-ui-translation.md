@@ -28,6 +28,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - [x] Cartões de tarefas sugeridas no chat: instruções, filtro acessível e ações de revisão/rejeição. Validado com `TaskChatInteractionCard.test.tsx` (40 testes) e `@paperclipai/ui typecheck`.
 - [x] Revisão paginada de itens no chat: navegação, paginação, decisões, justificativas e ações. Validado com `TaskChatInteractionCard.test.tsx` (41 testes) e `@paperclipai/ui typecheck`.
 - [x] Aprovação de ferramentas no takeover (incluindo a rota legada) e recibos de credenciais: argumentos, riscos, expiração, ações e rótulos de segredo. Validado com `TaskChatInteractionCard.test.tsx` (42 testes) e `@paperclipai/ui typecheck`.
+- [x] Confirmação por seleção de opções: filtros, contagem e limites, rejeição com justificativa, estados acessíveis e ações. Validado com `TaskChatInteractionCard.test.tsx` (43 testes) e `@paperclipai/ui typecheck`.
 - Manter `en.json` e `pt-BR.json` com a mesma estrutura e placeholders compatíveis.
 - Validar cada lote de forma focada e revisar a interface renderizada em pt-BR.
 - Fazer deploy somente depois da cobertura ampla, validação final e preparação do rollback.

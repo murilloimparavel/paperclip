@@ -198,6 +198,46 @@ describe("TaskChatInteractionCard", () => {
     }
   });
 
+  it("localizes checkbox confirmation counts and rejection controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    const interaction = {
+      ...pendingRequestCheckboxConfirmationInteraction,
+      payload: {
+        ...pendingRequestCheckboxConfirmationInteraction.payload,
+        acceptLabel: undefined,
+        rejectLabel: undefined,
+        rejectRequiresReason: true,
+        rejectReasonLabel: undefined,
+        declineReasonPlaceholder: undefined,
+      },
+    };
+    try {
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard
+              item={interactionItem(interaction)}
+              presentation="takeover"
+              onAcceptInteraction={() => undefined}
+              onRejectInteraction={() => undefined}
+            />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+
+      expect(container.textContent).toContain("0 selecionada(s)");
+      expect(container.textContent).toContain("Recusar");
+      expect(container.textContent).toContain("Confirmar seleção");
+      await act(async () => {
+        Array.from(container.querySelectorAll("button")).find(button => button.textContent?.trim() === "Recusar")?.click();
+      });
+      expect(container.querySelector("label[for$='-reject-reason']")?.textContent).toBe("O que deve mudar?");
+      expect(container.querySelector("textarea")?.placeholder).toBe("Adicione uma observação breve");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("keeps raw tool ids and the audit hash out of the tool approval card text", async () => {
     // Shape of the GitHub create_repository approval from the Nov 5 staging run.
     const rawToolName = "mcp.app-gallery-github-42e51e3f-9377-447b-ad45-333beda8a50a-b873f178:create-repository";

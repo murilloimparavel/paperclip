@@ -1171,6 +1171,7 @@ function CheckboxConfirmationCard({
   errorMessage: (error: unknown) => string;
   draftKey?: string;
 }) {
+  const { t } = useTranslation();
   const restored = draftKey
     ? loadStructuredDraft<{ selected: string[]; reason: string }>(draftKey, {
         selected: interaction.payload.defaultSelectedOptionIds ?? [],
@@ -1245,10 +1246,10 @@ function CheckboxConfirmationCard({
 
   const countHint =
     maximum < Number.POSITIVE_INFINITY
-      ? `${selected.size} selected · choose ${minimum}–${maximum}`
+      ? t("taskChatInteractions.selectedChooseRange", { count: selected.size, minimum, maximum })
       : minimum > 0
-        ? `${selected.size} selected · at least ${minimum}`
-        : `${selected.size} selected`;
+        ? t("taskChatInteractions.selectedAtLeast", { count: selected.size, minimum })
+        : t("taskChatInteractions.selectedCount", { count: selected.size });
 
   return (
     <div>
@@ -1274,8 +1275,8 @@ function CheckboxConfirmationCard({
             <Input
               value={filter}
               onChange={(event) => setFilter(event.target.value)}
-              placeholder="Filter options"
-              aria-label="Filter options"
+              placeholder={t("taskChatInteractions.filterOptions")}
+              aria-label={t("taskChatInteractions.filterOptions")}
               className="pl-8"
             />
           </label>
@@ -1316,15 +1317,15 @@ function CheckboxConfirmationCard({
             htmlFor={`${interaction.id}-reject-reason`}
             className="text-xs font-medium text-foreground"
           >
-            {interaction.payload.rejectReasonLabel ?? "What should change?"}
-            {interaction.payload.rejectRequiresReason ? "" : " (optional)"}
+            {interaction.payload.rejectReasonLabel ?? t("taskChatInteractions.whatShouldChange")}
+            {interaction.payload.rejectRequiresReason ? "" : ` (${t("taskChatInteractions.optional")})`}
           </label>
           <Textarea
             id={`${interaction.id}-reject-reason`}
             value={reason}
             onChange={(event) => setReason(event.target.value)}
             placeholder={
-              interaction.payload.declineReasonPlaceholder ?? "Add a short note"
+              interaction.payload.declineReasonPlaceholder ?? t("taskChatInteractions.addShortNote")
             }
             className={TAKEOVER_TEXTAREA_CLASS}
             autoFocus
@@ -1343,7 +1344,7 @@ function CheckboxConfirmationCard({
               disabled={working !== null}
               onClick={() => setRejecting(false)}
             >
-              Back
+              {t("taskChatInteractions.back")}
             </Button>
             <Button
               type="button"
@@ -1360,7 +1361,7 @@ function CheckboxConfirmationCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.rejectLabel ?? "Decline"}
+              {interaction.payload.rejectLabel ?? t("taskChatInteractions.decline")}
             </Button>
           </>
         ) : (
@@ -1376,7 +1377,7 @@ function CheckboxConfirmationCard({
                   : void resolve("reject")
               }
             >
-              {interaction.payload.rejectLabel ?? "Decline"}
+              {interaction.payload.rejectLabel ?? t("taskChatInteractions.decline")}
             </Button>
             <Button
               type="button"
@@ -1387,7 +1388,7 @@ function CheckboxConfirmationCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.acceptLabel ?? "Confirm selection"}
+              {interaction.payload.acceptLabel ?? t("taskChatInteractions.confirmSelection")}
             </Button>
           </>
         )}
