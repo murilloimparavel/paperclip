@@ -3250,5 +3250,51 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "history": "Activity history"
+  },
+  "runnerGoal": {
+    "ariaLabel": "Agent session goal",
+    "title": "Session goal",
+    "workingNow": "Working now",
+    "emptyHint": "Type /goal followed by an objective to pursue work across turns.",
+    "actionFailed": "The goal action could not be applied.",
+    "tokens": "{{count}} tokens",
+    "iterations_one": "{{count}} iteration",
+    "iterations_other": "{{count}} iterations",
+    "durationSeconds_one": "{{count}}s",
+    "durationSeconds_other": "{{count}}s",
+    "durationMinutes_one": "{{count}}m",
+    "durationMinutes_other": "{{count}}m",
+    "durationHoursMinutes": "{{hours}}h {{minutes}}m",
+    "edit": "Edit goal",
+    "pause": "Pause goal",
+    "resume": "Resume goal",
+    "clear": "Clear goal",
+    "replaceTitle": "Replace session goal?",
+    "editTitle": "Edit session goal",
+    "replaceDescription": "This clears the unfinished goal and starts a new goal with the objective below.",
+    "editDescription": "Update the objective without clearing the goal's progress.",
+    "objective": "Goal objective",
+    "cancel": "Cancel",
+    "saving": "Saving…",
+    "replace": "Replace goal",
+    "save": "Save goal",
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "blocked": "Blocked",
+      "limited": "Limited",
+      "usage_limited": "Usage limited",
+      "complete": "Complete",
+      "budget_limited": "Budget limited"
+    },
+    "pending": {
+      "starting": "Starting",
+      "saving": "Saving",
+      "replacing": "Replacing",
+      "pausing": "Pausing after current turn",
+      "resuming": "Resuming",
+      "clearing": "Clearing",
+      "continuing": "Continuing in a new run"
+    }
   }
 }

@@ -3250,5 +3250,51 @@
     "collapse": "Recolher",
     "expand": "Expandir",
     "history": "Histórico de atividades"
+  },
+  "runnerGoal": {
+    "ariaLabel": "Meta da sessão do agente",
+    "title": "Meta da sessão",
+    "workingNow": "Trabalhando agora",
+    "emptyHint": "Digite /goal seguido de um objetivo para continuar o trabalho entre turnos.",
+    "actionFailed": "Não foi possível aplicar a ação à meta.",
+    "tokens": "{{count}} tokens",
+    "iterations_one": "{{count}} iteração",
+    "iterations_other": "{{count}} iterações",
+    "durationSeconds_one": "{{count}}s",
+    "durationSeconds_other": "{{count}}s",
+    "durationMinutes_one": "{{count}}min",
+    "durationMinutes_other": "{{count}}min",
+    "durationHoursMinutes": "{{hours}}h {{minutes}}min",
+    "edit": "Editar meta",
+    "pause": "Pausar meta",
+    "resume": "Retomar meta",
+    "clear": "Limpar meta",
+    "replaceTitle": "Substituir a meta da sessão?",
+    "editTitle": "Editar meta da sessão",
+    "replaceDescription": "A meta incompleta será removida e uma nova será iniciada com o objetivo abaixo.",
+    "editDescription": "Atualize o objetivo sem apagar o progresso da meta.",
+    "objective": "Objetivo da meta",
+    "cancel": "Cancelar",
+    "saving": "Salvando…",
+    "replace": "Substituir meta",
+    "save": "Salvar meta",
+    "status": {
+      "active": "Ativa",
+      "paused": "Pausada",
+      "blocked": "Bloqueada",
+      "limited": "Limitada",
+      "usage_limited": "Limite de uso atingido",
+      "complete": "Concluída",
+      "budget_limited": "Orçamento esgotado"
+    },
+    "pending": {
+      "starting": "Iniciando",
+      "saving": "Salvando",
+      "replacing": "Substituindo",
+      "pausing": "Pausará após o turno atual",
+      "resuming": "Retomando",
+      "clearing": "Limpando",
+      "continuing": "Continuando em uma nova execução"
+    }
   }
 }

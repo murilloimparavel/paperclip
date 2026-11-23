@@ -268,6 +268,11 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
   - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
   - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
+- Widget de meta de sessão do agente no chat:
+  - [x] Traduzir status, ações, acessibilidade, contagens, duração e estados pendentes.
+  - [x] Traduzir criação/substituição/edição, descrições e controles do diálogo.
+  - [x] Preservar objetivo e motivos/erros dinâmicos, cobrindo todos os status definidos no contrato.
+  - [x] Validar catálogos, 9 testes focados e typecheck da UI.
 - Histórico agrupado de atividade do agente no chat:
   - [x] Localizar contagens plurais de atividades e arquivos lidos, ações de expandir/recolher e nomes acessíveis.
   - [x] Preservar nomes de arquivos, comandos e resumos dinâmicos das ferramentas.
