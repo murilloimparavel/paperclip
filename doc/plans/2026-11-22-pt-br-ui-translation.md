@@ -377,3 +377,7 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir avisos de acesso negado a credenciais, preservando nomes de agentes e usuários.
   - [x] Validar catálogos, 12 testes focados e typecheck da UI.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
+- Shell da sidebar do coordenador (flyout Mais, busca global, nova tarefa, recentes e ações acessíveis de fixar):
+  - [x] Aplicar as traduções já existentes aos links do flyout e adicionar os textos ausentes nos catálogos em inglês e pt-BR.
+  - [x] Cobrir nomes acessíveis, tooltip da busca e ações de fixar/desafixar; preservar os nomes dinâmicos de tarefas e agentes.
+  - [x] Validar o flyout e shell em pt-BR, validação dos catálogos, 46 testes focados, typecheck da UI e diff.

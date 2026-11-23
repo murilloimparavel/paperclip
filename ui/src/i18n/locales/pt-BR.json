@@ -1862,6 +1862,7 @@
       "Private project": "Projeto privado",
       "Profile": "Perfil",
       "Projects": "Projetos",
+      "Recents": "Recentes",
       "Review": "Revisão",
       "Routines": "Rotinas",
       "Search": "Buscar",
@@ -1882,7 +1883,15 @@
     },
     "actions": "Ações de {{label}}",
     "collapseSection": "Recolher {{label}}",
-    "expandSection": "Expandir {{label}}"
+    "expandSection": "Expandir {{label}}",
+    "more": "Mais",
+    "moreWorkspacePages": "Mais páginas do espaço de trabalho",
+    "workspaceNavigation": "Navegação do espaço de trabalho",
+    "globalSearch": "Busca global",
+    "searchTasksAgentsProjects": "Buscar tarefas, agentes e projetos",
+    "newTask": "Nova tarefa",
+    "pinItem": "Fixar {{label}}",
+    "unpinItem": "Desafixar {{label}}"
   },
   "auditRuns": {
     "runs": "Execuções",
