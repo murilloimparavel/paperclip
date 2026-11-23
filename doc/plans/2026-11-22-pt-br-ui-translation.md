@@ -236,4 +236,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
 - Bolha de descrição da tarefa:
   - [x] Traduzir placeholder, linha vazia, ação de edição e controles de expansão.
   - [x] Validar catálogos, teste do componente e renderização explícita em pt-BR.
+- Avisos de sistema no chat da tarefa:
+  - [x] Traduzir ação de nova tentativa, estado pendente e rótulo acessível de atualização.
+  - [x] Preservar títulos e mensagens dinâmicas de recuperação do servidor.
+  - [x] Validar catálogos, testes do aviso e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

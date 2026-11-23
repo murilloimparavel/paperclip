@@ -2924,6 +2924,11 @@
     },
     "details": "Details"
   },
+  "taskChatSystemNotice": {
+    "systemUpdate": "System update: {{title}}",
+    "tryAgain": "Try again",
+    "tryingAgain": "Trying again..."
+  },
   "taskChatDescription": {
     "addDescription": "Add a description...",
     "editDescription": "Edit description",
