@@ -2796,5 +2796,10 @@
     "submitError": "Não foi possível enviar as respostas.",
     "cancelError": "Não foi possível cancelar as perguntas.",
     "attachImageToAnswer": "Anexar imagem à resposta para {{question}}"
+  },
+  "taskChatRunHealth": {
+    "serverFailed": "O servidor MCP {{server}} não iniciou",
+    "serversFailedCount": "{{count}} servidores MCP não iniciaram",
+    "recoveryInstructions": "O agente executou sem essas ferramentas. Corrija o comando ou as credenciais do servidor e tente novamente."
   }
 }

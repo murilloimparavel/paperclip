@@ -9,6 +9,7 @@ import { MemoryRouter } from "@/lib/router";
 import { nativeRunEventsToTranscript } from "../transcript/native-run-events";
 import { TaskChatRunnerTurn } from "./TaskChatRunnerTurn";
 import { TaskChatTurn } from "./TaskChatTurn";
+import { i18n } from "@/i18n";
 import { partitionRunHealthItems } from "./TaskChatRunHealthBanner";
 import type { TaskChatTurnItem } from "./task-chat-model";
 import { coalesceSettledTurns, transcriptToTaskChatItems } from "./transcript-adapter";
@@ -107,6 +108,20 @@ describe("run health banner", () => {
     expect([...inline].map((row) => row.textContent)).toEqual([expect.stringContaining("Sign in again")]);
     const header = container.querySelector('[data-testid="task-chat-runner-identity-row"]');
     expect(header?.nextElementSibling).toBe(banners[0]);
+  });
+
+  it("renders MCP recovery guidance in Brazilian Portuguese while preserving server details", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      render([mcpFailure(1, "paperclip", "program not found: paperclip-mcp")]);
+      const banner = container.querySelector<HTMLElement>('[data-testid="task-chat-run-health-banner"]')!;
+      expect(banner.textContent).toContain("O servidor MCP paperclip não iniciou");
+      act(() => banner.querySelector("button")!.click());
+      expect(banner.textContent).toContain("O agente executou sem essas ferramentas.");
+      expect(banner.textContent).toContain("program not found: paperclip-mcp");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
   });
 
   it("names every failed server once and keeps the latest reason", () => {

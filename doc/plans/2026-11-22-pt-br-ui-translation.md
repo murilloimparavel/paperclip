@@ -186,4 +186,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir validações locais, paginação, instruções, estados sem resposta e controles acessíveis.
   - [x] Traduzir ações de cancelar, pular, avançar e enviar, preservando prompts e conteúdo dinâmico.
   - [x] Validar catálogos, testes focados de perguntas e renderização explícita em pt-BR.
+- Avisos de saúde da execução no chat:
+  - [x] Traduzir falha de inicialização de servidor MCP e orientação de recuperação.
+  - [x] Preservar nomes de servidores e detalhes técnicos devolvidos pelo provedor.
+  - [x] Validar catálogos, testes do banner e renderização em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
