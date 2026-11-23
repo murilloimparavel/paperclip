@@ -2737,5 +2737,24 @@
     "loadError": "Could not load all tasks.",
     "retry": "Retry",
     "noTasksYet": "No tasks yet."
+  },
+  "taskComposer": {
+    "addMenu": {
+      "filesImages": "Files and images",
+      "privateTask": "Private task",
+      "goal": "Goal",
+      "keepPursuing": "Keep pursuing",
+      "planMode": "Plan mode",
+      "planBeforeActing": "Plan before acting",
+      "askMode": "Ask mode",
+      "answerWithoutChanges": "Answer without changes",
+      "addToComposer": "Add to composer",
+      "add": "Add",
+      "closeAddMenu": "Close Add menu",
+      "removeMode": "Remove {{mode}}",
+      "privateTaskExplanation": "Only you and people you share with can read this task",
+      "removePrivateTask": "Remove private task",
+      "private": "Private"
+    }
   }
 }

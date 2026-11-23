@@ -2737,5 +2737,24 @@
     "loadError": "Não foi possível carregar todas as tarefas.",
     "retry": "Tentar novamente",
     "noTasksYet": "Ainda não há tarefas."
+  },
+  "taskComposer": {
+    "addMenu": {
+      "filesImages": "Arquivos e imagens",
+      "privateTask": "Tarefa privada",
+      "goal": "Meta",
+      "keepPursuing": "Continuar acompanhando",
+      "planMode": "Modo de planejamento",
+      "planBeforeActing": "Planejar antes de agir",
+      "askMode": "Modo de perguntas",
+      "answerWithoutChanges": "Responder sem fazer alterações",
+      "addToComposer": "Adicionar ao compositor",
+      "add": "Adicionar",
+      "closeAddMenu": "Fechar menu Adicionar",
+      "removeMode": "Remover {{mode}}",
+      "privateTaskExplanation": "Somente você e as pessoas com quem compartilhar podem ler esta tarefa",
+      "removePrivateTask": "Remover tarefa privada",
+      "private": "Privada"
+    }
   }
 }

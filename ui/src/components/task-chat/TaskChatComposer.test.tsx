@@ -11,6 +11,7 @@ import {
 } from "@paperclipai/shared";
 import { parseRunnerGoalCommand, TaskChatComposer } from "./TaskChatComposer";
 import { ComposerAddMenu } from "./ComposerAddMenu";
+import { i18n } from "@/i18n";
 import { QuestionForm } from "./QuestionForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Agent, HeartbeatRun, IssueWorkMode } from "@paperclipai/shared";
@@ -312,6 +313,18 @@ function renderComposer(props: ComponentProps<typeof TaskChatComposer>) {
 }
 
 describe("TaskChatComposer", () => {
+  it("renders the composer Add menu in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    render(<ComposerAddMenu mode="standard" onModeChange={vi.fn()} onAttachFile={vi.fn()} onGoal={vi.fn()} mobile />);
+    flushSync(() => container.querySelector<HTMLButtonElement>('[aria-label="Adicionar ao compositor"]')!.click());
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog?.textContent).toContain("Arquivos e imagens");
+    expect(dialog?.textContent).toContain("Modo de planejamento");
+    expect(dialog?.textContent).toContain("Modo de perguntas");
+    act(() => root?.unmount());
+    root = null;
+    await i18n.changeLanguage("en");
+  });
   describe("plain HTTP without randomUUID", () => {
     beforeEach(() => {
       vi.stubGlobal("crypto", { getRandomValues: crypto.getRandomValues.bind(crypto) });
