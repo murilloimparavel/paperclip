@@ -155,27 +155,42 @@ export function getItemVerdictProgress(args: {
   return { total: payload.items.length, decided, approved, rejected, deferred, pendingItemIds };
 }
 
+type InteractionSummaryTranslate = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
+
+function interactionSummaryText(
+  translate: InteractionSummaryTranslate | undefined,
+  key: string,
+  fallback: string,
+  values?: Record<string, string | number>,
+) {
+  return translate?.(`taskChatInteractionSummaries.${key}`, values) ?? fallback;
+}
+
 export function buildItemVerdictsSummary(
   interaction: RequestItemVerdictsInteraction,
+  translate?: InteractionSummaryTranslate,
 ): string {
   const progress = getItemVerdictProgress({
     payload: interaction.payload,
     result: interaction.result,
   });
   if (interaction.status === "answered") {
-    const parts = [`${progress.decided} decided`];
-    if (progress.approved > 0) parts.push(`${progress.approved} approved`);
-    if (progress.rejected > 0) parts.push(`${progress.rejected} rejected`);
-    if (progress.deferred > 0) parts.push(`${progress.deferred} deferred`);
+    const parts = [interactionSummaryText(translate, "decided", `${progress.decided} decided`, { count: progress.decided })];
+    if (progress.approved > 0) parts.push(interactionSummaryText(translate, "approved", `${progress.approved} approved`, { count: progress.approved }));
+    if (progress.rejected > 0) parts.push(interactionSummaryText(translate, "rejected", `${progress.rejected} rejected`, { count: progress.rejected }));
+    if (progress.deferred > 0) parts.push(interactionSummaryText(translate, "deferred", `${progress.deferred} deferred`, { count: progress.deferred }));
     return parts.join(" · ");
   }
   if (interaction.status === "expired") {
     const outcome = interaction.result?.outcome;
-    if (outcome === "superseded_by_comment") return "Verdicts expired after comment";
-    if (outcome === "stale_target") return "Verdicts expired after target changed";
-    return "Verdicts expired";
+    if (outcome === "superseded_by_comment") return interactionSummaryText(translate, "verdictsExpiredAfterComment", "Verdicts expired after comment");
+    if (outcome === "stale_target") return interactionSummaryText(translate, "verdictsExpiredAfterTargetChange", "Verdicts expired after target changed");
+    return interactionSummaryText(translate, "verdictsExpired", "Verdicts expired");
   }
-  return `${progress.decided} of ${progress.total} decided`;
+  return interactionSummaryText(translate, "verdictsProgress", `${progress.decided} of ${progress.total} decided`, { decided: progress.decided, total: progress.total });
 }
 
 export function getCheckboxConfirmationSelectedLabels(args: {
@@ -219,126 +234,132 @@ export function getRequestConfirmationTargetHref({
 
 export function buildIssueThreadInteractionSummary(
   interaction: IssueThreadInteraction,
+  translate?: InteractionSummaryTranslate,
 ) {
+  const text = (
+    key: string,
+    fallback: string,
+    values?: Record<string, string | number>,
+  ) => interactionSummaryText(translate, key, fallback, values);
   const administrativeOutcome = interaction.result && "outcome" in interaction.result
     ? interaction.result.outcome
     : null;
-  if (administrativeOutcome === "skipped") return "Skipped interaction";
-  if (administrativeOutcome === "withdrawn") return "Withdrawn interaction";
-  if (administrativeOutcome === "issue_closed") return "Expired when issue closed";
-  if (administrativeOutcome === "addressee_deleted") return "Cancelled when addressee was deleted";
+  if (administrativeOutcome === "skipped") return text("skippedInteraction", "Skipped interaction");
+  if (administrativeOutcome === "withdrawn") return text("withdrawnInteraction", "Withdrawn interaction");
+  if (administrativeOutcome === "issue_closed") return text("expiredWhenIssueClosed", "Expired when issue closed");
+  if (administrativeOutcome === "addressee_deleted") return text("cancelledWhenAddresseeDeleted", "Cancelled when addressee was deleted");
   if (interaction.kind === "suggest_tasks") {
     const count = interaction.payload.tasks.length;
     if (interaction.status === "accepted") {
       const createdCount = interaction.result?.createdTasks?.length ?? 0;
       const skippedCount = interaction.result?.skippedClientKeys?.length ?? 0;
       if (skippedCount > 0) {
-        return `Accepted ${createdCount} of ${count} tasks`;
+        return text("tasksAcceptedPartial", `Accepted ${createdCount} of ${count} tasks`, { created: createdCount, total: count });
       }
-      return createdCount === 1 ? "Accepted 1 task" : `Accepted ${createdCount} tasks`;
+      return createdCount === 1 ? text("taskAccepted", "Accepted 1 task", { count: createdCount }) : text("tasksAccepted", `Accepted ${createdCount} tasks`, { count: createdCount });
     }
     if (interaction.status === "rejected") {
-      return count === 1 ? "Rejected 1 task" : `Rejected ${count} tasks`;
+      return count === 1 ? text("taskRejected", "Rejected 1 task", { count }) : text("tasksRejected", `Rejected ${count} tasks`, { count });
     }
-    return count === 1 ? "Suggested 1 task" : `Suggested ${count} tasks`;
+    return count === 1 ? text("taskSuggested", "Suggested 1 task", { count }) : text("tasksSuggested", `Suggested ${count} tasks`, { count });
   }
 
   if (interaction.kind === "request_confirmation") {
-    if (interaction.status === "accepted") return "Confirmed request";
+    if (interaction.status === "accepted") return text("confirmedRequest", "Confirmed request");
     if (interaction.status === "rejected") {
       const rejectLabel = interaction.payload.rejectLabel?.trim();
-      return rejectLabel ? `Selected “${rejectLabel}”` : "Declined request";
+      return rejectLabel ? text("selectedRejectLabel", `Selected “${rejectLabel}”`, { label: rejectLabel }) : text("declinedRequest", "Declined request");
     }
     if (interaction.status === "expired") {
       const outcome = interaction.result?.outcome;
-      if (outcome === "superseded_by_comment") return "Confirmation expired after comment";
-      if (outcome === "stale_target") return "Confirmation expired after target changed";
-      return "Confirmation expired";
+      if (outcome === "superseded_by_comment") return text("confirmationExpiredAfterComment", "Confirmation expired after comment");
+      if (outcome === "stale_target") return text("confirmationExpiredAfterTargetChange", "Confirmation expired after target changed");
+      return text("confirmationExpired", "Confirmation expired");
     }
-    return "Requested confirmation";
+    return text("requestedConfirmation", "Requested confirmation");
   }
 
   if (interaction.kind === "request_checkbox_confirmation") {
     const optionCount = interaction.payload.options.length;
     if (interaction.status === "accepted") {
       const selectedCount = interaction.result?.selectedOptionIds?.length ?? 0;
-      if (selectedCount === 0) return "Confirmed with no options selected";
+      if (selectedCount === 0) return text("confirmedNoOptionsSelected", "Confirmed with no options selected");
       return selectedCount === 1
-        ? `Confirmed 1 of ${optionCount} options`
-        : `Confirmed ${selectedCount} of ${optionCount} options`;
+        ? text("confirmedOneOption", `Confirmed 1 of ${optionCount} options`, { count: optionCount })
+        : text("confirmedOptions", `Confirmed ${selectedCount} of ${optionCount} options`, { selected: selectedCount, total: optionCount });
     }
-    if (interaction.status === "rejected") return "Declined selection";
+    if (interaction.status === "rejected") return text("declinedSelection", "Declined selection");
     if (interaction.status === "expired") {
       const outcome = interaction.result?.outcome;
-      if (outcome === "superseded_by_comment") return "Selection expired after comment";
-      if (outcome === "stale_target") return "Selection expired after target changed";
-      return "Selection expired";
+      if (outcome === "superseded_by_comment") return text("selectionExpiredAfterComment", "Selection expired after comment");
+      if (outcome === "stale_target") return text("selectionExpiredAfterTargetChange", "Selection expired after target changed");
+      return text("selectionExpired", "Selection expired");
     }
     return optionCount === 1
-      ? "Requested a selection from 1 option"
-      : `Requested a selection from ${optionCount} options`;
+      ? text("requestedOneOption", "Requested a selection from 1 option", { count: optionCount })
+      : text("requestedOptions", `Requested a selection from ${optionCount} options`, { count: optionCount });
   }
 
   if (interaction.kind === "request_item_verdicts") {
-    return buildItemVerdictsSummary(interaction);
+    return buildItemVerdictsSummary(interaction, translate);
   }
 
   if (interaction.kind === "connection_intent") {
-    if (interaction.status === "accepted") return `${interaction.payload.serviceName} connected`;
-    if (interaction.status === "rejected") return `${interaction.payload.serviceName} declined`;
+    if (interaction.status === "accepted") return text("serviceConnected", `${interaction.payload.serviceName} connected`, { service: interaction.payload.serviceName });
+    if (interaction.status === "rejected") return text("serviceDeclined", `${interaction.payload.serviceName} declined`, { service: interaction.payload.serviceName });
     if (interaction.status === "expired") {
       return interaction.result?.outcome === "superseded"
-        ? `${interaction.payload.serviceName} request superseded`
-        : `${interaction.payload.serviceName} request expired`;
+        ? text("serviceRequestSuperseded", `${interaction.payload.serviceName} request superseded`, { service: interaction.payload.serviceName })
+        : text("serviceRequestExpired", `${interaction.payload.serviceName} request expired`, { service: interaction.payload.serviceName });
     }
-    return `Connect ${interaction.payload.serviceName}`;
+    return text("connectService", `Connect ${interaction.payload.serviceName}`, { service: interaction.payload.serviceName });
   }
 
   if (interaction.kind === "suggest_routine") {
-    if (interaction.status === "accepted") return `Routine set up: ${interaction.payload.title}`;
-    if (interaction.status === "rejected") return "Routine offer declined";
-    if (interaction.status !== "pending") return "Routine offer closed";
-    return `Repeat ${interaction.payload.title}?`;
+    if (interaction.status === "accepted") return text("routineSetUp", `Routine set up: ${interaction.payload.title}`, { title: interaction.payload.title });
+    if (interaction.status === "rejected") return text("routineOfferDeclined", "Routine offer declined");
+    if (interaction.status !== "pending") return text("routineOfferClosed", "Routine offer closed");
+    return text("repeatRoutine", `Repeat ${interaction.payload.title}?`, { title: interaction.payload.title });
   }
 
   if (interaction.kind === "propose_responsibility_bar") {
-    if (interaction.status === "accepted") return `Bar set: ${interaction.payload.bar.standard}`;
-    if (interaction.status === "rejected") return "Proposed bar: not right";
-    if (interaction.result?.outcome === "replaced") return "Proposed bar replaced";
-    if (interaction.status !== "pending") return "Proposed bar closed";
-    return `Proposed bar: ${interaction.payload.bar.standard}`;
+    if (interaction.status === "accepted") return text("barSet", `Bar set: ${interaction.payload.bar.standard}`, { standard: interaction.payload.bar.standard });
+    if (interaction.status === "rejected") return text("proposedBarRejected", "Proposed bar: not right");
+    if (interaction.result?.outcome === "replaced") return text("proposedBarReplaced", "Proposed bar replaced");
+    if (interaction.status !== "pending") return text("proposedBarClosed", "Proposed bar closed");
+    return text("proposedBar", `Proposed bar: ${interaction.payload.bar.standard}`, { standard: interaction.payload.bar.standard });
   }
 
   if (interaction.kind === "propose_automation") {
-    if (interaction.status === "accepted") return `Automation set up: ${interaction.payload.title}`;
-    if (interaction.status === "rejected") return "Proposed automation: not right";
-    if (interaction.result?.outcome === "replaced") return "Proposed automation replaced";
-    if (interaction.status !== "pending") return "Proposed automation closed";
-    return `Proposed automation: ${interaction.payload.title}`;
+    if (interaction.status === "accepted") return text("automationSetUp", `Automation set up: ${interaction.payload.title}`, { title: interaction.payload.title });
+    if (interaction.status === "rejected") return text("proposedAutomationRejected", "Proposed automation: not right");
+    if (interaction.result?.outcome === "replaced") return text("proposedAutomationReplaced", "Proposed automation replaced");
+    if (interaction.status !== "pending") return text("proposedAutomationClosed", "Proposed automation closed");
+    return text("proposedAutomation", `Proposed automation: ${interaction.payload.title}`, { title: interaction.payload.title });
   }
 
   if (interaction.kind === "propose_dashboard_changes") {
-    if (interaction.status === "accepted") return `Dashboard changed${interaction.result?.summary ? `: ${interaction.result.summary}` : ""}`;
-    if (interaction.status === "rejected") return "Proposed dashboard changes: not right";
-    if (interaction.result?.outcome === "replaced") return "Proposed dashboard changes replaced";
-    if (interaction.status !== "pending") return "Proposed dashboard changes closed";
-    return "Proposed dashboard changes";
+    if (interaction.status === "accepted") return interaction.result?.summary ? text("dashboardChangedWithSummary", `Dashboard changed: ${interaction.result.summary}`, { summary: interaction.result.summary }) : text("dashboardChanged", "Dashboard changed");
+    if (interaction.status === "rejected") return text("proposedDashboardRejected", "Proposed dashboard changes: not right");
+    if (interaction.result?.outcome === "replaced") return text("proposedDashboardReplaced", "Proposed dashboard changes replaced");
+    if (interaction.status !== "pending") return text("proposedDashboardClosed", "Proposed dashboard changes closed");
+    return text("proposedDashboard", "Proposed dashboard changes");
   }
 
   const count = interaction.payload.questions.length;
   if (interaction.status === "answered") {
-    return count === 1 ? "Answered 1 question" : `Answered ${count} questions`;
+    return count === 1 ? text("questionAnswered", "Answered 1 question", { count }) : text("questionsAnswered", `Answered ${count} questions`, { count });
   }
   if (interaction.status === "cancelled") {
-    return count === 1 ? "Cancelled 1 question" : `Cancelled ${count} questions`;
+    return count === 1 ? text("questionCancelled", "Cancelled 1 question", { count }) : text("questionsCancelled", `Cancelled ${count} questions`, { count });
   }
   if (interaction.status === "expired") {
     if (interaction.result?.expirationReason === "superseded_by_comment") {
-      return count === 1 ? "Question expired after comment" : "Questions expired after comment";
+      return count === 1 ? text("questionExpiredAfterComment", "Question expired after comment", { count }) : text("questionsExpiredAfterComment", "Questions expired after comment", { count });
     }
-    return count === 1 ? "Question expired" : "Questions expired";
+    return count === 1 ? text("questionExpired", "Question expired", { count }) : text("questionsExpired", "Questions expired", { count });
   }
-  return count === 1 ? "Asked 1 question" : `Asked ${count} questions`;
+  return count === 1 ? text("questionAsked", "Asked 1 question", { count }) : text("questionsAsked", `Asked ${count} questions`, { count });
 }
 
 /** Readable model input for a durable answer delivered into a successor run. */

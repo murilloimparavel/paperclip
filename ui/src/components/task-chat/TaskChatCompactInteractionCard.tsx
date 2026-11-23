@@ -652,7 +652,7 @@ function ReceiptDisclosure({
       interaction.status === "answered"
         ? t("taskChatInteractions.questionsAnswered")
         : planReviewReceiptSummary(interaction, answerReason)
-          ?? buildIssueThreadInteractionSummary(interaction);
+          ?? buildIssueThreadInteractionSummary(interaction, (key, values) => t(key, values));
     return (
       <details
         className="group"

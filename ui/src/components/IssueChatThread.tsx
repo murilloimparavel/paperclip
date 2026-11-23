@@ -1,4 +1,5 @@
 import { createUuid } from "@/lib/uuid";
+import { t as i18nT } from "@/i18n";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 import { useCurrentAccountGuard } from "../hooks/useAccountBoundMutation";
 import { resolveIssueChatHumanAuthor } from "@/lib/issue-chat-human-author";
@@ -3088,7 +3089,7 @@ function ExpiredRequestConfirmationActivity({
   const detailsId = anchorId
     ? `${anchorId}-details`
     : `${interaction.id}-details`;
-  const summary = buildIssueThreadInteractionSummary(interaction);
+  const summary = buildIssueThreadInteractionSummary(interaction, (key, values) => i18nT(key, values));
 
   const rowContent = (
     <div className="min-w-0 flex-1">

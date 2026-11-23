@@ -166,29 +166,33 @@ describe("TaskChatInteractionCard", () => {
     await act(async () => { await i18n.changeLanguage("pt-BR"); });
     expect(i18n.t("taskChatInteractions.arguments")).toBe("Argumentos");
     try {
-      await act(async () => flushSync(() => root.render(
-        <TooltipProvider>
-          <ThemeProvider>
-            <TaskChatInteractionCard
-              item={interactionItem(pendingToolActionLongProposalInteraction)}
-              presentation="takeover"
-              onAcceptInteraction={() => undefined}
-              onRejectInteraction={() => undefined}
-            />
-          </ThemeProvider>
-        </TooltipProvider>,
-      )));
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard
+                item={interactionItem(pendingToolActionLongProposalInteraction)}
+                presentation="takeover"
+                onAcceptInteraction={() => undefined}
+                onRejectInteraction={() => undefined}
+              />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
       expect(container.querySelector("summary")?.textContent).toBe("Argumentos");
       expect(container.textContent).toContain("Recusar");
       expect(container.textContent).toContain("Aprovar e executar");
 
-      await act(async () => flushSync(() => root.render(
-        <TooltipProvider>
-          <ThemeProvider>
-            <TaskChatInteractionCard item={interactionItem(expiredSecretProposalInteraction)} />
-          </ThemeProvider>
-        </TooltipProvider>,
-      )));
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(expiredSecretProposalInteraction)} />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
       expect(container.textContent).toContain("Segredo");
       expect(container.textContent).toContain("Vinculação");
       expect(container.textContent).toContain("Motivo");
@@ -212,18 +216,22 @@ describe("TaskChatInteractionCard", () => {
       },
     };
     try {
-      flushSync(() => root.render(
-        <TooltipProvider>
-          <ThemeProvider>
-            <TaskChatInteractionCard
-              item={interactionItem(interaction)}
-              presentation="takeover"
-              onAcceptInteraction={() => undefined}
-              onRejectInteraction={() => undefined}
-            />
-          </ThemeProvider>
-        </TooltipProvider>,
-      ));
+      await act(async () => {
+        flushSync(() =>
+          root.render(
+            <TooltipProvider>
+              <ThemeProvider>
+                <TaskChatInteractionCard
+                  item={interactionItem(interaction)}
+                  presentation="takeover"
+                  onAcceptInteraction={() => undefined}
+                  onRejectInteraction={() => undefined}
+                />
+              </ThemeProvider>
+            </TooltipProvider>,
+          ),
+        );
+      });
 
       expect(container.textContent).toContain("0 opções selecionadas");
       expect(container.textContent).toContain("Recusar");
@@ -242,16 +250,33 @@ describe("TaskChatInteractionCard", () => {
     await act(async () => { await i18n.changeLanguage("pt-BR"); });
     try {
       const interaction = createRequestConfirmation({ title: null, status: "failed" });
-      flushSync(() => root.render(
-        <TooltipProvider>
-          <ThemeProvider>
-            <TaskChatInteractionCard item={interactionItem(interaction)} presentation="takeover" />
-          </ThemeProvider>
-        </TooltipProvider>,
-      ));
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(interaction)} presentation="takeover" />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
       expect(container.textContent).toContain("Confirmação");
       expect(container.querySelector('[data-testid="interaction-status-badge"]')?.textContent).toContain("falhou");
       expect(container.querySelector("summary")?.textContent).toContain("Ver solicitação original e resolução");
+      const accepted = createRequestConfirmation({
+        title: null,
+        status: "accepted",
+        result: { version: 1, outcome: "accepted" },
+      });
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(accepted)} presentation="timeline" />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
+      expect(container.querySelector('[data-testid="task-chat-interaction-receipt"] > summary')?.textContent).toContain("Solicitação confirmada");
     } finally {
       await act(async () => { await i18n.changeLanguage("en"); });
     }
