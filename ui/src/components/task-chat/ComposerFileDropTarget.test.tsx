@@ -8,6 +8,7 @@ import { ArtifactDropzone } from "../artifacts/ArtifactDropzone";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { ComposerFileDropTarget } from "./ComposerFileDropTarget";
+import { i18n } from "@/i18n";
 
 let host: HTMLDivElement;
 let root: Root;
@@ -27,6 +28,18 @@ beforeEach(() => { vi.stubGlobal("DragEvent", MouseEvent); host = document.creat
 afterEach(() => { act(() => root.unmount()); host.remove(); vi.unstubAllGlobals(); });
 
 describe("composer screen file drops", () => {
+  it("renders the drop overlay in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      render(<ComposerFileDropTarget newTask enabled onFiles={vi.fn()} />);
+      drag("dragenter");
+      expect(overlay()?.textContent).toContain("Solte os arquivos para anexá-los");
+      expect(overlay()?.textContent).toContain("Adicionar imagens e arquivos à nova tarefa");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("accepts a drop outside the composer exactly once and clears the overlay", () => {
     const onFiles = vi.fn();
     render(<ComposerFileDropTarget enabled onFiles={onFiles} />);

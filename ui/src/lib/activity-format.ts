@@ -1,6 +1,7 @@
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
+import { t } from "@/i18n";
 
 type ActivityDetails = Record<string, unknown> | null | undefined;
 
@@ -258,7 +259,19 @@ function formatInteractionOutcomeLabel(action: string, details: ActivityDetails)
       : null;
   if (!table) return null;
   const kind = typeof details?.interactionKind === "string" ? details.interactionKind : null;
-  return kind ? table[kind] ?? null : null;
+  if (!kind || !table[kind]) return null;
+  const key = action.endsWith("accepted") ? "accepted" : "rejected";
+  return t(`auditFeed.interactionOutcomes.${key}.${kind}`, { defaultValue: table[kind] });
+}
+
+function activityVerb(action: string, fallback: string): string {
+  if (!ACTIVITY_ROW_VERBS[action]) return t("auditFeed.unknownEventVerb", { action });
+  return t(`auditFeed.eventVerbs.${action}`, { defaultValue: fallback });
+}
+
+function activityLabel(action: string, fallback: string): string {
+  if (!ISSUE_ACTIVITY_LABELS[action]) return t("auditFeed.unknownEventLabel", { action });
+  return t(`auditFeed.eventLabels.${action}`, { defaultValue: fallback });
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -294,17 +307,17 @@ function readIssueReferences(details: ActivityDetails, key: string): ActivityIss
 }
 
 function formatUserLabel(userId: string | null | undefined, options: ActivityFormatOptions = {}): string {
-  if (!userId || userId === "local-board") return "Board";
-  if (options.currentUserId && userId === options.currentUserId) return "You";
+  if (!userId || userId === "local-board") return t("auditFeed.board");
+  if (options.currentUserId && userId === options.currentUserId) return t("auditFeed.you");
   const profile = options.userProfileMap?.get(userId);
   if (profile) return profile.label;
-  return `user ${userId.slice(0, 5)}`;
+  return t("auditFeed.userIdFallback", { id: userId.slice(0, 5) });
 }
 
 function formatParticipantLabel(participant: ActivityParticipant, options: ActivityFormatOptions): string {
   if (participant.type === "agent") {
     const agentId = participant.agentId ?? "";
-    return options.agentMap?.get(agentId)?.name ?? "agent";
+    return options.agentMap?.get(agentId)?.name ?? t("auditFeed.actors.agent");
   }
   return formatUserLabel(participant.userId, options);
 }
@@ -313,14 +326,15 @@ function formatIssueReferenceLabel(reference: ActivityIssueReference): string {
   if (reference.identifier) return reference.identifier;
   if (reference.title) return reference.title;
   if (reference.id) return reference.id.slice(0, 8);
-  return "task";
+  return t("auditFeed.entities.task");
 }
 
 function formatChangedEntityLabel(
-  singular: string,
-  plural: string,
+  entity: "blocker" | "reviewer" | "approver",
   labels: string[],
 ): string {
+  const singular = t(`auditFeed.changedEntities.${entity}`);
+  const plural = t(`auditFeed.changedEntities.${entity}Plural`);
   if (labels.length <= 0) return plural;
   if (labels.length === 1) return `${singular} ${labels[0]}`;
   return `${labels.length} ${plural}`;
@@ -344,33 +358,50 @@ function formatAcceptedPlanDecompositionDetail(details: ActivityDetails): string
   const newlyCreated = readStringArrayLength(details.newlyCreatedChildIssueIds);
   const reused = Math.max(0, totalChildren - newlyCreated);
   const parts: string[] = [];
-  if (newlyCreated > 0) parts.push(`created ${newlyCreated} new`);
-  if (reused > 0) parts.push(`reused ${reused} existing`);
-  if (parts.length === 0 && requested !== null) parts.push(`${requested} requested`);
+  if (newlyCreated > 0) parts.push(t("auditFeed.plan.created", { count: newlyCreated }));
+  if (reused > 0) parts.push(t("auditFeed.plan.reused", { count: reused }));
+  if (parts.length === 0 && requested !== null) parts.push(t("auditFeed.plan.requested", { count: requested }));
   const summary = parts.length > 0 ? parts.join(", ") : null;
-  if (status === "completed" && summary) return `decomposition completed (${summary})`;
-  if (status === "completed") return "decomposition completed";
-  if (status === "in_flight" && summary) return `decomposition in flight (${summary})`;
+  if (status === "completed" && summary) return t("auditFeed.plan.completedWithSummary", { summary });
+  if (status === "completed") return t("auditFeed.plan.completed");
+  if (status === "in_flight" && summary) return t("auditFeed.plan.inFlightWithSummary", { summary });
   return summary;
 }
 
-function formatIssueUpdatedVerb(details: ActivityDetails): string | null {
+function formatIssueUpdatedVerb(details: ActivityDetails, options: ActivityFormatOptions = {}): string | null {
   if (!details) return null;
   const previous = asRecord(details._previous) ?? {};
   if (details.status !== undefined) {
     const from = previous.status;
-    const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
+    const to = translateActivityValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     return from
-      ? `changed status from ${humanizeValue(from)} to ${to} on`
-      : `changed status to ${to} on`;
+      ? t("auditFeed.dynamicVerbs.statusChangedFromTo", { from: translateActivityValue(from), to })
+      : t("auditFeed.dynamicVerbs.statusChangedTo", { to });
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     return from
-      ? `changed priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)} on`
-      : `changed priority to ${humanizeValue(details.priority)} on`;
+      ? t("auditFeed.dynamicVerbs.priorityChangedFromTo", { from: translateActivityValue(from), to: translateActivityValue(details.priority) })
+      : t("auditFeed.dynamicVerbs.priorityChangedTo", { to: translateActivityValue(details.priority) });
   }
+  if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
+    const assigneeName = formatAssigneeName(details, options);
+    return assigneeName
+      ? t("auditFeed.dynamicVerbs.assignedToVerb", { name: assigneeName })
+      : t("auditFeed.dynamicVerbs.assignmentCleared");
+  }
+  if (details.reviewPolicy !== undefined) {
+    return t("auditFeed.dynamicVerbs.reviewPolicyChanged", { policy: formatReviewPolicyValue(details.reviewPolicy) });
+  }
+  if (details.title !== undefined) return t("auditFeed.dynamicVerbs.titleChangedVerb");
+  if (details.description !== undefined) return t("auditFeed.dynamicVerbs.descriptionChangedVerb");
   return null;
+}
+
+function translateActivityValue(value: unknown): string {
+  const fallback = humanizeValue(value);
+  if (typeof value !== "string") return fallback;
+  return t(`auditFeed.values.${value}`, { defaultValue: fallback });
 }
 
 function formatAssigneeName(details: ActivityDetails, options: ActivityFormatOptions): string | null {
@@ -393,32 +424,34 @@ function formatIssueUpdatedAction(details: ActivityDetails, options: ActivityFor
 
   if (details.status !== undefined) {
     const from = previous.status;
-    const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
+    const to = translateActivityValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     parts.push(
       from
-        ? `changed the status from ${humanizeValue(from)} to ${to}`
-        : `changed the status to ${to}`,
+        ? t("auditFeed.dynamicVerbs.statusActionFromTo", { from: translateActivityValue(from), to })
+        : t("auditFeed.dynamicVerbs.statusActionTo", { to }),
     );
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     parts.push(
       from
-        ? `changed the priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)}`
-        : `changed the priority to ${humanizeValue(details.priority)}`,
+        ? t("auditFeed.dynamicVerbs.priorityActionFromTo", { from: translateActivityValue(from), to: translateActivityValue(details.priority) })
+        : t("auditFeed.dynamicVerbs.priorityActionTo", { to: translateActivityValue(details.priority) }),
     );
   }
   if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
     const assigneeName = formatAssigneeName(details, options);
-    parts.push(assigneeName ? `made ${assigneeName} responsible for the task` : "cleared the responsible");
+    parts.push(assigneeName
+      ? t("auditFeed.dynamicVerbs.assignedToAction", { name: assigneeName })
+      : t("auditFeed.dynamicVerbs.assignmentCleared"));
   }
   if (details.reviewPolicy !== undefined) {
     // `null` is the default ("anyone can approve"), so it must not read as
     // "changed the review policy to none" (PAP-16506).
-    parts.push(`changed who can approve to ${formatReviewPolicyValue(details.reviewPolicy)}`);
+    parts.push(t("auditFeed.dynamicVerbs.reviewPolicyChanged", { policy: formatReviewPolicyValue(details.reviewPolicy) }));
   }
-  if (details.title !== undefined) parts.push("updated the title");
-  if (details.description !== undefined) parts.push("updated the description");
+  if (details.title !== undefined) parts.push(t("auditFeed.dynamicVerbs.titleChangedAction"));
+  if (details.description !== undefined) parts.push(t("auditFeed.dynamicVerbs.descriptionChangedAction"));
 
   return parts.length > 0 ? parts.join(", ") : null;
 }
@@ -436,30 +469,30 @@ function formatStructuredIssueChange(input: {
     const added = readIssueReferences(details, "addedBlockedByIssues").map(formatIssueReferenceLabel);
     const removed = readIssueReferences(details, "removedBlockedByIssues").map(formatIssueReferenceLabel);
     if (added.length > 0 && removed.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      const changed = formatChangedEntityLabel("blocker", added);
+      return t(input.forIssueDetail ? "auditFeed.structured.addedBlocker" : "auditFeed.structured.addedBlockerTo", { changed });
     }
     if (removed.length > 0 && added.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      const changed = formatChangedEntityLabel("blocker", removed);
+      return t(input.forIssueDetail ? "auditFeed.structured.removedBlocker" : "auditFeed.structured.removedBlockerFrom", { changed });
     }
-    return input.forIssueDetail ? "updated blockers" : "updated blockers on";
+    return t(input.forIssueDetail ? "auditFeed.structured.blockersUpdated" : "auditFeed.structured.blockersUpdatedOn");
   }
 
   if (input.action === "issue.reviewers_updated" || input.action === "issue.approvers_updated") {
     const added = readParticipants(details, "addedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
     const removed = readParticipants(details, "removedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
-    const singular = input.action === "issue.reviewers_updated" ? "reviewer" : "approver";
-    const plural = input.action === "issue.reviewers_updated" ? "reviewers" : "approvers";
+    const entity = input.action === "issue.reviewers_updated" ? "reviewer" : "approver";
+    const entityPlural = t(`auditFeed.changedEntities.${entity}Plural`);
     if (added.length > 0 && removed.length === 0) {
-      const changed = formatChangedEntityLabel(singular, plural, added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      const changed = formatChangedEntityLabel(entity, added);
+      return t(input.forIssueDetail ? `auditFeed.structured.added${entity === "reviewer" ? "Reviewer" : "Approver"}` : `auditFeed.structured.added${entity === "reviewer" ? "ReviewerTo" : "ApproverTo"}`, { changed });
     }
     if (removed.length > 0 && added.length === 0) {
-      const changed = formatChangedEntityLabel(singular, plural, removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      const changed = formatChangedEntityLabel(entity, removed);
+      return t(input.forIssueDetail ? `auditFeed.structured.removed${entity === "reviewer" ? "Reviewer" : "Approver"}` : `auditFeed.structured.removed${entity === "reviewer" ? "ReviewerFrom" : "ApproverFrom"}`, { changed });
     }
-    return input.forIssueDetail ? `updated ${plural}` : `updated ${plural} on`;
+    return t(input.forIssueDetail ? `auditFeed.structured.${entityPlural}Updated` : `auditFeed.structured.${entityPlural}UpdatedOn`);
   }
 
   return null;
@@ -478,28 +511,28 @@ export function formatActivityVerb(
         : "an app action";
     const tool = rawTool.replace(/[._-]+/g, " ");
     const isTest = details?.source === "test";
-    if (action === "tool_gateway.call_completed") return `${isTest ? "tested" : "used"} ${tool} on`;
-    if (action === "tool_gateway.call_allowed") return `${isTest ? "started a test of" : "was allowed to use"} ${tool} on`;
-    if (action === "tool_gateway.call_denied") return `was blocked from using ${tool} on`;
-    if (action === "tool_gateway.approval_requested") return `asked to use ${tool} on`;
-    if (action === "tool_gateway.session_created") return "opened an app session for";
-    if (action === "tool_gateway.session_rejected") return "was blocked from opening an app session for";
-    if (action === "tool_gateway.discovery") return "discovered app actions for";
+    if (action === "tool_gateway.call_completed") return t(`auditFeed.gatewayVerbs.${isTest ? "tested" : "used"}`, { tool });
+    if (action === "tool_gateway.call_allowed") return t(`auditFeed.gatewayVerbs.${isTest ? "testAllowed" : "allowed"}`, { tool });
+    if (action === "tool_gateway.call_denied") return t("auditFeed.gatewayVerbs.denied", { tool });
+    if (action === "tool_gateway.approval_requested") return t("auditFeed.gatewayVerbs.approvalRequested", { tool });
+    if (action === "tool_gateway.session_created") return t("auditFeed.gatewayVerbs.sessionCreated");
+    if (action === "tool_gateway.session_rejected") return t("auditFeed.gatewayVerbs.sessionRejected");
+    if (action === "tool_gateway.discovery") return t("auditFeed.gatewayVerbs.discovery");
   }
 
   if (action === "issue.updated") {
-    const issueUpdatedVerb = formatIssueUpdatedVerb(details);
+    const issueUpdatedVerb = formatIssueUpdatedVerb(details, options);
     if (issueUpdatedVerb) return issueUpdatedVerb;
   }
 
   if (action === "issue.stalled_review_decided") {
     const decision = typeof details?.action === "string" ? details.action : null;
     const label = decision ? STALLED_REVIEW_DECISION_LABELS[decision] : null;
-    if (label) return `${label} on`;
+    if (label) return `${t(`auditFeed.reviewDecisions.${decision}`, { defaultValue: label })}${t("auditFeed.onSuffix")}`;
   }
 
   const outcomeLabel = formatInteractionOutcomeLabel(action, details);
-  if (outcomeLabel) return `${outcomeLabel} on`;
+  if (outcomeLabel) return `${outcomeLabel}${t("auditFeed.onSuffix")}`;
 
   const structuredChange = formatStructuredIssueChange({
     action,
@@ -509,7 +542,7 @@ export function formatActivityVerb(
   });
   if (structuredChange) return structuredChange;
 
-  return ACTIVITY_ROW_VERBS[action] ?? action.replace(/[._]/g, " ");
+  return activityVerb(action, ACTIVITY_ROW_VERBS[action] ?? action.replace(/[._]/g, " "));
 }
 
 export function formatIssueActivityAction(
@@ -538,7 +571,7 @@ export function formatIssueActivityAction(
   if (action === "issue.stalled_review_decided") {
     const decision = typeof details?.action === "string" ? details.action : null;
     const label = decision ? STALLED_REVIEW_DECISION_LABELS[decision] : null;
-    if (label) return label;
+    if (label) return t(`auditFeed.reviewDecisions.${decision}`, { defaultValue: label });
   }
 
   const outcomeLabel = formatInteractionOutcomeLabel(action, details);
@@ -548,7 +581,7 @@ export function formatIssueActivityAction(
     const serviceName = typeof details.serviceName === "string" && details.serviceName.trim()
       ? details.serviceName.trim()
       : null;
-    const base = ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+    const base = activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " "));
     return serviceName ? `${base} for ${serviceName}` : base;
   }
 
@@ -564,8 +597,8 @@ export function formatIssueActivityAction(
   ) {
     const key = typeof details.key === "string" ? details.key : "document";
     const title = typeof details.title === "string" && details.title ? ` (${details.title})` : "";
-    return `${ISSUE_ACTIVITY_LABELS[action] ?? action} ${key}${title}`;
+    return `${activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action)} ${key}${title}`;
   }
 
-  return ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+  return activityLabel(action, ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " "));
 }

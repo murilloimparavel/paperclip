@@ -9,17 +9,18 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { QueryErrorState } from "@/components/QueryView";
 import { StatusBadge } from "@/components/StatusBadge";
+import { t } from "@/i18n";
 
 /** Risk classification badge for a catalog tool. */
 export function RiskBadge({ risk }: { risk: ToolRiskLevel | null | undefined }) {
-  if (!risk) return <Badge variant="outline">unknown</Badge>;
+  if (!risk) return <Badge variant="outline">{t("toolUi.risk.unknown")}</Badge>;
   const variant =
     risk === "high" || risk === "critical"
       ? "destructive"
       : risk === "medium"
         ? "secondary"
         : "outline";
-  return <Badge variant={variant}>{risk}</Badge>;
+  return <Badge variant={variant}>{t(`toolUi.risk.${risk}`, { defaultValue: risk })}</Badge>;
 }
 
 /** Read/Write/Destructive capability chips. */
@@ -34,9 +35,9 @@ export function CapabilityBadges({
 }) {
   return (
     <span className="inline-flex flex-wrap gap-1">
-      {isReadOnly ? <Badge variant="outline">read-only</Badge> : null}
-      {isWrite ? <Badge variant="secondary">write</Badge> : null}
-      {isDestructive ? <Badge variant="destructive">destructive</Badge> : null}
+      {isReadOnly ? <Badge variant="outline">{t("toolUi.capability.readOnly")}</Badge> : null}
+      {isWrite ? <Badge variant="secondary">{t("toolUi.capability.write")}</Badge> : null}
+      {isDestructive ? <Badge variant="destructive">{t("toolUi.capability.destructive")}</Badge> : null}
     </span>
   );
 }

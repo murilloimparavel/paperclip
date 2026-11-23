@@ -198,6 +198,13 @@ export async function selectProjectTests({ root = process.cwd(), project, change
     async function setupClosure(file) {
       if (setup.has(file)) return;
       setup.add(file);
+      // Vite's JSON loader turns tracked JSON imports into static data. Keep
+      // them in the setup closure so edits invalidate the project, but do not
+      // parse them as JavaScript or classify them as opaque executable setup.
+      if (path.extname(file) === ".json") {
+        JSON.parse(readFileSync(file, "utf8"));
+        return;
+      }
       const source = parse(file);
       const coveredBuiltins = declaredInputs(file, source);
       const review = reviewedSetup.get(path.relative(root, file).split(path.sep).join("/"));

@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TaskChatRunnerActivityGroup, foldReadRuns, formatToolDuration } from "./TaskChatRunnerActivityGroup";
 import type { TaskChatActivityPhaseItem, TaskChatToolItem } from "./task-chat-model";
+import { i18n } from "@/i18n";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -11,7 +12,7 @@ const tool = (id: string, fields: Partial<TaskChatToolItem>): TaskChatToolItem =
   id, kind: "tool", name: "Bash", rawName: "Bash", status: "completed", ...fields,
 });
 const read = (id: string, path: string) => tool(id, { name: "Read", rawName: "Read", operation: "read", target: path, exitCode: 0 });
-const phase = (items: TaskChatToolItem[]): TaskChatActivityPhaseItem => ({ id: "phase", kind: "activity_phase", items, active: false, summary: "" });
+const phase = (items: TaskChatActivityPhaseItem["items"]): TaskChatActivityPhaseItem => ({ id: "phase", kind: "activity_phase", items, active: false, summary: "" });
 
 describe("tool row grammar", () => {
   let container: HTMLDivElement;
@@ -24,6 +25,7 @@ describe("tool row grammar", () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+    void i18n.changeLanguage("en");
   });
 
   it("formats durations compactly", () => {
@@ -76,5 +78,28 @@ describe("tool row grammar", () => {
     const blocked = container.querySelector('[data-activity-row="t2"]');
     expect(blocked?.textContent).toContain("Blocked");
     expect(blocked?.querySelector("[data-tool-blocked-reason]")?.textContent).toBe("Denied by rule");
+  });
+
+  it("localizes grouped file reads and their accessible history label", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    act(() => root.render(<TaskChatRunnerActivityGroup defaultExpanded item={phase([
+      read("pt-1", "src/a.ts"), read("pt-2", "src/b.ts"), read("pt-3", "src/c.ts"),
+    ])} />));
+    expect(container.querySelector("[data-activity-read-run]")?.textContent).toContain("Leu 3 arquivos");
+    act(() => container.querySelector<HTMLButtonElement>('[data-activity-read-run] button')!.click());
+    expect(container.querySelector('[aria-label="Arquivos lidos"]')).not.toBeNull();
+  });
+
+  it("localizes fixed labels for blocked, thinking, and token usage rows", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    act(() => root.render(<TaskChatRunnerActivityGroup defaultExpanded item={{ ...phase([
+      tool("blocked-pt", { blockedReason: "Policy denied" }),
+      { id: "usage-pt", kind: "usage", usage: { used: 12, size: 100 } },
+      { id: "thinking-pt", kind: "thinking", lines: ["Raciocínio do agente"], streaming: true },
+    ]), active: true }} />));
+    expect(container.textContent).toContain("Bloqueado");
+    expect(container.textContent).toContain("Pensando");
+    expect(container.textContent).toContain("Uso de tokens");
+    expect(container.textContent).toContain("Policy denied");
   });
 });

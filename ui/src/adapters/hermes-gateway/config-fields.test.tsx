@@ -66,7 +66,7 @@ describe("HermesGatewayConfigFields", () => {
     expect(text).toContain("API key");
     expect(text).toContain("Paperclip API URL");
     expect(text).toContain("Session key strategy");
-    expect(text).toContain("Timeout seconds");
+    expect(text).toContain("Timeout (sec)");
     expect(text).toContain("Event reconnect ms");
     expect(text).toContain("Dangerously allow remote HTTP");
     expect(text).toContain("Extra headers");

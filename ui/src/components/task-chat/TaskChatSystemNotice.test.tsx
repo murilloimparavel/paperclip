@@ -2,8 +2,16 @@
 
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/router", async (importOriginal) => ({
+  ...await importOriginal<typeof import("@/lib/router")>(),
+  Link: ({ to, children, ...props }: { to: string; children?: React.ReactNode }) => <a href={to} {...props}>{children}</a>,
+}));
+
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { TaskChatSystemNotice } from "./TaskChatSystemNotice";
 import type { TaskChatMessageItem } from "./task-chat-model";
 
@@ -45,9 +53,11 @@ describe("TaskChatSystemNotice (PAP-443)", () => {
     };
     flushSync(() =>
       root!.render(
-        <ThemeProvider>
-          <TaskChatSystemNotice item={item} {...props} />
-        </ThemeProvider>,
+        <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+          <ThemeProvider>
+            <TaskChatSystemNotice item={item} {...props} />
+          </ThemeProvider>
+        </QueryClientProvider>,
       ),
     );
   }
@@ -224,6 +234,30 @@ describe("TaskChatSystemNotice (PAP-443)", () => {
         .querySelector('[data-testid="task-chat-system-notice"]')
         ?.classList.contains("items-start"),
     ).toBe(true);
+  });
+
+  it("localizes the retry action and pending state in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      renderNotice(
+        {
+          text: "Paperclip retried continuation, but it still has no live execution path.",
+          presentation: { kind: "system_notice", tone: "danger", title: "No live execution path", detailsDefaultOpen: false },
+        },
+        { onTryAgainNoLiveExecutionPath: () => undefined },
+      );
+      expect(container.querySelector('[data-testid="task-chat-no-live-path-try-again"]')?.textContent).toBe("Tentar novamente");
+      renderNotice(
+        {
+          text: "Paperclip retried continuation, but it still has no live execution path.",
+          presentation: { kind: "system_notice", tone: "danger", title: "No live execution path", detailsDefaultOpen: false },
+        },
+        { onTryAgainNoLiveExecutionPath: () => undefined, tryAgainNoLiveExecutionPathPending: true },
+      );
+      expect(container.querySelector('[data-testid="task-chat-no-live-path-try-again"]')?.textContent).toBe("Tentando novamente...");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
   });
 
   it.each([false, true])("preserves retry on a saved Automatic recovery blocked notice (pending: %s)", async (pending) => {

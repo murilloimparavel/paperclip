@@ -33,6 +33,8 @@ import type {
 } from "@paperclipai/shared";
 import { AGENT_ROLES, AGENT_ROLE_LABELS, ADAPTER_AUTH_MISSING_CHECK_CODE } from "@paperclipai/shared";
 import { AdapterLoginPanel, ModelDropdown } from "./AgentConfigForm";
+import { adapterEnvironmentCheckMessage } from "@/lib/adapter-test-copy";
+import { t } from "@/i18n";
 import {
   CONNECT_SOURCE_NAMES,
   OnboardingCardField,
@@ -3560,10 +3562,10 @@ function AdapterEnvironmentResult({
 }) {
   const statusLabel =
     result.status === "pass"
-      ? "Passed"
+      ? t("agentConfig.testPassed")
       : result.status === "warn"
-      ? "Warnings"
-      : "Failed";
+      ? t("agentConfig.testWarnings")
+      : t("agentConfig.testFailed");
   const statusClass =
     result.status === "pass"
       ? "text-green-700 dark:text-green-300 border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10"
@@ -3586,10 +3588,10 @@ function AdapterEnvironmentResult({
             className="leading-relaxed break-words"
           >
             <span className="font-medium uppercase tracking-wide opacity-80">
-              {check.level}
+              {t(`agentConfig.testLevels.${check.level}`)}
             </span>
             <span className="mx-1 opacity-60">·</span>
-            <span>{check.message}</span>
+            <span>{adapterEnvironmentCheckMessage(check)}</span>
             {check.detail && (
               <span className="block opacity-75 break-all">
                 ({check.detail})
@@ -3597,7 +3599,7 @@ function AdapterEnvironmentResult({
             )}
             {showHints && check.hint && (
               <span className="block opacity-90 break-words">
-                Hint: {check.hint}
+                {t("agentConfig.hintPrefix")} {check.hint}
               </span>
             )}
           </div>

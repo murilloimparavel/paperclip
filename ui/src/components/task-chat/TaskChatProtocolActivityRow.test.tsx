@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { MemoryRouter } from "@/lib/router";
 import type { TaskChatProtocolItem, TaskChatProviderActivityItem } from "./task-chat-model";
 import { TaskChatProtocolActivityRow, TaskChatProtocolActivityDetails } from "./TaskChatProtocolActivityRow";
@@ -89,6 +90,32 @@ describe("TaskChatProtocolActivityRow", () => {
     const showMore = Array.from(detail?.querySelectorAll("button") ?? []).find((button) => button.textContent?.includes("Show 1 more result"));
     act(() => showMore?.click());
     expect(detail?.querySelectorAll('ol[aria-label="Research sources"] li')).toHaveLength(6);
+  });
+
+  it("localizes research and changed-file details in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const item: TaskChatProviderActivityItem = {
+        id: "research-pt", kind: "protocol", surface: "provider_activity", family: "research",
+        eventType: "research.completed", status: "completed", title: "Research", summary: "Consulta do agente",
+        details: [{ label: "Query", value: "Paperclip" }], steps: [],
+        links: [{ href: "https://example.com", label: "Fonte" }], children: [],
+      };
+      act(() => root.render(<TaskChatProtocolActivityDetails item={item} />));
+      expect(container.textContent).toContain("Consulta");
+      expect(container.textContent).toContain("1 resultado");
+      expect(container.querySelector('ol[aria-label="Fontes da pesquisa"]')).not.toBeNull();
+      act(() => root.render(<TaskChatProtocolActivityDetails item={{
+        id: "workspace-pt", kind: "protocol", surface: "workspace_change", changeSetId: "c1", revision: 1,
+        source: "runner_verified", complete: true,
+        files: [{ path: "src/new.ts", operation: "create", previousPath: null, additions: 2, deletions: 0, binary: false, diff: null }],
+        totals: { files: 1, additions: 2, deletions: 0 }, patchArtifactRef: null,
+      }} />));
+      expect(container.querySelector('ul[aria-label="Arquivos alterados"]')).not.toBeNull();
+      expect(container.textContent).toContain("Criado");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("summarizes workspace files without rendering inline diff bodies", () => {

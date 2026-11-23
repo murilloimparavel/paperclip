@@ -1,0 +1,379 @@
+# Tradução completa da interface para pt-BR
+
+## Objetivo
+
+Traduzir todas as superfícies de produto do Paperclip para português do Brasil usando a localização nativa do app. Preservar nomes próprios, conteúdo escrito por usuários, identificadores e termos técnicos que devam continuar em inglês.
+
+## Checklist de cobertura
+
+- [ ] Infraestrutura i18n: catálogos, idioma padrão, atributo `lang`, fallback, formatação, pluralização e validação de chaves/placeholders.
+- [ ] Agentes: roster, filtros, hierarquia, criação, configuração, detalhes, abas, ferramentas, skills, histórico, custos, orçamento e ações.
+- [ ] Tarefas e inbox: listas, filtros, estados, ações em lote, inbox, detalhe, comentários, chat, anexos, execuções, bloqueios e erros.
+- [ ] Projetos e workspaces: listas, detalhes, configuração, orçamento e workspaces isolados/de execução.
+- [ ] Organização do trabalho: dashboard, busca, metas, responsabilidades, decisões, aprovações, rotinas, atividade, auditoria, timeline, casos, status cards e artefatos.
+- [ ] Administração: configurações de organização/instância, membros, convites, acesso, conexões, ambientes, importação/exportação, perfil e segredos/cofres.
+- [ ] Integrações e ferramentas: apps/conectores, OAuth, chat, gateways, MCP, perfis, CLI, plugins e skills.
+- [ ] Conta e entrada: login, onboarding, convites, pedidos de acesso, perfil e telas de erro/não encontrado.
+- [ ] Componentes compartilhados: diálogos, menus, tooltips, toasts, banners, carregamento, estados vazios/erro/sucesso e acessibilidade.
+- [ ] Superfícies alternativas: variantes `production`, layouts clássico/novo, responsividade e fluxos condicionais.
+- [ ] Revisão final: busca por strings visíveis em inglês, revisão visual de rotas principais e validação de todos os catálogos.
+
+## Processo
+
+- Traduzir por fluxo e marcar cada área aqui após a implementação e validação.
+- Criar commits pequenos por área concluída, sem mudanças não relacionadas.
+
+## Progresso por fluxo
+
+- [x] Cartões de tarefas sugeridas no chat: instruções, filtro acessível e ações de revisão/rejeição. Validado com `TaskChatInteractionCard.test.tsx` (40 testes) e `@paperclipai/ui typecheck`.
+- [x] Revisão paginada de itens no chat: navegação, paginação, decisões, justificativas e ações. Validado com `TaskChatInteractionCard.test.tsx` (41 testes) e `@paperclipai/ui typecheck`.
+- [x] Aprovação de ferramentas no takeover (incluindo a rota legada) e recibos de credenciais: argumentos, riscos, expiração, ações e rótulos de segredo. Validado com `TaskChatInteractionCard.test.tsx` (42 testes) e `@paperclipai/ui typecheck`.
+- [x] Confirmação por seleção de opções: filtros, contagem e limites, rejeição com justificativa, estados acessíveis e ações. Validado com `TaskChatInteractionCard.test.tsx` (43 testes) e `@paperclipai/ui typecheck`.
+- [x] Formulário de perguntas revisado: validações, respostas em texto/escolha, filtros, paginação, campos opcionais, envio/cancelamento e acessibilidade já usam o catálogo pt-BR; prompts, opções e instruções dinâmicas permanecem intactos. Conferido com 59 testes em quatro suítes focadas.
+- [x] Casca e recibos de interações: títulos de fallback, badges de status, chamadas de ação e rótulos de recibos localizados. Validado com as mesmas quatro suítes (59 testes) e `@paperclipai/ui typecheck`.
+- [x] Histórico e recibos de perguntas de execuções antigas: estados resolvido/cancelado/expirado e aviso quando a versão antiga não registrou respostas. Validado com quatro suítes focadas (55 testes) e `@paperclipai/ui typecheck`.
+- [x] Resumos de interações em recibos, histórico e notificações: tarefas, confirmações, seleções, decisões por item, conexões, rotinas, metas, automações, painel, perguntas e encerramentos administrativos. A apresentação usa o catálogo pt-BR; texto padrão em inglês permanece para consumidores internos. Validado com `issue-thread-interactions.test.ts` e `TaskChatInteractionCard.test.tsx` (71 testes), mais typecheck.
+- [x] Cartão de sugestão de rotina: texto padrão, nome acessível, estados e ações. Mensagem, título e cadência personalizados permanecem intactos. Validado com `RoutineSuggestionCard.test.tsx` (6 testes) e `@paperclipai/ui typecheck`.
+- Manter `en.json` e `pt-BR.json` com a mesma estrutura e placeholders compatíveis.
+- Validar cada lote de forma focada e revisar a interface renderizada em pt-BR.
+- Fazer deploy somente depois da cobertura ampla, validação final e preparação do rollback.
+
+## Andamento
+
+- Análise das alternativas `ancora-auto` e `MaxPaperclipPlugin` concluída. Vamos reaproveitar as traduções compatíveis como memória de tradução, revisar cada frase no contexto atual e manter a integração nativa via i18next.
+  - `ancora-auto` tem 299 pares no catálogo `ui/src/lib/i18n.ts`; o repositório declara MIT.
+  - `MaxPaperclipPlugin` tem 2.554 pares no dicionário atual; o `package.json` declara MIT e o autor como MaxVue contributors. O mecanismo DOM e as permissões do plugin não serão incorporados.
+  - Frases curtas aproveitadas do dicionário do Max estão registradas em `ui/src/i18n/THIRD_PARTY_NOTICES.md` junto com o aviso MIT.
+  - Correspondências literais são pistas para revisão, não prova de que a string é texto visível ou de que a tradução serve sem ajuste.
+- Lote atual: roster de agentes nas variantes clássica e simplificada, filtros compartilhados e estados/labels.
+  - [x] Traduzir toolbar, filtros, lista em lote, status e badges de ciclo de vida.
+  - [x] Traduzir estados vazios, ações, hierarquia, acessibilidade e informações de ambiente nas variantes clássica e simplificada.
+  - [x] Manter chaves e plurais compatíveis nos catálogos `en` e `pt-BR`.
+  - [x] Validar catálogos e tipos da UI.
+- Criação de agente em andamento:
+  - [x] Traduzir a tela principal de setup, etapas, confirmação, campos do provedor e validações locais.
+  - [x] Traduzir dicas de login e mensagens de fallback do próprio fluxo.
+  - [x] Traduzir o diálogo inicial de nome e escolha de adaptador, reaproveitando frases da memória MIT.
+  - [x] Traduzir a tela de conexão, credenciais salvas e controles compartilhados de login.
+  - [x] Traduzir as mensagens do painel OAuth herdado de `AgentConfigForm`, incluindo login, associação de conta, expiração e conexão insegura.
+  - [ ] Concluir a tradução de `AgentConfigForm`.
+    - [x] Traduzir as dicas de ajuda do formulário, identidade, ambiente e seção de executor.
+    - [x] Preservar placeholders de templates dentro das dicas e placeholders de interpolação i18next.
+    - [x] Traduzir opções avançadas, políticas de execução, estados do seletor de modelos e depuração.
+    - [x] Traduzir o campo compartilhado de arquivo de instruções e a janela de seleção de caminho para macOS, Windows e Linux.
+    - [x] Traduzir opções de execução ACP e políticas específicas de Claude e Gemini.
+    - [x] Traduzir configurações avançadas do Paperclip Runner para Cursor Cloud, Dot, Muse, ACP, Claude Managed e AgentCore.
+    - [x] Traduzir configurações de HTTP, processo, OpenClaw Gateway e Hermes Gateway.
+    - [x] Localizar rótulos, dicas e opções vindos de schemas dinâmicos de adaptadores.
+    - [x] Traduzir grupos, badges e níveis compartilhados de raciocínio do formulário.
+    - [x] Traduzir os campos específicos dos adaptadores e placeholders em linguagem natural, preservando exemplos técnicos.
+    - [x] Revisar campos dos adaptadores OpenCode e Process que não estavam usando as chaves existentes do catálogo.
+    - [x] Traduzir ações e erros locais restantes do formulário de configuração e aprimoramento do executor.
+    - [x] Traduzir os 172 códigos de teste estáveis encontrados nos adaptadores e avisos de opções de executor compartilhados entre criação, edição e onboarding.
+    - [ ] Traduzir/revisar mensagens livres, dicas e resumos legíveis fornecidos dinamicamente pela API.
+  - [x] Traduzir o cartão compartilhado de teste do executor e os resultados apresentados no onboarding.
+    - [x] Traduzir o painel OAuth embutido, estados de autenticação e resultados do teste do ambiente.
+    - [ ] Revisar os fluxos completos de conexão e os campos específicos dos adaptadores.
+  - [ ] Validar visualmente a criação em pt-BR.
+- Abas de habilidades do agente:
+  - [x] Traduzir estados de gerenciamento, suporte por adaptador, busca, contagens, seções e estados vazios.
+  - [x] Traduzir ações acessíveis de ativação, estado somente leitura e seletor de versões da habilidade.
+  - [x] Validar catálogos, placeholders, testes da aba/seletor e typecheck da UI.
+- Aba de ferramentas do agente:
+  - [x] Traduzir identidade GitHub, mensagens de conexão e ações de gerenciamento da conta.
+  - [x] Traduzir instalação de aplicativos, permissões, estados de salvamento e controles acessíveis.
+  - [x] Traduzir acesso efetivo, ferramentas permitidas/indisponíveis, perfis e políticas.
+  - [x] Traduzir badges compartilhados de risco e capacidade usados em tabelas de ferramentas.
+  - [x] Validar catálogos, testes da aba/validação de idiomas e typecheck da UI.
+- Configuração avançada do agente:
+  - [x] Traduzir editor YAML, estados de carregamento/salvamento, revisão da ordem de alterações e credenciais criadas.
+  - [x] Traduzir os rótulos de operações e preservar nomes/paths definidos pelo usuário.
+  - [x] Validar catálogos, testes do fluxo e typecheck da UI.
+  - [ ] Revisar erros dinâmicos de API e validação que ainda podem chegar em inglês.
+- Custos do agente:
+  - [x] Traduzir períodos, intervalo personalizado, métricas, detalhamento por modelo e estados sem dados/erro.
+  - [x] Validar catálogos, testes das funções de agregação e typecheck da UI.
+- Entrada do Chat com agentes:
+  - [x] Traduzir estados de carregamento, seleção de agente, orientação inicial e recurso desativado.
+  - [x] Traduzir navegação, acessibilidade e estados sem agentes.
+  - [x] Validar catálogos, testes do fluxo de entrada e typecheck da UI.
+- Visão geral e revisões do agente:
+  - [x] Traduzir métricas, perfil, habilidades, tarefas recentes e sugestões de tarefa.
+  - [x] Traduzir histórico de revisões de configuração e ações disponíveis.
+  - [x] Validar catálogos, testes das telas e typecheck da UI.
+- Histórico e restauração do agente:
+  - [x] Traduzir resumo das alterações, identificação de autoria, tabela e confirmação de restauração.
+  - [x] Preservar nomes de agentes, membros, IDs e chaves de configuração.
+  - [x] Validar catálogo, testes auxiliares e typecheck da UI.
+- Orçamento do agente e componentes compartilhados:
+  - [x] Traduzir política, limites, reserva por execução, métricas, alertas e incidentes.
+  - [x] Traduzir estados e ações para escopos de agente e projeto, preservando nomes definidos pela organização.
+  - [x] Validar catálogos, testes dos incidentes e typecheck da UI.
+- Configuração externa das instruções do agente:
+  - [x] Traduzir validações de caminho, gerenciamento externo, seleção de arquivo raiz e estados de carregamento.
+  - [x] Preservar caminhos e nomes de arquivos; traduzir somente os fallbacks de erro locais.
+  - [x] Validar catálogos, testes do fluxo e typecheck da UI.
+- Editor de instruções do agente:
+  - [x] Traduzir navegação da árvore de arquivos, edição, cópia, download, exclusão e nomes acessíveis.
+  - [x] Traduzir recuperação/comparação de alterações preservadas, revisão de arquivo e estados de salvamento.
+  - [x] Validar catálogos, testes do editor e typecheck da UI.
+  - [ ] Mapear mensagens dinâmicas de API e avisos do conjunto, que ainda podem chegar em inglês.
+- Lista de execuções do agente:
+  - [x] Traduzir origens, carregamento, indisponibilidade, estado vazio, navegação e métricas de uso.
+  - [x] Traduzir títulos de avisos de armazenamento e sincronização de arquivos.
+  - [ ] Cobrir detalhes completos da execução e variantes `production`.
+- Detalhes da execução do agente:
+  - [x] Traduzir status, ações, resumo, sessão, tarefas afetadas e horários conforme o idioma ativo.
+  - [x] Localizar rótulos do rastreamento do provedor e ações de cancelamento compartilhadas.
+  - [ ] Revisar mensagens dinâmicas e componentes de tentativa, logs, recuperação e autorização.
+- Logs e operações de workspace da execução:
+  - [x] Traduzir transcript, eventos, navegação de logs, detalhes de invocação e operações de workspace.
+  - [x] Traduzir categorias e rótulos de falhas do provedor, preservando mensagens retornadas pelo provedor.
+  - [x] Traduzir mensagens compartilhadas de erro, carregamento, nova tentativa e reconexão usadas pelas consultas.
+  - [ ] Revisar o conteúdo do transcript e mensagens legíveis devolvidas diretamente pela API.
+- Retry e autorização da pessoa responsável:
+  - [x] Traduzir estados, motivos conhecidos e resumos do ciclo de retry.
+  - [x] Traduzir os avisos de autorização e a orientação de recuperação para a pessoa responsável.
+  - [ ] Tratar mensagens de exaustão customizadas e erros dinâmicos recebidos do servidor.
+- Navegação de detalhes do agente:
+  - [x] Traduzir grupos, abas, rótulos acessíveis, breadcrumbs e nomes de rotas legadas.
+  - [x] Preservar os segmentos e URLs das rotas.
+  - [x] Validar catálogo, testes de navegação e typecheck da UI.
+- Ações do agente compartilhadas entre lista e detalhe:
+  - [x] Traduzir executar, pausar/retomar, limpar erro, atribuir, conversar, duplicar, redefinir sessões e encerrar.
+  - [x] Traduzir confirmações, notificações, ajuda de acessibilidade e aviso de rastreamento detalhado.
+  - [x] Validar catálogos, testes de ações e typecheck da UI.
+- Avisos e diálogos do cabeçalho do agente:
+  - [x] Traduzir avisos de participação, hierarquia, agente integrado e aprovação pendente.
+  - [x] Traduzir confirmação de alterações não salvas, ações e textos acessíveis do cabeçalho.
+  - [x] Validar catálogo, testes da página de detalhe e typecheck da UI.
+- Descrições das abas do agente:
+  - [x] Traduzir as descrições de ambiente, segredos, permissões, atividade, execuções e custos.
+  - [x] Validar catálogo, testes da página de detalhe e typecheck da UI.
+- Auditoria e lista de execuções:
+  - [x] Traduzir a lista de execuções gerais e por rotina, seus filtros, estados vazios, carregamento e acessibilidade.
+  - [x] Traduzir fontes de execução conhecidas e manter os resumos fornecidos pelo servidor intactos.
+  - [x] Validar catálogos, testes da lista de auditoria e typecheck da UI.
+- Feed de auditoria:
+  - [x] Traduzir filtros, escopos, estados vazios, exportação, mensagens de acesso, nomes de atores e fallbacks de entidades.
+  - [x] Traduzir rótulos e verbos dos eventos conhecidos, decisões de revisão, interações e mudanças de status/prioridade.
+  - [x] Traduzir mudanças de responsável, título, descrição e decomposição de plano aceito.
+  - [x] Traduzir alterações estruturadas de bloqueadores, revisores e aprovadores.
+  - [x] Traduzir valores de políticas de revisão e textos das regras compartilhadas entre auditoria e tarefas.
+  - [x] Validar catálogos, testes do feed e typecheck da UI.
+  - [x] Exibir eventos futuros/desconhecidos com uma apresentação em português, preservando o identificador técnico da ação.
+- Política de revisão compartilhada:
+  - [x] Traduzir badges, descrições acessíveis e valores usados nos recibos de alteração.
+  - [x] Validar os consumidores da política, formatação de auditoria e catálogos.
+- Filtros compartilhados de tarefas e inbox:
+  - [x] Traduzir filtros rápidos, status, prioridades, responsáveis, criadores, projetos, etiquetas, objetos externos e opções de visibilidade nas apresentações clássica, simplificada e atualizada.
+  - [x] Traduzir categorias e status de aprovação da inbox, buscas, estados vazios e rótulos acessíveis.
+  - [x] Validar catálogos, testes do popover e typecheck da UI.
+- Lista canônica de tarefas e colunas:
+  - [x] Traduzir títulos de colunas, configuração e restauração dos padrões, ordenação, hierarquia acessível e instruções de teclado/leitor de tela.
+  - [x] Traduzir agrupamento por status/projeto, expansão de subtarefas, responsáveis de fallback e carregamento progressivo.
+  - [x] Validar catálogos, 28 testes focados da lista e typecheck da UI.
+- Linhas compartilhadas de tarefas:
+  - [x] Traduzir ações de arquivar/restaurar, marcar como lida e os respectivos rótulos acessíveis.
+  - [x] Traduzir o aviso de tarefa bloqueadora e os nomes acessíveis para abrir, expandir e verificar a recuperação da tarefa.
+  - [x] Validar catálogos, 65 testes focados de linha/lista e typecheck da UI.
+- Lista ativa de tarefas (`IssuesList`):
+  - [x] Traduzir busca, criação, modo de visualização, ordenação, agrupamento e ajustes do quadro.
+  - [x] Traduzir status de busca/falha, limites de resultados, estados vazios, agrupamentos, carregamento e acessibilidade.
+  - [x] Traduzir resumo de subtarefas, custos agregados e separadores de data.
+  - [x] Validar catálogos, 74 testes focados da lista e typecheck da UI.
+- Lista legada de tarefas (`LegacyIssuesList`, fallback quando a interface simplificada está desativada):
+  - [x] Traduzir busca, criação, modo de visualização, ordenação e agrupamento.
+  - [x] Traduzir estados vazios, limites, hierarquia, badges, progresso de subtarefas, custos, carregamento e separadores de data.
+  - [x] Validar catálogo, teste de renderização em pt-BR e typecheck da UI.
+- Painel de tarefas relacionadas no detalhe da tarefa:
+  - [x] Traduzir subtarefas, progresso, bloqueio principal, próxima ação e referências entre tarefas.
+  - [x] Traduzir ancestrais, tarefas criadas, estados vazios, carregamento, falha, repetição e acessibilidade.
+  - [x] Validar catálogos, testes de painéis e renderização explícita em pt-BR.
+- Menu de ações do compositor de conversa:
+  - [x] Traduzir anexos, tarefa privada, metas, modos de planejamento/perguntas e instruções.
+  - [x] Traduzir rótulos acessíveis, ações de remoção e chips do compositor.
+  - [x] Validar catálogos, testes do compositor e renderização explícita em pt-BR.
+- Formulário de perguntas e decisões:
+  - [x] Traduzir validações locais, paginação, instruções, estados sem resposta e controles acessíveis.
+  - [x] Traduzir ações de cancelar, pular, avançar e enviar, preservando prompts e conteúdo dinâmico.
+  - [x] Validar catálogos, testes focados de perguntas e renderização explícita em pt-BR.
+- Avisos de saúde da execução no chat:
+  - [x] Traduzir falha de inicialização de servidor MCP e orientação de recuperação.
+  - [x] Preservar nomes de servidores e detalhes técnicos devolvidos pelo provedor.
+  - [x] Validar catálogos, testes do banner e renderização em pt-BR.
+- Acessibilidade de fases de atividade no transcript:
+  - [x] Traduzir ações acessíveis de expandir e recolher, preservando o resumo da atividade.
+  - [x] Validar catálogos, testes das fases e renderização explícita em pt-BR.
+- Seletor de responsável, modelo e esforço do compositor:
+  - [x] Traduzir estados sem agente, indisponibilidade, seleção, busca, catálogo e IDs personalizados.
+  - [x] Traduzir modo rápido, níveis de esforço, padrões e nomes acessíveis.
+  - [x] Preservar nomes de provedores, modelos, agentes e a sintaxe técnica de IDs.
+  - [x] Validar catálogos, testes do seletor e renderização explícita em pt-BR.
+- Plano e progresso da execução no transcript:
+  - [x] Traduzir cabeçalhos, progresso, rótulos acessíveis dos status e contagem de arquivos alterados.
+  - [x] Traduzir controles para revelar etapas anteriores/adicionais e recolher a lista.
+  - [x] Preservar os nomes das etapas definidos pelo agente.
+  - [x] Validar catálogos, testes do plano e renderização explícita em pt-BR.
+- Detalhes de pesquisa, alterações de workspace e avisos do provedor:
+  - [x] Traduzir consultas, contagem e expansão de resultados, listas de fontes e rótulos acessíveis.
+  - [x] Traduzir alterações de arquivos, operações, pré-visualizações e mensagens de truncamento/indisponibilidade.
+  - [x] Traduzir níveis e controles de avisos, preservando mensagens e metadados do provedor.
+  - [x] Validar catálogos, testes dos cartões e renderização explícita em pt-BR.
+- Status e resumo da execução em tempo real:
+  - [x] Traduzir em andamento, aguardando, concluído, interrompido e duração decorrida.
+  - [x] Traduzir contagem de comandos e ferramentas, incluindo formas singulares/plurais.
+  - [x] Atualizar o resumo quando o idioma da interface mudar durante a conversa.
+  - [x] Validar catálogos, testes do pill e renderização explícita em pt-BR.
+- Espera por limite de execuções simultâneas do agente:
+  - [x] Traduzir aviso detalhado, posição na fila, configuração e nomes acessíveis.
+  - [x] Traduzir o chip compacto exibido em listas e cabeçalhos.
+  - [x] Validar catálogos e renderização explícita em pt-BR.
+- Status do turno Paperclip Runner:
+  - [x] Traduzir estados em andamento, pensando, concluído e interrompido.
+  - [x] Traduzir duração e continuação após orientação, mantendo rótulos dinâmicos do servidor.
+  - [x] Validar catálogos, teste do turno e renderização explícita em pt-BR.
+- Palavras rotativas de status do Runner:
+  - [x] Traduzir os verbos lúdicos exibidos durante execuções genéricas.
+  - [x] Preservar a seleção determinística e a rotação temporal existentes.
+  - [x] Validar catálogos, teste do status e renderização explícita em pt-BR.
+- Cartões compactos de interação no chat da tarefa:
+  - [x] Traduzir pergunta sem resposta, solicitação de revisão e tarefa sugerida.
+  - [x] Traduzir rótulos acessíveis e fallbacks locais, preservando títulos e prompts dinâmicos.
+  - [x] Validar catálogos, testes do cartão e renderização explícita em pt-BR.
+- Bloqueios e tarefas em execução relacionadas:
+  - [x] Traduzir relações de bloqueio direto/principal e estados de espera por tarefas relacionadas.
+  - [x] Traduzir rótulos acessíveis e o estado de tarefa em execução.
+  - [x] Validar catálogos, variantes streamlined/production e renderização explícita em pt-BR.
+- Bolha de descrição da tarefa:
+  - [x] Traduzir placeholder, linha vazia, ação de edição e controles de expansão.
+  - [x] Validar catálogos, teste do componente e renderização explícita em pt-BR.
+- Avisos de sistema no chat da tarefa:
+  - [x] Traduzir ação de nova tentativa, estado pendente e rótulo acessível de atualização.
+  - [x] Preservar títulos e mensagens dinâmicas de recuperação do servidor.
+  - [x] Validar catálogos, testes do aviso e renderização explícita em pt-BR.
+- Campo e ações do compositor da tarefa:
+  - [x] Traduzir placeholders por modo, meta de sessão, nova sessão e entrada pendente.
+  - [x] Traduzir atribuição, edição de mensagem enfileirada, envio/interrupção e estados de upload.
+  - [x] Traduzir nomes acessíveis e ajuda das ações de envio/anexo.
+  - [x] Validar catálogos, testes do compositor e renderização explícita em pt-BR.
+  - [x] Traduzir validações locais de metas de sessão, falha ao ignorar pedidos e tipos de anexo não permitidos.
+  - [x] Preservar mensagens não reconhecidas recebidas do servidor.
+- Estados de pausa e retomada no composer:
+  - [x] Traduzir explicações para tarefa/árvore pausada, rascunho salvo e ações de retomada.
+  - [x] Traduzir contagens e controles acessíveis do takeover de interações pendentes.
+  - [x] Validar catálogos, teste do composer e renderização explícita em pt-BR.
+- Anexos de imagem no composer:
+  - [x] Traduzir erro de envio, estado de progresso, grupo e ações acessíveis para remover/tentar novamente.
+  - [x] Preservar nomes de arquivo e mensagens dinâmicas de erro.
+  - [x] Validar catálogos, testes do composer e renderização explícita em pt-BR.
+- Avisos conhecidos de limite de uso do provedor:
+  - [x] Traduzir padrões reconhecidos de espera, nova tentativa e retomada.
+  - [x] Formatar contagem regressiva, data e horário no idioma selecionado.
+  - [x] Preservar mensagens fora dos padrões reconhecidos e diagnósticos dinâmicos.
+  - [x] Validar catálogos, mensagens de sistema/marcador e atualização do contador.
+- Resumos de turnos no transcript clássico:
+  - [x] Traduzir estados concluídos/interrompidos, atividade histórica e continuação após orientação.
+  - [x] Traduzir a contagem de ferramentas, preservando métricas, tokens e alterações de arquivo.
+  - [x] Validar catálogos, helper de resumo e renderização explícita em pt-BR.
+- Bolhas de mensagens do transcript:
+  - [x] Traduzir estados otimistas, atribuição de iMessage e aviso de ressalvas da verificação.
+  - [x] Traduzir o rótulo acessível para abrir anexos, preservando nomes e diagnósticos dinâmicos.
+  - [x] Validar catálogos, testes da bolha e renderização explícita em pt-BR.
+- Resumo recolhido de atividades do agente:
+  - [x] Traduzir categorias de ferramentas, arquivos, verificações, modelos, avisos e estados de fallback.
+  - [x] Traduzir rótulos conhecidos de hooks de segurança/governança, preservando mensagens livres do provedor.
+  - [x] Validar catálogos, 28 testes focados, typecheck da UI e diff.
+- Metadados compartilhados dos modos de trabalho:
+  - [x] Localizar nomes de modos usados em menus, chips e badge legado da tarefa.
+  - [x] Traduzir dicas de modo automático, planejamento e perguntas.
+  - [x] Validar catálogos, 4 testes da utilidade e typecheck da UI.
+- Overlay de arrastar arquivos do compositor:
+  - [x] Traduzir instruções e contexto de destino para tarefa nova ou mensagem.
+  - [x] Validar catálogos, 18 testes focados, typecheck da UI e diff.
+- Prévia do plano no transcript:
+  - [x] Traduzir títulos de fallback, status de escrita, ações de abrir e estados vazios.
+  - [x] Traduzir links acessíveis com revisão e destino na barra lateral.
+  - [x] Preservar títulos e etapas escritos no plano; validar catálogo, 8 testes focados e typecheck da UI.
+- Rótulos locais de atividade do Runner:
+  - [x] Traduzir estados de bloqueio/pensamento e o fallback de uso de tokens.
+  - [x] Preservar motivos, texto de raciocínio e contagens técnicas.
+  - [x] Validar catálogos, 6 testes focados e typecheck da UI.
+- Cartões e árvore de subagentes no transcript:
+  - [x] Traduzir estados, contagens plurais de ferramentas, durações e instrução expandida.
+  - [x] Traduzir resumos de execução paralela e rótulos acessíveis da árvore/status.
+  - [x] Preservar tipos de agente, modelos, descrições e conteúdo retornado pelos subagentes.
+  - [x] Validar catálogos, teste focado em pt-BR, typecheck da UI e diff.
+- Widget de meta de sessão do agente no chat:
+  - [x] Traduzir status, ações, acessibilidade, contagens, duração e estados pendentes.
+  - [x] Traduzir criação/substituição/edição, descrições e controles do diálogo.
+  - [x] Preservar objetivo e motivos/erros dinâmicos, cobrindo todos os status definidos no contrato.
+  - [x] Validar catálogos, 9 testes focados e typecheck da UI.
+- Histórico agrupado de atividade do agente no chat:
+  - [x] Localizar contagens plurais de atividades e arquivos lidos, ações de expandir/recolher e nomes acessíveis.
+  - [x] Preservar nomes de arquivos, comandos e resumos dinâmicos das ferramentas.
+  - [x] Validar catálogos, 5 testes focados e typecheck da UI.
+- Mensagens enfileiradas no compositor de tarefas:
+  - [x] Traduzir ações, títulos acessíveis, contagem regressiva e mensagens de sucesso/erro/reordenação.
+  - [x] Preservar conteúdo das mensagens e avisos dinâmicos de espera vindos do servidor.
+  - [x] Validar catálogos, 44 testes focados e typecheck da UI.
+- Visualizador de diferenças no transcript:
+  - [x] Traduzir rótulos acessíveis de linhas adicionadas/removidas, expansão e truncamento do diff.
+  - [x] Manter código e conteúdo das alterações intactos.
+  - [x] Validar catálogos, teste focado em pt-BR, typecheck da UI e diff.
+- Resultado e encerramento da execução no transcript:
+  - [x] Traduzir título, rótulo acessível de verificações, bloqueio e pendências que impedem conclusão.
+  - [x] Preservar comandos, códigos de motivo, detalhes e mensagens das ferramentas.
+  - [x] Validar catálogos, 39 testes focados, typecheck da UI e diff.
+- Cartões de resultados de execução no chat:
+  - [x] Traduzir detalhes, descrição salva, metadados e controles acessíveis para expandir/recolher.
+  - [x] Preservar títulos, estados e metadados dinâmicos do provedor.
+  - [x] Validar catálogos, 38 testes focados, typecheck da UI e diff.
+- Seletor de workspaces de execução no compositor:
+  - [x] Traduzir modos de uso/criação, grupos, busca e estados vazio, carregamento, erro e nova tentativa.
+  - [x] Preservar nomes de workspaces e branches fornecidos pelo usuário ou servidor.
+  - [x] Validar catálogos, teste de renderização em pt-BR, typecheck da UI e diff.
+- Cartão de habilidade criada no chat:
+  - [x] Traduzir título e rótulo acessível, preservando nome e descrição da habilidade.
+  - [x] Validar catálogos, 2 testes focados e typecheck da UI.
+- Cartão de proposta de meta e formulário de feedback:
+  - [x] Traduzir rótulos, ações, mensagens de estado, nomes acessíveis e texto padrão do formulário.
+  - [x] Preservar valores, nomes e conteúdo dinâmico da proposta.
+  - [x] Validar o catálogo pt-BR, 9 testes focados, typecheck da UI e diff.
+- Formulário de criação de responsabilidade e meta:
+  - [x] Traduzir título, área, campos, opções, exemplos, erros locais e leitura automática do status.
+  - [x] Preservar conteúdo digitado e nomes de áreas fornecidos pela organização.
+  - [x] Validar renderização em pt-BR, 46 testes focados, typecheck da UI e diff.
+- Resumo e filtros da página de responsabilidades:
+  - [x] Traduzir indicadores de status, resumo de execução por agentes, filtros e estados vazios.
+  - [x] Preservar contagens e dados das responsabilidades.
+  - [x] Validar a página em pt-BR, 16 testes focados, typecheck da UI e diff.
+- Filas de atenção e áreas da página de responsabilidades:
+  - [x] Traduzir menus e ações das áreas, fila de itens que precisam de atenção e seção de trabalho em execução.
+  - [x] Preservar títulos das áreas, nomes e detalhes dinâmicos das tarefas.
+  - [x] Validar a tela em pt-BR, 16 testes focados, typecheck da UI e diff.
+- Resumo do trabalho na página de uma responsabilidade:
+  - [x] Traduzir títulos, estados vazios, contagens de itens concluídos e rótulos acessíveis do tom dos sinais.
+  - [x] Preservar textos dinâmicos dos sinais, itens e status fornecidos pelo servidor.
+  - [x] Validar as páginas em pt-BR, 32 testes focados, typecheck da UI e diff.
+- Cabeçalho e bloco de status da responsabilidade:
+  - [x] Traduzir rótulos de status, revisão de propostas, ações do cabeçalho e autoria/data do status escrito.
+  - [x] Preservar nomes, mensagens e conteúdo dinâmico informado por agentes e usuários.
+  - [x] Validar a tela em pt-BR, 24 testes focados, typecheck da UI e diff.
+- Visão compacta “Uma tela” da responsabilidade:
+  - [x] Traduzir a meta, listas de projetos/tarefas/rotinas, legenda dos indicadores e ações de automação.
+  - [x] Preservar títulos e justificativas dinâmicas dos itens.
+  - [x] Validar a tela em pt-BR, 18 testes focados, typecheck da UI, build de produção da UI e diff.
+- Build completo para publicação:
+  - [ ] `pnpm build` local parou na compilação do runner porque `cargo` não está instalado no host.
+  - [x] Confirmar que o Dockerfile instala o toolchain Rust e compila a UI; build de imagem não executável neste host porque `docker` não está instalado.
+  - [x] Confirmar que `.github/workflows/docker.yml` só inicia automaticamente para `master`/tags; push desta branch não publica imagem.
+- Carregamento do histórico no chat de tarefas:
+  - [x] Traduzir falha, nova tentativa, carregamento e orientação para buscar mensagens anteriores.
+  - [x] Traduzir nomes acessíveis da conversa e da ação para ir à mensagem mais recente.
+  - [x] Validar catálogos, 32 testes focados e typecheck da UI.
+- Marcadores de ciclo de vida e acesso a credenciais no chat:
+  - [x] Traduzir ações de nova tentativa, execução e plano salvo.
+  - [x] Traduzir avisos de acesso negado a credenciais, preservando nomes de agentes e usuários.
+  - [x] Validar catálogos, 12 testes focados e typecheck da UI.
+- Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.

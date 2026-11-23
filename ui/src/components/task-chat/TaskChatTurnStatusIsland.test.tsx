@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { TaskChatItem, TaskChatProviderActivityItem } from "./task-chat-model";
+import { i18n } from "@/i18n";
 import {
   TaskChatTurnStatusIsland,
   taskChatTurnPlanRows,
@@ -99,8 +100,24 @@ describe("TaskChatTurnStatusIsland", () => {
     act(() => root.render(<TaskChatTurnStatusIsland model={model} {...props} />));
     return container.querySelector<HTMLElement>('[data-testid="task-chat-turn-status-island"]')!;
   }
-  const checklist = () => container.querySelector('[aria-label="Within-turn checklist"]');
+  const checklist = () => container.querySelector('ol[aria-label]');
   const header = () => container.querySelector<HTMLElement>('[data-testid="task-chat-turn-plan-header"]')!;
+
+  it("renders plan status and checklist controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const island = render(taskChatTurnStatusModel([plan([
+        { id: "one", label: "Inspecionar", status: "completed" },
+        { id: "two", label: "Construir", status: "in_progress" },
+      ])])!);
+      expect(island.getAttribute("aria-label")).toBe("Plano do agente");
+      expect(checklist()?.getAttribute("aria-label")).toBe("Lista de etapas desta execução");
+      expect(checklist()?.textContent).toContain("Inspecionar");
+      expect(checklist()?.querySelector(".sr-only")?.textContent).toContain("concluída");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
 
   it("shows the checklist inline with the current step highlighted", () => {
     const island = render(taskChatTurnStatusModel([

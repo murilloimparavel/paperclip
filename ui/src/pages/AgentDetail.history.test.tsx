@@ -9,6 +9,7 @@ import { RunsTab } from "./AgentDetail";
 import { RunsTab as ProductionRunsTab } from "./AgentDetail.production";
 import { ToastProvider } from "../context/ToastContext";
 import { PanelProvider } from "../context/PanelContext";
+import { t } from "@/i18n";
 
 const { get, mobile } = vi.hoisted(() => ({ get: vi.fn(), mobile: { value: false } }));
 vi.mock("../api/heartbeats", () => ({ heartbeatsApi: { get, events: async () => [], workspaceOperations: async () => [] } }));
@@ -35,7 +36,8 @@ it.each([
     await act(async () => root.render(<QueryClientProvider client={client}><MemoryRouter><PanelProvider><ToastProvider>
       <Tab runs={[]} companyId="company-1" agentId="agent-1" agentRouteId="agent-1" selectedRunId="older-run" adapterType="codex_local" adapterConfig={{}} />
     </ToastProvider></PanelProvider></MemoryRouter></QueryClientProvider>));
-    await vi.waitFor(async () => { await act(async () => {}); expect(element.textContent).toContain("succeeded"); });
+    const expectedStatus = Tab === RunsTab ? t("agentRuns.status.succeeded") : "succeeded";
+    await vi.waitFor(async () => { await act(async () => {}); expect(element.textContent).toContain(expectedStatus); });
     expect(element.textContent).not.toContain("No runs yet.");
     expect(get).toHaveBeenCalledWith("older-run");
   } finally { await act(async () => root.unmount()); client.clear(); element.remove(); }

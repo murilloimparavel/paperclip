@@ -10,6 +10,7 @@ import type { MentionOption } from "@/components/MarkdownEditor";
 import { formatTaskChatTimestamp } from "./task-chat-adapter";
 import { useCoordinatorPresentation } from "../coordinator/CoordinatorPresentation";
 import { CoordinatorRelativeTime } from "../coordinator/CoordinatorRelativeTime";
+import { useTranslation } from "react-i18next";
 
 /**
  * Host binding for the description-as-first-bubble (PAP-375): the LIVE issue
@@ -61,6 +62,7 @@ function initialsForName(name: string) {
  * an empty bubble.
  */
 export function TaskChatDescriptionBubble({ brief }: TaskChatDescriptionBubbleProps) {
+  const { t } = useTranslation();
   const coordinator = useCoordinatorPresentation();
   const [editing, setEditing] = useState(false);
   const isHuman = brief.author === "human";
@@ -77,7 +79,7 @@ export function TaskChatDescriptionBubble({ brief }: TaskChatDescriptionBubblePr
           onSave={brief.onSave}
           as="p"
           className="text-sm leading-7 text-foreground"
-          placeholder="Add a description..."
+          placeholder={t("taskChatDescription.addDescription")}
           multiline
           defaultEditing
           onEditingChange={(next) => {
@@ -102,7 +104,7 @@ export function TaskChatDescriptionBubble({ brief }: TaskChatDescriptionBubblePr
         data-testid="task-chat-description-ghost"
       >
         <Pencil className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Add a description...
+        {t("taskChatDescription.addDescription")}
       </button>
     );
   }
@@ -141,6 +143,8 @@ export function TaskChatDescriptionBubble({ brief }: TaskChatDescriptionBubblePr
         >
           <FoldCurtain
             collapsedHeight={FOLD_COLLAPSED_HEIGHT_PX}
+            moreLabel={t("taskChatDescription.showMore")}
+            lessLabel={t("taskChatDescription.showLess")}
             // The curtain's fade is a mask (background-agnostic); only the
             // toggle's muted colors need a lift on the solid blue bubble.
             toggleClassName={isHuman ? "text-white/80 hover:text-white hover:bg-white/10" : undefined}
@@ -162,7 +166,7 @@ export function TaskChatDescriptionBubble({ brief }: TaskChatDescriptionBubblePr
             type="button"
             className="mt-1 shrink-0 rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent/50 hover:text-foreground focus-visible:opacity-100 group-hover/brief:opacity-100"
             onClick={() => setEditing(true)}
-            aria-label="Edit description"
+            aria-label={t("taskChatDescription.editDescription")}
             data-testid="task-chat-description-edit"
           >
             <Pencil className="h-3.5 w-3.5" aria-hidden />

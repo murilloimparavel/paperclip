@@ -18,6 +18,7 @@ import { transcriptToTaskChatItems } from "./transcript-adapter";
 import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { RichWorkProductCard } from "./RichWorkProductCard";
 import { stateChipFor } from "./RichWorkProductCard";
+import { i18n } from "@/i18n";
 
 function workProduct(overrides: Partial<IssueWorkProduct> = {}): IssueWorkProduct {
   return {
@@ -157,6 +158,27 @@ describe("TaskChatProtocolCard", () => {
     expect(stats?.className).toContain("whitespace-nowrap");
   });
 
+  it("renders run verification labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      renderCard(root, {
+        id: "result", kind: "protocol", surface: "run_result", disposition: "yielded",
+        summary: "Resumo do agente", objectiveSatisfied: false,
+        verification: [{ commandOrCheck: "pnpm test", status: "passed", detail: "all tests passed" }],
+        remainingWork: [{ description: "Revisão visual", blocksCompletion: true }],
+        blocker: { reasonCode: "waiting_for_input", unblockAction: "Aguardar resposta", scope: "task_wide" }, artifacts: [],
+      });
+      expect(container.textContent).toContain("Resultado da execução");
+      expect(container.querySelector('[aria-label="Resultados da verificação"]')).not.toBeNull();
+      expect(container.textContent).toContain("Bloqueado: waiting_for_input");
+      expect(container.textContent).toContain("impede a conclusão");
+      expect(container.textContent).toContain("pnpm test");
+      expect(container.textContent).toContain("all tests passed");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it("shows pending artifacts with a dashed Pending chip", () => {
     const product = workProduct({
       type: "artifact",
@@ -267,6 +289,21 @@ describe("TaskChatProtocolCard", () => {
     expect(container.querySelector("details")).toBeNull();
     expect(container.textContent).toContain("Branch · no remote link");
     expect(container.querySelector('button[aria-label^="Show details:"]')?.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("renders work product detail controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(<RichWorkProductCard workProduct={workProduct({ type: "branch", provider: "git", title: "Ramo de entrega", summary: "Descrição do trabalho", url: null, metadata: null, status: "active" })} href={null} />));
+      const button = container.querySelector<HTMLButtonElement>('button[aria-label="Mostrar detalhes: Ramo de entrega"]');
+      expect(button).not.toBeNull();
+      expect(button?.textContent).toContain("Mostrar detalhes");
+      flushSync(() => button!.click());
+      expect(container.textContent).toContain("Descrição salva");
+      expect(container.querySelector('button[aria-label="Ocultar detalhes: Ramo de entrega"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it.each(["text/html", "application/zip"])("labels %s artifact links as downloads", (contentType) => {
@@ -929,6 +966,34 @@ describe("TaskChatProtocolCard", () => {
     expect(container.textContent).toContain(
       "No answers were submitted; this request was cancelled.",
     );
+  });
+
+  it("localizes runtime question receipts and fallback history in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      await act(async () => renderCard(root, {
+        id: "cancelled-input-request-pt",
+        kind: "protocol",
+        surface: "runtime_request",
+        runId: "run-1",
+        requestId: "request-cancelled-input-pt",
+        requestKind: "runtime",
+        turnId: "turn-1",
+        requestType: "input",
+        status: "cancelled",
+        prompt: "Codex needs your input.",
+        choices: [],
+        fields: [],
+        questionSet: {
+          schema: "paperclip.question_set.v1",
+          questions: [{ id: "goal", prompt: "What should the server do?", required: false, answerMode: "text" }],
+        },
+      }));
+      expect(container.querySelector("summary")?.textContent).toBe("Perguntas canceladas");
+      expect(container.textContent).toContain("Nenhuma resposta foi enviada; esta solicitação foi cancelada.");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("requires text when an explicit custom multi-select answer is active", async () => {

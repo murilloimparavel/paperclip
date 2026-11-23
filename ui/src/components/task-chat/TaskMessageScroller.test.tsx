@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TaskMessageScroller } from "./TaskMessageScroller";
 import { TaskChatScrollNavigation } from "./scroll-navigation";
+import { i18n } from "@/i18n";
 
 const PILL_SELECTOR = 'button[aria-label="Scroll to latest"]';
 
@@ -166,6 +167,15 @@ describe("TaskMessageScroller", () => {
     update(4);
     await scrollTo(scroller(), 0);
     expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it("renders history controls in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    flushSync(() => root.render(<TaskMessageScroller contentKey={0} scrollingHistory={{ hasMore: true, loading: false, error: true, load: vi.fn() }}><div>mensagens</div></TaskMessageScroller>));
+    expect(scroller().getAttribute("aria-label")).toBe("Mensagens da conversa");
+    expect(container.textContent).toContain("Não foi possível carregar as mensagens anteriores.");
+    expect(container.querySelector('[data-testid="chat-history-status"] button')?.textContent).toBe("Tentar novamente");
+    await i18n.changeLanguage("en");
   });
 
   it("follows a late image resize in the message body after the history status", () => {

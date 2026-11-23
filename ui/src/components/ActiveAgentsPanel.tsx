@@ -13,6 +13,7 @@ import { StatusGlyph } from "./StatusGlyph";
 import { RunChatSurface } from "./RunChatSurface";
 import { useLiveRunTranscripts } from "./transcript/useLiveRunTranscripts";
 import { usePublishSharedQueryData, useSharedPollingQuery } from "../hooks/useSharedPolling";
+import { useTranslation } from "@/i18n";
 
 const MIN_DASHBOARD_RUNS = 4;
 const DASHBOARD_RUN_CARD_LIMIT = 4;
@@ -22,14 +23,14 @@ const DASHBOARD_MAX_CHUNKS_PER_RUN = 40;
 const EMPTY_TRANSCRIPT: TranscriptEntry[] = [];
 const EMPTY_RUNS: LiveRunForIssue[] = [];
 
-const runStatusLabels: Record<string, string> = {
-  running: "Running",
-  queued: "Queued",
-  succeeded: "Succeeded",
-  failed: "Failed",
-  timed_out: "Timed out",
-  cancelled: "Cancelled",
-  interrupted: "Interrupted",
+const runStatusTranslationKeys: Record<string, string> = {
+  running: "activeAgents.running",
+  queued: "activeAgents.queued",
+  succeeded: "activeAgents.succeeded",
+  failed: "activeAgents.failed",
+  timed_out: "activeAgents.timedOut",
+  cancelled: "activeAgents.cancelled",
+  interrupted: "activeAgents.interrupted",
 };
 
 interface ActiveAgentsPanelProps {
@@ -49,18 +50,21 @@ interface ActiveAgentsPanelProps {
 
 export function ActiveAgentsPanel({
   companyId,
-  title = "Agents",
+  title,
   minRunCount = MIN_DASHBOARD_RUNS,
   fetchLimit,
   cardLimit = DASHBOARD_RUN_CARD_LIMIT,
   gridClassName,
   cardClassName,
-  emptyMessage = "No recent agent runs.",
+  emptyMessage,
   queryScope = "dashboard",
   showMoreLink = true,
   showTranscripts = false,
   dedupeLinkedTasks = false,
 }: ActiveAgentsPanelProps) {
+  const { t } = useTranslation();
+  const panelTitle = title ?? t("activeAgents.title");
+  const panelEmptyMessage = emptyMessage ?? t("activeAgents.noRecentRuns");
   const effectiveFetchLimit = fetchLimit;
   const liveRunsQueryKey = [...queryKeys.liveRuns(companyId), queryScope, { minRunCount, fetchLimit: effectiveFetchLimit, dedupeLinkedTasks }] as const;
   const sharedLiveRuns = useSharedPollingQuery({
@@ -131,11 +135,11 @@ export function ActiveAgentsPanel({
   return (
     <div>
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-        {title}
+        {panelTitle}
       </h3>
       {runs.length === 0 ? (
         <div className="rounded-xl border border-border p-4">
-          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+          <p className="text-sm text-muted-foreground">{panelEmptyMessage}</p>
         </div>
       ) : (
         <div className={cn("grid grid-cols-1 items-start gap-2 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4", gridClassName)}>
@@ -158,8 +162,8 @@ export function ActiveAgentsPanel({
         <div className="mt-3 flex justify-end text-xs text-muted-foreground">
           <Link to="/dashboard/live" className="hover:text-foreground hover:underline">
             {hiddenRunCount > 0
-              ? `${hiddenRunCount} more active/recent run${hiddenRunCount === 1 ? "" : "s"}`
-              : "View all runs"}
+              ? t("activeAgents.moreRuns", { count: hiddenRunCount })
+              : t("activeAgents.viewAllRuns")}
           </Link>
         </div>
       )}
@@ -186,13 +190,18 @@ export const AgentRunCard = memo(function AgentRunCard({
   issueLoadFailed?: boolean;
   className?: string;
 }) {
-  const statusLabel = runStatusLabels[run.status] ?? run.status.replace(/[_-]/g, " ");
+  const { t } = useTranslation();
+  const statusLabel = runStatusTranslationKeys[run.status]
+    ? t(runStatusTranslationKeys[run.status]!)
+    : run.status.replace(/[_-]/g, " ");
   const runUrl = `/agents/${run.agentId}/runs/${run.id}`;
   const timestamp = run.finishedAt
-    ? `Finished ${relativeTime(run.finishedAt)}`
-    : run.startedAt ? `Started ${relativeTime(run.startedAt)}` : `Queued ${relativeTime(run.createdAt)}`;
+    ? t("activeAgents.finished", { time: relativeTime(run.finishedAt) })
+    : run.startedAt
+      ? t("activeAgents.started", { time: relativeTime(run.startedAt) })
+      : t("activeAgents.queuedAt", { time: relativeTime(run.createdAt) });
   const taskStatus = issue?.status === "in_review" && issue.externalConversationState === "waiting" ? "idle" : issue?.status ?? "backlog";
-  const taskTitle = issue?.title ?? (issueLoadFailed ? "Task unavailable" : "Loading task…");
+  const taskTitle = issue?.title ?? t(issueLoadFailed ? "activeAgents.taskUnavailable" : "activeAgents.loadingTask");
 
   return (
     <div className={cn(
@@ -207,7 +216,7 @@ export const AgentRunCard = memo(function AgentRunCard({
         <Link
           to={runUrl}
           title={`${run.agentName} — ${statusLabel} · ${timestamp}`}
-          aria-label={`${run.agentName} — ${statusLabel}. View run`}
+          aria-label={t("activeAgents.viewRun", { agent: run.agentName, status: statusLabel })}
           className="flex min-w-0 items-center gap-2 rounded-md text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <AgentIdentity agent={{ id: run.agentId, name: run.agentName, appearance: run.agentAppearance }} size="sm" className="gap-2 font-medium" />
@@ -235,7 +244,7 @@ export const AgentRunCard = memo(function AgentRunCard({
         ) : (
           <Link to={runUrl} className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-background/60 px-2.5 py-2 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <Clock3 className="size-4 shrink-0" aria-hidden />
-            <span className="truncate">{run.invocationSource === "timer" ? "Scheduled heartbeat" : "No linked task"}</span>
+            <span className="truncate">{t(run.invocationSource === "timer" ? "activeAgents.scheduledHeartbeat" : "activeAgents.noLinkedTask")}</span>
           </Link>
         )}
         <time

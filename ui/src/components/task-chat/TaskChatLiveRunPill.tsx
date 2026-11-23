@@ -3,13 +3,13 @@ import { Hourglass, Loader2 } from "lucide-react";
 import type { TranscriptEntry } from "../../adapters";
 import { cn } from "@/lib/utils";
 import { useSecondTick } from "@/hooks/useSecondTick";
-import { formatDurationWords } from "@/lib/issue-chat-messages";
 import { isCommandTool } from "@/lib/transcriptPresentation";
 import { isTerminalRunStatus } from "@/components/task-chat/transcript-adapter";
 import { useTaskChatShimmer } from "./TaskChatShimmer";
 import { AgentQueueWait } from "@/components/AgentQueueWait";
 import { agentQueueWaitOf } from "@/lib/agent-queue-wait";
-import { WAITING_TO_START_LABEL, useWaitingToStart } from "./useWaitingToStart";
+import { useWaitingToStart } from "./useWaitingToStart";
+import { t as i18nT, useTranslation } from "@/i18n";
 
 /**
  * "ran N commands, called M tools" for the live tail's status pill, counted off
@@ -33,9 +33,22 @@ export function toolCountSummaryFromEntries(entries: readonly TranscriptEntry[])
     else other += 1;
   }
   const parts: string[] = [];
-  if (commands > 0) parts.push(`ran ${commands} command${commands === 1 ? "" : "s"}`);
-  if (other > 0) parts.push(`called ${other} tool${other === 1 ? "" : "s"}`);
+  if (commands > 0) parts.push(i18nT("taskChatLiveRun.commandsRun", { count: commands }));
+  if (other > 0) parts.push(i18nT("taskChatLiveRun.toolsCalled", { count: other }));
   return parts.length > 0 ? parts.join(", ") : null;
+}
+
+function liveDurationWords(ms: number | null): string | null {
+  if (ms === null || !Number.isFinite(ms) || ms <= 0) return null;
+  const totalSeconds = Math.max(1, Math.round(ms / 1000));
+  if (totalSeconds < 60) return i18nT("taskChatLiveRun.seconds", { count: totalSeconds });
+  const totalMinutes = Math.round(totalSeconds / 60);
+  if (totalMinutes < 60) return i18nT("taskChatLiveRun.minutes", { count: totalMinutes });
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return minutes === 0
+    ? i18nT("taskChatLiveRun.hours", { count: hours })
+    : i18nT(`taskChatLiveRun.hoursMinutes_${hours === 1 ? "hourOne" : "hourOther"}_${minutes === 1 ? "minuteOne" : "minuteOther"}`, { hours, minutes });
 }
 
 /**
@@ -62,6 +75,7 @@ export function TaskChatLiveRunPill({
   finishedAtMs?: number | null;
   toolSummary: string | null;
 }) {
+  const { t } = useTranslation();
   const active = !isTerminalRunStatus(status);
   const shimmer = useTaskChatShimmer("working");
   const agentQueue = status === "queued" ? agentQueueWaitOf(execution) : null;
@@ -75,12 +89,10 @@ export function TaskChatLiveRunPill({
 
   const elapsedMs =
     startedAtMs == null ? null : (active ? Date.now() : finishedAtMs ?? Date.now()) - startedAtMs;
-  const elapsed = elapsedMs != null
-    ? formatDurationWords(elapsedMs)
-    : null;
+  const elapsed = elapsedMs != null ? liveDurationWords(elapsedMs) : null;
   const failed = ["failed", "timed_out", "cancelled", "interrupted"].includes(status);
-  const verb = active ? holdLabel ?? (waitingToStart ? WAITING_TO_START_LABEL : "Working") : failed ? "Stopped" : "Worked";
-  const suffix = elapsed ? `for ${elapsed}` : null;
+  const verb = active ? holdLabel ?? (waitingToStart ? t("taskChatLiveRun.waitingToStart") : t("taskChatLiveRun.working")) : failed ? t("taskChatLiveRun.stopped") : t("taskChatLiveRun.worked");
+  const suffix = elapsed ? t(failed ? "taskChatLiveRun.elapsedAfter" : "taskChatLiveRun.elapsedFor", { duration: elapsed }) : null;
 
   if (agentQueue) {
     return (

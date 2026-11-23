@@ -10,7 +10,10 @@ import {
   instanceExperimentalSettingsSchema,
 } from "@paperclipai/shared";
 import { parseRunnerGoalCommand, TaskChatComposer } from "./TaskChatComposer";
+import { TaskChatPausedTakeover } from "./TaskChatPausedTakeover";
+import { ComposerImageAttachments } from "./ComposerImageAttachments";
 import { ComposerAddMenu } from "./ComposerAddMenu";
+import { i18n } from "@/i18n";
 import { QuestionForm } from "./QuestionForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Agent, HeartbeatRun, IssueWorkMode } from "@paperclipai/shared";
@@ -312,6 +315,43 @@ function renderComposer(props: ComponentProps<typeof TaskChatComposer>) {
 }
 
 describe("TaskChatComposer", () => {
+  it("renders the composer Add menu in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    render(<ComposerAddMenu mode="standard" onModeChange={vi.fn()} onAttachFile={vi.fn()} onGoal={vi.fn()} mobile />);
+    flushSync(() => container.querySelector<HTMLButtonElement>('[aria-label="Adicionar ao compositor"]')!.click());
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog?.textContent).toContain("Arquivos e imagens");
+    expect(dialog?.textContent).toContain("Modo de planejamento");
+    expect(dialog?.textContent).toContain("Modo de perguntas");
+    act(() => root?.unmount());
+    root = null;
+    await i18n.changeLanguage("en");
+  });
+  it("localizes image attachment errors and accessible actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      render(<ComposerImageAttachments
+        images={[{ id: "image-1", name: "captura.png", status: "error" }]}
+        onRemove={vi.fn()} onRetry={vi.fn()}
+      />);
+      expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Anexos de imagem");
+      expect(container.querySelector('[role="alert"]')?.textContent).toBe("Falha no envio");
+      expect(container.querySelector('button[aria-label="Remover captura.png"]')).not.toBeNull();
+      expect(container.querySelector('button[aria-label="Tentar enviar captura.png novamente"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+  it("localizes the task composer send controls in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      renderComposer({ onAdd: vi.fn(), workMode: "standard" });
+      expect(sendButton().getAttribute("aria-label")).toBe("Enviar");
+      expect(sendButton().title).toBe("Enviar (Enter)");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
   describe("plain HTTP without randomUUID", () => {
     beforeEach(() => {
       vi.stubGlobal("crypto", { getRandomValues: crypto.getRandomValues.bind(crypto) });
@@ -2071,6 +2111,22 @@ describe("TaskChatComposer", () => {
       });
     });
 
+    it("localizes known goal validation errors in Brazilian Portuguese", async () => {
+      await i18n.changeLanguage("pt-BR");
+      try {
+        renderComposer({
+          onAdd: vi.fn(), workMode: "standard", runnerGoalCapability: capability,
+          onRunnerGoalCommand: vi.fn(),
+        });
+        typeText("/goal pause extra");
+        pressKey("Enter", { metaKey: true });
+        await flushAsync();
+        expect(container.querySelector('[role="alert"]')?.textContent).toBe("/goal pause não aceita argumentos adicionais.");
+      } finally {
+        await i18n.changeLanguage("en");
+      }
+    });
+
     it("dispatches a goal action without posting a comment", async () => {
       const onAdd = vi.fn().mockResolvedValue(undefined);
       const onRunnerGoalCommand = vi.fn().mockResolvedValue(undefined);
@@ -2557,6 +2613,22 @@ describe("TaskChatComposer", () => {
   });
 
   describe("paused task takeover", () => {
+    it("localizes pause explanations, saved draft, and resume states in Brazilian Portuguese", async () => {
+      await act(async () => { await i18n.changeLanguage("pt-BR"); });
+      try {
+        render(<TaskChatPausedTakeover scope="subtree" hasDraft pending onResume={vi.fn()} />);
+        expect(container.textContent).toContain("A árvore de tarefas está pausada.");
+        expect(container.textContent).toContain("Retome esta árvore de tarefas para enviar uma mensagem.");
+        expect(container.textContent).toContain("Seu rascunho foi salvo.");
+        expect(container.querySelector("button")?.textContent).toContain("Retomando…");
+        render(<TaskChatPausedTakeover scope="leaf" onResume={vi.fn()} />);
+        expect(container.textContent).toContain("A tarefa está pausada.");
+        expect(container.querySelector("button")?.textContent).toContain("Retomar tarefa");
+      } finally {
+        await act(async () => { await i18n.changeLanguage("en"); });
+      }
+    });
+
     it("allows only standalone /new to resume a paused conversation through the normal composer", async () => {
       const onAdd = vi.fn().mockResolvedValue(undefined);
       render(<TaskChatComposer onAdd={onAdd} conversationMode workMode="standard" pause={{ scope: "leaf" }} />);

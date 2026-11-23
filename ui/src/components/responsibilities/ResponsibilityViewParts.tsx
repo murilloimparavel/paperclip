@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { skillRoute } from "@/lib/company-skill-routes";
-import { RESPONSIBILITY_HEALTH_LABEL } from "@/lib/responsibilities";
+import { useTranslation } from "react-i18next";
 import { WORK_ITEM_KIND_LABEL, type WorkItem } from "@/lib/responsibility-views";
 import { Link } from "@/lib/router";
 import { taskStatusIconProps } from "@/lib/task-status-presentation";
@@ -64,10 +64,11 @@ export function HealthDot({ health, label, className }: { health: Responsibility
 
 /** A status as a dot and its word: "● At risk". */
 export function HealthMark({ health, className }: { health: ResponsibilityHealth; className?: string }) {
+  const { t } = useTranslation();
   return (
     <span className={cn("inline-flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground", className)}>
       <HealthDot health={health} className="size-2" />
-      {RESPONSIBILITY_HEALTH_LABEL[health]}
+      {t(`responsibilityMeasures.health.${health}`)}
     </span>
   );
 }
@@ -88,13 +89,14 @@ export function ProposalsNotice({
   subject?: "list" | "this";
   className?: string;
 }) {
+  const { t } = useTranslation();
   if (count <= 0) return null;
   const message =
     subject === "this"
-      ? "This responsibility was proposed for you and is waiting for your review."
+      ? t("responsibilityViewParts.proposedThisWaiting")
       : count === 1
-        ? "1 proposed responsibility is waiting for your review."
-        : `${count} proposed responsibilities are waiting for your review.`;
+        ? t("responsibilityViewParts.oneProposalWaiting")
+        : t("responsibilityViewParts.proposalsWaiting", { count });
   return (
     <div
       role="status"
@@ -106,7 +108,7 @@ export function ProposalsNotice({
         {message}
       </p>
       <Button size="xs" variant="outline" onClick={onReview}>
-        {subject === "this" || count === 1 ? "Review it" : "Review them"}
+        {subject === "this" || count === 1 ? t("responsibilityViewParts.reviewIt") : t("responsibilityViewParts.reviewThem")}
       </Button>
     </div>
   );
@@ -124,6 +126,7 @@ export function ResponsibilityViewHeader({
   /** Notices from the page, below the name. */
   children?: ReactNode;
 }) {
+  const { t } = useTranslation();
   return (
     <header className="flex flex-col gap-1">
       {responsibility.area ? (
@@ -134,9 +137,9 @@ export function ResponsibilityViewHeader({
         {actions}
       </div>
       {responsibility.status === "let_go" ? (
-        <p className="text-sm text-muted-foreground">You let go of this.</p>
+        <p className="text-sm text-muted-foreground">{t("responsibilityViewParts.youLetGoOfThis")}</p>
       ) : responsibility.status === "dismissed" ? (
-        <p className="text-sm text-muted-foreground">You dismissed this when it was proposed.</p>
+        <p className="text-sm text-muted-foreground">{t("responsibilityViewParts.youDismissedThis")}</p>
       ) : null}
       {children}
     </header>
@@ -155,30 +158,31 @@ export function ResponsibilityHeaderActions({
   status: ResponsibilityDetail["status"];
   actions: Pick<ResponsibilityPageActions, "newTask" | "setStatus" | "requestDelete">;
 }) {
+  const { t } = useTranslation();
   const isActive = status === "active";
   return (
     <div className="flex shrink-0 items-center gap-2" data-responsibility-header-actions="">
       {isActive ? (
         <Button variant="outline" onClick={() => actions.newTask({ defaultTitle: "" })}>
           <SquarePen aria-hidden="true" />
-          New task for an agent
+          {t("responsibilityHomeSections.newTaskForAgent")}
         </Button>
       ) : null}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost" aria-label="More actions for this responsibility">
+          <Button size="icon" variant="ghost" aria-label={t("responsibilityViewParts.moreActions")}>
             <MoreHorizontal aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {isActive ? (
-            <DropdownMenuItem onSelect={() => actions.setStatus("let_go")}>Let go</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => actions.setStatus("let_go")}>{t("responsibilityViewParts.letGo")}</DropdownMenuItem>
           ) : status === "let_go" || status === "dismissed" ? (
-            <DropdownMenuItem onSelect={() => actions.setStatus("active")}>Take it back on</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => actions.setStatus("active")}>{t("responsibilityViewParts.takeItBackOn")}</DropdownMenuItem>
           ) : null}
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={actions.requestDelete}>
-            Delete…
+            {t("responsibilityViewParts.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -7,11 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { t } from "@/i18n";
 
 /** Sentinel value for the "no pin / live default" option (Radix forbids ""). */
 export const RELEASE_DEFAULT_VALUE = "default";
 
-const DEFAULT_LABEL = "Default — current (recommended)";
+const DEFAULT_LABEL = t("agentSkills.defaultRelease");
 
 /**
  * Render a bundled release's calendar date. Plain `YYYY-MM-DD` strings (like the
@@ -32,19 +33,19 @@ export function formatReleaseDate(value: CompanySkillVersionSummary["releasedAt"
 
 /** Release display name, e.g. `V7 — Roster champion` (no date). */
 export function releaseName(release: CompanySkillVersionSummary): string {
-  return release.releaseName ?? release.label ?? release.releaseId ?? "Release";
+  return release.releaseName ?? release.label ?? release.releaseId ?? t("agentSkills.release");
 }
 
 /** Full option label, e.g. `V7 — Roster champion · released 2026-07-21`. */
 export function releaseOptionLabel(release: CompanySkillVersionSummary): string {
   const name = releaseName(release);
   const date = formatReleaseDate(release.releasedAt);
-  return date ? `${name} · released ${date}` : name;
+  return date ? t("agentSkills.releaseWithDate", { name, date }) : name;
 }
 
 /** Compact badge label for a pinned release, e.g. `V7`. */
 export function releaseShortLabel(release: CompanySkillVersionSummary): string {
-  const name = release.releaseName ?? release.label ?? release.releaseId ?? "Release";
+  const name = release.releaseName ?? release.label ?? release.releaseId ?? t("agentSkills.release");
   return name.split(" — ")[0]!.trim();
 }
 
@@ -82,7 +83,7 @@ export function AgentSkillReleasePicker({
       <SelectTrigger
         size="sm"
         className="w-full max-w-(--sz-16rem) sm:w-(--sz-16rem)"
-        aria-label="Skill release"
+        aria-label={t("agentSkills.skillRelease")}
       >
         <SelectValue placeholder={DEFAULT_LABEL}>{triggerLabel}</SelectValue>
       </SelectTrigger>

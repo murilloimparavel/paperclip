@@ -13,6 +13,7 @@ import { useReducedMotion } from "motion/react";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import { cn } from "@/lib/utils";
 import { useTaskChatExpansion } from "./expansion-state";
+import { useTranslation } from "react-i18next";
 import type { TaskChatActivityPhaseItem, TaskChatAutoReview } from "./task-chat-model";
 import { AutoApprovedBadge, AutoReviewDetail } from "./TaskChatAutoReview";
 import {
@@ -107,7 +108,7 @@ function providerTrailing(item: Extract<Activity, { kind: "protocol" }>): Pick<A
   return {};
 }
 
-function presentation(item: Activity, active: boolean, taskLabel?: string): ActivityRowPresentation | null {
+function presentation(item: Activity, active: boolean, t: (key: string) => string, taskLabel?: string): ActivityRowPresentation | null {
   if (item.kind === "tool") {
     const tool = toolPresentation(item);
     const running =
@@ -138,7 +139,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     if (item.blockedReason) {
       return {
         icon: ShieldX,
-        label: "Blocked",
+        label: t("taskChatRunnerActivity.blocked"),
         target: subject ? (terminal ? `$ ${subject}` : subject) : undefined,
         mono: true,
         running: false,
@@ -160,7 +161,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? t("taskChatRunnerActivity.thinking") : t("taskChatRunnerActivity.thought"),
       target:
         latestReasoningHeadline(item.lines.join("\n")) ??
         item.lines
@@ -207,7 +208,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     .join(" · ");
   return {
     icon: Gauge,
-    label: item.label ?? "Token usage",
+    label: item.label ?? t("taskChatRunnerActivity.tokenUsage"),
     target: usage || item.detail,
     mono: false,
     running: false,
@@ -250,7 +251,8 @@ function ActivityRowContent({
   active: boolean;
   taskLabel?: string;
 }) {
-  const row = presentation(item, active, taskLabel);
+  const { t } = useTranslation();
+  const row = presentation(item, active, t, taskLabel);
   const shimmer = useTaskChatShimmer(item.id);
   if (!row) return null;
   const Icon = row.icon;
@@ -470,6 +472,7 @@ function ExpandedActivity({
   item: Activity;
   active: boolean;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useTaskChatExpansion(
     `runner-detail:${item.id}`,
     false,
@@ -477,7 +480,7 @@ function ExpandedActivity({
   const detailId = useId();
   const expandable = hasActivityDetails(item);
   const content = <ActivityContent item={item} active={active} />;
-  const row = presentation(item, active);
+  const row = presentation(item, active, t);
   const note = row?.note;
   return (
     <li className="min-w-0" data-activity-item-id={item.id}>
@@ -549,6 +552,7 @@ function readRunPreview(items: ToolActivity[]): string {
 }
 
 function ReadRunActivity({ items }: { items: ToolActivity[] }) {
+  const { t } = useTranslation();
   const id = `runner-reads:${items[0]!.id}`;
   const [open, setOpen] = useTaskChatExpansion(id, false);
   const listId = useId();
@@ -566,14 +570,14 @@ function ReadRunActivity({ items }: { items: ToolActivity[] }) {
             <BookOpen className="size-3.5" aria-hidden="true" />
           </span>
           <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden whitespace-nowrap">
-            <span className="shrink-0 text-xs">Read {items.length} files</span>
+            <span className="shrink-0 text-xs">{t("taskChatRunnerActivity.readFiles", { count: items.length })}</span>
             <span className="truncate font-mono text-xs text-muted-foreground">{readRunPreview(items)}</span>
           </span>
         </span>
         <ChevronRight className={cn("size-3.5 shrink-0", open && "rotate-90")} aria-hidden="true" />
       </button>
       {open ? (
-        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label="Files read">
+        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label={t("taskChatRunnerActivity.filesRead")}>
           {items.map((item) => (
             <ExpandedActivity key={item.id} item={item} active={false} />
           ))}
@@ -591,18 +595,19 @@ export function TaskChatRunnerActivityGroup({
   item: TaskChatActivityPhaseItem;
   defaultExpanded?: boolean;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useTaskChatExpansion(
     item.id,
     defaultExpanded,
   );
   const historyId = useId();
   const activities = item.items.filter(
-    (activity) => presentation(activity, false) !== null,
+    (activity) => presentation(activity, false, t) !== null,
   );
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
   const SummaryIcon = summary.icon;
-  const countLabel = `${activities.length} ${activities.length === 1 ? "activity" : "activities"}`;
+  const countLabel = t("taskChatRunnerActivity.activityCount", { count: activities.length });
   const editTotals = activities.reduce(
     (sum, activity) =>
       activity.kind === "tool" && activity.diff
@@ -637,7 +642,7 @@ export function TaskChatRunnerActivityGroup({
             onClick={() => setExpanded(!expanded)}
             aria-expanded={expanded}
             aria-controls={expanded ? historyId : undefined}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.active ? countLabel : `${summary.fullLabel.toLowerCase()} (${countLabel})`}`}
+            aria-label={`${t(expanded ? "taskChatRunnerActivity.collapse" : "taskChatRunnerActivity.expand")} ${item.active ? countLabel : `${summary.fullLabel.toLowerCase()} (${countLabel})`}`}
           >
             {!item.active ? (
               <span
@@ -680,7 +685,7 @@ export function TaskChatRunnerActivityGroup({
             <ol
               id={historyId}
               className="flex min-w-0 flex-col gap-1"
-              aria-label="Activity history"
+              aria-label={t("taskChatRunnerActivity.history")}
               data-testid="task-chat-runner-activity-list"
             >
               {foldReadRuns(activities).map((row) =>

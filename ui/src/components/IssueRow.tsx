@@ -2,6 +2,7 @@ import { requiresExecutionReconciliation } from "@paperclipai/shared";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import type { ExternalObjectSummary, Issue, IssueRecoveryAction } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
+import { useTranslation } from "@/i18n";
 import { Archive, ArchiveRestore, Flag, CircleAlert } from "lucide-react";
 import {
   createIssueDetailPath,
@@ -115,7 +116,8 @@ export function InboxArchiveButton({
   archived?: boolean;
   iconOnly?: boolean;
 }) {
-  const label = archived ? "Restore from archive" : "Archive";
+  const { t } = useTranslation();
+  const label = t(archived ? "taskRow.restoreFromArchive" : "taskRow.archive");
   const Icon = archived ? ArchiveRestore : Archive;
   return (
     <button
@@ -187,6 +189,7 @@ export function IssueRow({
   chevronInGuide = false,
   showDivider = false,
 }: IssueRowProps) {
+  const { t } = useTranslation();
   const visibleColumns = useTaskListColumns();
   const { hoveredCell, onMouseMove: handleCellHover, clearHoveredCell } = useCellMarqueeHover();
   const [titleFocused, setTitleFocused] = useState(false);
@@ -216,7 +219,7 @@ export function IssueRow({
         "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
         selected ? "hover:bg-muted/80" : "hover:bg-blue-500/20",
       )}
-      aria-label="Mark as read"
+      aria-label={t("taskRow.markAsRead")}
     >
       <span
         className={cn(
@@ -247,10 +250,10 @@ export function IssueRow({
     <Badge variant="outline"
       data-testid="issue-row-parked-blocker"
       className="[&>svg]:size-2.5 ml-1.5 gap-0.5 border-amber-500/60 bg-amber-500/15 text-(length:--text-nano) text-amber-700 dark:text-amber-300"
-      title="Blocked by parked work — at least one assigned blocker is in backlog and will not wake its assignee."
+      title={t("taskRow.parkedBlockerTitle")}
     >
       <Flag className="h-2.5 w-2.5" aria-hidden />
-      Blocked by parked work
+      {t("taskRow.parkedBlocker")}
     </Badge>
   ) : null;
 
@@ -276,7 +279,7 @@ export function IssueRow({
             disableIssueQuicklook
             issuePrefetch={issue}
             onClickCapture={() => rememberIssueDetailLocationState(issuePathId, detailState)}
-            aria-label={`Open task ${identifier} (${statusLabel})`}
+            aria-label={t("taskRow.openTask", { identifier, status: statusLabel })}
             className="task-row-status-link"
             data-slot="task-row-status"
           >
@@ -309,7 +312,7 @@ export function IssueRow({
           refreshed && "task-row-link",
         )}
       >
-        <span className="sr-only">Open {identifier}: {issue.title}</span>
+        <span className="sr-only">{t("taskRow.openTaskTitle", { identifier, title: issue.title })}</span>
       </Link>
     );
     return (
@@ -412,7 +415,7 @@ export function IssueRow({
                   {recoveryIndicator ? (
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <span tabIndex={0} aria-label="Task recovery status" className="relative z-10 inline-flex text-muted-foreground sm:hidden">
+                        <span tabIndex={0} aria-label={t("taskRow.recoveryStatus")} className="relative z-10 inline-flex text-muted-foreground sm:hidden">
                           <CircleAlert className="h-4 w-4" />
                         </span>
                       </TooltipTrigger>

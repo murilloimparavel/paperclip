@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { AgentPanel } from "@/components/agent-detail/AgentPanels";
 import { queryKeys } from "@/lib/queryKeys";
+import { t } from "@/i18n";
 
 type Field = "root" | "entry";
 type LoadState =
@@ -16,9 +17,9 @@ type LoadState =
   | { kind: "error"; field: Field | null; message: string };
 
 export function checkExternalProfile(root: string, entry: string): { field: Field; message: string } | null {
-  if (!root.startsWith("/") && !root.startsWith("~")) return { field: "root", message: "Use an absolute path that starts with / or ~." };
+  if (!root.startsWith("/") && !root.startsWith("~")) return { field: "root", message: t("instructionSettings.absolutePath") };
   if (entry.startsWith("/") || entry.split(/[\\/]/).includes("..")) {
-    return { field: "entry", message: "The entry file has to sit inside the root path." };
+    return { field: "entry", message: t("instructionSettings.entryMustStayInsideRoot") };
   }
   return null;
 }
@@ -75,7 +76,7 @@ export function InstructionsBundleSettings({
         companyId,
       );
     } catch (error) {
-      setLoad({ kind: "error", field: null, message: errorMessage(error, `Couldn’t read ${trimmedEntry} in ${trimmedRoot}.`) });
+      setLoad({ kind: "error", field: null, message: errorMessage(error, t("instructionSettings.couldNotRead", { entry: trimmedEntry, root: trimmedRoot })) });
       return;
     }
     await refresh();
@@ -91,7 +92,7 @@ export function InstructionsBundleSettings({
       onSwitched();
       setLoad({ kind: "idle" });
     } catch (error) {
-      setLoad({ kind: "error", field: null, message: errorMessage(error, "Couldn’t switch back to the managed bundle.") });
+      setLoad({ kind: "error", field: null, message: errorMessage(error, t("instructionSettings.switchFailed")) });
     }
   };
 
@@ -101,18 +102,18 @@ export function InstructionsBundleSettings({
     <Collapsible defaultOpen={mode === "external"} className="flex flex-col gap-(--agent-detail-module-gap)">
       <CollapsibleTrigger className="group flex w-fit items-center gap-1.5 rounded-sm text-sm text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-foreground">
         <Settings2 className="size-4" aria-hidden />
-        Advanced management
+        {t("instructionSettings.advancedManagement")}
         <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" aria-hidden />
       </CollapsibleTrigger>
       <CollapsibleContent data-agent-disclosure>
-        <AgentPanel className="gap-4 p-(--agent-identity-panel-gap)" aria-label="External management">
+        <AgentPanel className="gap-4 p-(--agent-identity-panel-gap)" aria-label={t("instructionSettings.externalManagement")}>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-foreground">External management</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Point this agent at a directory on disk. Paperclip checks that the root file exists before it switches over.</p>
+            <p className="text-sm font-semibold text-foreground">{t("instructionSettings.externalManagement")}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{t("instructionSettings.externalManagementHelp")}</p>
           </div>
           <div className="grid gap-(--agent-detail-module-gap) sm:grid-cols-2">
             <label className="flex min-w-0 flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Root path</span>
+              <span className="text-xs text-muted-foreground">{t("instructionSettings.rootPath")}</span>
               <Input
                 value={root}
                 onChange={(event) => edit(setRoot)(event.target.value)}
@@ -123,7 +124,7 @@ export function InstructionsBundleSettings({
               />
             </label>
             <label className="flex min-w-0 flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Root file</span>
+              <span className="text-xs text-muted-foreground">{t("instructionSettings.rootFile")}</span>
               <Input
                 value={entry}
                 onChange={(event) => edit(setEntry)(event.target.value)}
@@ -137,22 +138,22 @@ export function InstructionsBundleSettings({
           <div className="flex flex-wrap items-center justify-end gap-3">
             {mode === "external" ? (
               <Button variant="ghost" size="sm" className="mr-auto -ml-3" onClick={() => void switchToManaged()} disabled={busy || blocked}>
-                Use managed bundle
+                {t("instructionSettings.useManagedBundle")}
               </Button>
             ) : null}
             <p role="status" aria-live="polite" className="flex min-w-0 items-center gap-2 text-xs">
-              {blocked ? <span className="text-muted-foreground">Save or discard your file changes first.</span> : null}
+              {blocked ? <span className="text-muted-foreground">{t("instructionSettings.saveOrDiscardFirst")}</span> : null}
               {!blocked && load.kind === "error" ? <span className="text-destructive">{load.message}</span> : null}
               {!blocked && load.kind === "loaded" ? (
                 <span className="flex items-center gap-2 text-muted-foreground">
                   <span className="size-1.5 shrink-0 rounded-full bg-(--agent-detail-dot-saved)" aria-hidden />
-                  Loaded {load.entry} from {load.root}
+                  {t("instructionSettings.loadedFrom", { entry: load.entry, root: load.root })}
                 </span>
               ) : null}
             </p>
             <Button size="sm" onClick={() => void loadProfile()} disabled={!trimmedRoot || !trimmedEntry || busy || blocked || unchanged}>
               {busy ? <Loader2 className="animate-spin motion-reduce:animate-none" /> : null}
-              {busy ? "Loading…" : "Load profile"}
+              {busy ? t("instructionSettings.loading") : t("instructionSettings.loadProfile")}
             </Button>
           </div>
         </AgentPanel>

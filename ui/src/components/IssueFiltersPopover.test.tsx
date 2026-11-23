@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IssueFiltersPopover } from "./IssueFiltersPopover";
 import { defaultIssueFilterState } from "../lib/issue-filters";
+import { i18n } from "@/i18n";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
@@ -43,7 +44,8 @@ vi.mock("./PriorityIcon", () => ({
 describe("IssueFiltersPopover", () => {
   let container: HTMLDivElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("pt-BR");
     container = document.createElement("div");
     document.body.appendChild(container);
   });
@@ -58,15 +60,15 @@ describe("IssueFiltersPopover", () => {
     act(() => root.render(<IssueFiltersPopover enableAgentCreatedVisibilityFilter enableRoutineTasksFilter presentation={presentation} state={{ ...defaultIssueFilterState, routineTasksOnly: true }} onChange={onChange} activeFilterCount={1} />));
     const visibility = container.querySelector('[data-filter-options="visibility"]');
     expect(Array.from(visibility?.querySelectorAll("label") ?? []).map(label => label.textContent)).toEqual([
-      "Live runs only", "Show agent-created tasks", "Routine tasks",
+      "Somente execuções ativas", "Mostrar tarefas criadas por agentes", "Tarefas de rotina",
     ]);
-    expect(container.textContent).toContain("Visibility");
+    expect(container.textContent).toContain("Visibilidade");
     expect(container.textContent).not.toContain("Source");
-    const row = Array.from(visibility!.querySelectorAll("label")).find(label => label.textContent === "Routine tasks");
+    const row = Array.from(visibility!.querySelectorAll("label")).find(label => label.textContent === "Tarefas de rotina");
     expect(row?.querySelector("input")?.checked).toBe(true);
     act(() => row?.querySelector("input")?.click());
     expect(onChange).toHaveBeenCalledWith({ routineTasksOnly: false });
-    act(() => Array.from(container.querySelectorAll("button")).find(button => button.textContent === "Clear")?.click());
+    act(() => Array.from(container.querySelectorAll("button")).find(button => button.textContent === "Limpar")?.click());
     expect(onChange).toHaveBeenCalledWith(defaultIssueFilterState);
     act(() => root.unmount());
   });
@@ -75,11 +77,11 @@ describe("IssueFiltersPopover", () => {
     const root = createRoot(container);
     const props = { presentation, enableLiveRunsFilter: false, state: defaultIssueFilterState, onChange: vi.fn(), activeFilterCount: 0 };
     act(() => root.render(<IssueFiltersPopover {...props} />));
-    expect(container.textContent).not.toContain("Live runs only");
-    expect(container.textContent).not.toContain("Visibility");
+    expect(container.textContent).not.toContain("Somente execuções ativas");
+    expect(container.textContent).not.toContain("Visibilidade");
     act(() => root.render(<IssueFiltersPopover {...props} enableRoutineTasksFilter />));
     const visibility = container.querySelector('[data-filter-options="visibility"]');
-    expect(Array.from(visibility?.querySelectorAll("label") ?? []).map(label => label.textContent)).toEqual(["Routine tasks"]);
+    expect(Array.from(visibility?.querySelectorAll("label") ?? []).map(label => label.textContent)).toEqual(["Tarefas de rotina"]);
     act(() => root.unmount());
   });
 
@@ -116,9 +118,9 @@ describe("IssueFiltersPopover", () => {
       element.className.includes("md:grid-cols-3"),
     );
     expect(layoutGrid?.className).toContain("grid-cols-1");
-    expect(popoverContent?.textContent).toContain("Live runs only");
-    const creationToggle = Array.from(popoverContent?.querySelectorAll("label") ?? []).find((label) => label.textContent?.includes("Show agent-created tasks"));
-    expect(creationToggle?.textContent).toBe("Show agent-created tasks");
+    expect(popoverContent?.textContent).toContain("Somente execuções ativas");
+    const creationToggle = Array.from(popoverContent?.querySelectorAll("label") ?? []).find((label) => label.textContent?.includes("Mostrar tarefas criadas por agentes"));
+    expect(creationToggle?.textContent).toBe("Mostrar tarefas criadas por agentes");
     expect(creationToggle?.querySelector("input")?.checked).toBe(false);
   });
 
@@ -142,7 +144,7 @@ describe("IssueFiltersPopover", () => {
       );
     });
 
-    const input = container.querySelector<HTMLInputElement>('input[aria-label="Search responsible"]');
+    const input = container.querySelector<HTMLInputElement>('input[aria-label="Pesquisar responsável"]');
     expect(input).not.toBeNull();
     act(() => {
       const valueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
@@ -184,7 +186,7 @@ describe("IssueFiltersPopover", () => {
 
     const popoverContent = container.querySelector("[data-testid='popover-content']");
     expect(popoverContent?.className).not.toContain("overflow-y-auto");
-    expect(container.querySelector('input[aria-label="Search responsible"]')).toBeNull();
+    expect(container.querySelector('input[aria-label="Pesquisar responsável"]')).toBeNull();
     expect(container.querySelector('[data-filter-options="responsible"]')?.className).toContain("overflow-y-auto");
     expect(container.querySelector('[data-filter-options="projects"]')?.className).toContain("overflow-y-auto");
 
@@ -220,21 +222,21 @@ describe("IssueFiltersPopover", () => {
 
     const categoryOptions = container.querySelector('[data-filter-options="inbox-category"]');
     const approvalOptions = container.querySelector('[data-filter-options="inbox-approval-status"]');
-    expect(categoryOptions?.textContent).toContain("All categories");
-    expect(categoryOptions?.querySelector('button[aria-pressed="true"]')?.textContent).toContain("Approvals");
-    expect(approvalOptions?.querySelector('button[aria-pressed="true"]')?.textContent).toContain("Needs action");
+    expect(categoryOptions?.textContent).toContain("Todas as categorias");
+    expect(categoryOptions?.querySelector('button[aria-pressed="true"]')?.textContent).toContain("Aprovações");
+    expect(approvalOptions?.querySelector('button[aria-pressed="true"]')?.textContent).toContain("Precisa de ação");
 
     const allCategoriesButton = Array.from(categoryOptions?.querySelectorAll("button") ?? [])
-      .find((button) => button.textContent?.includes("All categories"));
+      .find((button) => button.textContent?.includes("Todas as categorias"));
     const resolvedButton = Array.from(approvalOptions?.querySelectorAll("button") ?? [])
-      .find((button) => button.textContent?.includes("Resolved"));
+      .find((button) => button.textContent?.includes("Resolvido"));
     act(() => allCategoriesButton?.click());
     act(() => resolvedButton?.click());
     expect(onCategoryChange).toHaveBeenCalledWith("everything");
     expect(onApprovalStatusChange).toHaveBeenCalledWith("resolved");
 
     const clearButton = Array.from(container.querySelectorAll("button"))
-      .find((button) => button.textContent?.trim() === "Clear");
+      .find((button) => button.textContent?.trim() === "Limpar");
     act(() => clearButton?.click());
     expect(onChange).toHaveBeenCalledWith(defaultIssueFilterState);
     expect(onClear).toHaveBeenCalledTimes(1);

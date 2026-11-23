@@ -13,6 +13,7 @@ import type {
   TaskChatProviderActivityItem,
   TaskChatWorkspaceChangeItem,
 } from "./task-chat-model";
+import { t as i18nT, useTranslation } from "@/i18n";
 
 /**
  * Active-turn status docked above the composer.
@@ -154,10 +155,10 @@ function isProblem(step: TaskChatProtocolStep | undefined): boolean {
 
 export function taskChatTurnPlanHeadline(plan: TaskChatTurnPlanSegment): string {
   const step = plan.steps[plan.currentStepIndex];
-  if (plan.complete) return plan.steps.length === 1 ? "Step done" : `All ${plan.steps.length} steps done`;
-  if (!step) return "Plan";
-  if (isProblem(step)) return `Blocked: ${step.label}`;
-  if (step.status === "pending") return `Up next: ${step.label}`;
+  if (plan.complete) return plan.steps.length === 1 ? i18nT("taskChatTurnPlan.stepDone") : i18nT("taskChatTurnPlan.allStepsDone", { count: plan.steps.length });
+  if (!step) return i18nT("taskChatTurnPlan.plan");
+  if (isProblem(step)) return i18nT("taskChatTurnPlan.blocked", { label: step.label });
+  if (step.status === "pending") return i18nT("taskChatTurnPlan.upNext", { label: step.label });
   return step.label;
 }
 
@@ -184,16 +185,8 @@ function checklistIcon(step: TaskChatProtocolStep) {
   return <Circle className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />;
 }
 
-const STEP_STATUS_LABEL: Record<TaskChatProtocolStep["status"], string> = {
-  completed: "done",
-  in_progress: "in progress",
-  pending: "not started",
-  blocked: "blocked",
-  failed: "failed",
-};
-
 function fileCountLabel(files: number): string {
-  return `${files} ${files === 1 ? "file" : "files"} changed`;
+  return i18nT("taskChatTurnPlan.filesChanged", { count: files });
 }
 
 function WorkspaceStats({ workspace, compact }: { workspace: WorkspaceSegment; compact?: boolean }) {
@@ -228,7 +221,7 @@ function PlanRow({ row, onShowAll }: { row: TaskChatTurnPlanRow; onShowAll: () =
           {row.allCompleted
             ? <CheckCircle2 className="size-4 shrink-0 text-(--status-task-icon-done)" aria-hidden />
             : <Circle className="size-4 shrink-0" aria-hidden />}
-          <span>{row.count} earlier {row.count === 1 ? "step" : "steps"}{row.allCompleted ? " done" : ""}</span>
+          <span>{row.allCompleted ? i18nT("taskChatTurnPlan.earlierDone", { count: row.count }) : i18nT("taskChatTurnPlan.earlier", { count: row.count })}</span>
         </button>
       </li>
     );
@@ -238,7 +231,7 @@ function PlanRow({ row, onShowAll }: { row: TaskChatTurnPlanRow; onShowAll: () =
       <li>
         <button type="button" className={ROW_BUTTON_CLASS_NAME} onClick={onShowAll} data-testid="task-chat-turn-plan-more">
           <Circle className="size-4 shrink-0 opacity-0" aria-hidden />
-          <span>+{row.count} more {row.count === 1 ? "step" : "steps"}</span>
+          <span>{i18nT("taskChatTurnPlan.more", { count: row.count })}</span>
         </button>
       </li>
     );
@@ -259,7 +252,7 @@ function PlanRow({ row, onShowAll }: { row: TaskChatTurnPlanRow; onShowAll: () =
       {checklistIcon(step)}
       <span className="min-w-0 break-words">
         {step.label}
-        <span className="sr-only"> ({STEP_STATUS_LABEL[step.status]})</span>
+        <span className="sr-only"> ({i18nT(`taskChatTurnPlan.status.${step.status}`)})</span>
       </span>
     </li>
   );
@@ -275,6 +268,7 @@ export interface TaskChatTurnPlanProps {
 }
 
 export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = false, compact = false }: TaskChatTurnPlanProps) {
+  const { t } = useTranslation();
   const listId = useId();
   const [expandedOverride, setExpandedOverride] = useState<boolean | null>(null);
   const [showAll, setShowAll] = useState(false);
@@ -304,14 +298,14 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
         data-testid="task-chat-turn-plan-progress"
       >
         <span aria-hidden>{completed}/{total}</span>
-        <span className="sr-only">{completed} of {total} steps done</span>
+        <span className="sr-only">{t("taskChatTurnPlan.progress", { completed, total })}</span>
       </span>
     </>
   );
 
   return (
     <section
-      aria-label="Agent plan"
+      aria-label={t("taskChatTurnPlan.agentPlan")}
       className="mx-auto w-full max-w-(--sz-turn-status-island) overflow-hidden rounded-xl border border-border bg-popover/95 text-foreground shadow-sm backdrop-blur"
       data-testid="task-chat-turn-status-island"
       data-plan-state={plan.complete ? "complete" : problem ? "blocked" : "active"}
@@ -343,7 +337,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
       <div
         className="h-0.5 w-full bg-muted"
         role="progressbar"
-        aria-label="Plan progress"
+        aria-label={t("taskChatTurnPlan.progressLabel")}
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={completed}
@@ -359,7 +353,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
       {expanded ? (
         <ol
           id={listId}
-          aria-label="Within-turn checklist"
+          aria-label={t("taskChatTurnPlan.checklist")}
           className="flex max-h-(--sz-turn-plan-list-max-h) flex-col gap-0.5 overflow-y-auto p-1.5"
         >
           {rows.map((row) => (
@@ -373,7 +367,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
             <li>
               <button type="button" className={ROW_BUTTON_CLASS_NAME} onClick={() => setShowAll(false)}>
                 <Circle className="size-4 shrink-0 opacity-0" aria-hidden />
-                <span>Show fewer</span>
+                <span>{t("taskChatTurnPlan.showFewer")}</span>
               </button>
             </li>
           ) : null}

@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { RunnerGoalProjection } from "@paperclipai/shared";
 import { issuesApi } from "@/api/issues";
 import { queryKeys } from "@/lib/queryKeys";
+import { i18n } from "@/i18n";
 import { RunnerGoalWidget, useRunnerGoalControl } from "./RunnerGoalWidget";
 
 vi.mock("@/api/issues", () => ({ issuesApi: { getRunnerGoal: vi.fn(), actOnRunnerGoal: vi.fn() } }));
@@ -70,9 +71,21 @@ afterEach(async () => {
   await act(async () => root.unmount());
   client.clear();
   container.remove();
+  await act(async () => { await i18n.changeLanguage("en"); });
 });
 
 describe("session goal dialogs", () => {
+  it("renders the session goal widget and editor in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    expect(document.querySelector('[aria-label="Meta da sessão do agente"]')).not.toBeNull();
+    expect(document.querySelector('[aria-label="Editar meta"]')).not.toBeNull();
+    expect(document.querySelector('[role="status"]')?.textContent).toContain("Ativa");
+    await click("Editar meta");
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Editar meta da sessão");
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Objetivo da meta");
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Salvar meta");
+  });
+
   it("hides the widget after an expanded goal is cleared", async () => {
     await click("Focus goal");
     vi.mocked(issuesApi.actOnRunnerGoal).mockResolvedValue({

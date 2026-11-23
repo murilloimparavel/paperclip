@@ -6,6 +6,7 @@ import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { MemoryRouter, useLocation } from "@/lib/router";
 import { TaskChatAgentIdentity, TaskChatBubble } from "./TaskChatBubble";
@@ -145,6 +146,27 @@ describe("TaskChatBubble attachment chips", () => {
     }
     renderMessage("Board reply");
     expect(container.textContent).not.toContain("Sent from iMessage");
+  });
+
+  it("localizes optimistic message status and verification caveats in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root!.render(
+        <ThemeProvider>
+          <>
+            <TaskChatBubble item={{ id: "queued", kind: "message", author: "human", isCurrentUser: true, text: "Oi", timestamp: "agora", sourceChannel: "imessage-photon", optimistic: "queued" }} />
+            <TaskChatBubble item={{ id: "imessage", kind: "message", author: "human", text: "Tudo bem?", timestamp: "agora", sourceChannel: "imessage-photon" }} />
+            <TaskChatBubble item={{ id: "verified", kind: "message", author: "agent", text: "Pronto", verificationCaveats: [{ commandOrCheck: "npm test", reasonCode: "tool_unavailable" }] }} />
+          </>
+        </ThemeProvider>,
+      ));
+      expect(container.textContent).toContain("Na fila");
+      expect(container.textContent).toContain("Enviada pelo iMessage");
+      expect(container.textContent).toContain("Observação sobre a verificação");
+      expect(container.textContent).toContain("ferramenta indisponível");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("copies the viewer's original Markdown beside the timestamp, including attachment links", async () => {

@@ -8,6 +8,7 @@ import { LiveTranscriptInterests } from "../lib/live-transcript-interests";
 import { ApiError } from "../api/client";
 import { ConnectivityProvider, createConnectivityStore } from "../lib/connectivity";
 import { LogViewer } from "../components/run-log/LogViewer";
+import { t } from "@/i18n";
 
 const { log, events, empty } = vi.hoisted(() => ({ log: vi.fn(), events: vi.fn(async (_runId?: string, _cursor?: number, _limit?: number, _options?: { signal?: AbortSignal }): Promise<import("@paperclipai/shared").HeartbeatRunEvent[]> => []), empty: [] }));
 vi.mock("../api/heartbeats", () => ({ heartbeatsApi: { log, events } }));
@@ -146,7 +147,7 @@ it("re-enables cancelled history paging after hiding and showing a completed run
   const run = { id: "run-1", companyId: "company-1", agentId: "agent-1", status: "succeeded" } as HeartbeatRun;
   const container = document.createElement("div");
   const root = createRoot(container);
-  const more = () => [...container.querySelectorAll("button")].find(button => /Load more events|Loading\.\.\./.test(button.textContent ?? ""));
+  const more = () => [...container.querySelectorAll("button")].find(button => [t("runLogs.loadMoreEvents"), t("runLogs.loadingMore")].includes(button.textContent ?? ""));
   try {
     await act(async () => root.render(<LogViewer run={run} adapterType="codex_local" />));
     await act(async () => more()!.click());
@@ -182,15 +183,15 @@ it("bounds automatic event history and pages further only on request", async () 
     await act(async () => root.render(<LogViewer run={run} adapterType="codex_local" />));
     expect(events).toHaveBeenCalledTimes(1);
     expect(container.textContent).toContain("invocation-retained-proof");
-    const more = [...container.querySelectorAll("button")].find(button => button.textContent === "Load more events");
+    const more = [...container.querySelectorAll("button")].find(button => button.textContent === t("runLogs.loadMoreEvents"));
     expect(more).toBeDefined();
     events.mockRejectedValueOnce(new Error("history unavailable"));
     await act(async () => more!.click());
-    expect(container.textContent).toContain("Could not load events. Try again.");
+    expect(container.textContent).toContain(t("runLogs.couldNotLoadEvents"));
     expect(container.textContent).toContain("invocation-retained-proof");
     await act(async () => more!.click());
     expect(events).toHaveBeenCalledTimes(3);
-    expect(container.textContent).not.toContain("Could not load events. Try again.");
+    expect(container.textContent).not.toContain(t("runLogs.couldNotLoadEvents"));
     expect(events).toHaveBeenLastCalledWith(run.id, 1000, 1000, expect.objectContaining({ signal: expect.any(AbortSignal) }));
     expect(container.textContent).toContain("invocation-retained-proof");
   } finally { await act(async () => root.unmount()); }
@@ -248,7 +249,7 @@ it("preserves saved event details and catches up payload-free commit signals", a
     });
     expect(container.textContent).toContain("saved event details");
     expect(container.textContent).toContain("live row 2205");
-    expect(container.textContent).toContain("Events (2200)");
+    expect(container.textContent).toContain(t("runLogs.events", { count: 2200 }));
     await act(async () => root.render(<LiveEventSubscriptionContext.Provider value={subscription}><LogViewer run={{ ...run, status: "succeeded" }} adapterType="paperclip_runner" /></LiveEventSubscriptionContext.Provider>));
     expect(container.textContent).toContain("saved event details");
     expect(container.textContent).toContain("live row 2205");
@@ -358,14 +359,14 @@ it("shows and retries an initial event-history failure instead of claiming empty
   try {
     await act(async () => root.render(<LogViewer run={run} adapterType="paperclip_runner" />));
     expect(container.textContent).toContain("Could not load events. Try again.");
-    expect(container.textContent).not.toContain("No log events.");
+    expect(container.textContent).not.toContain(t("runLogs.noEvents"));
     await act(async () => vi.advanceTimersByTimeAsync(2000));
     expect(events).toHaveBeenCalledTimes(2);
     expect(container.textContent).toContain("Could not load events. Try again.");
     events.mockResolvedValueOnce([{ id: 1, seq: 1, runId: run.id, companyId: run.companyId, agentId: run.agentId,
       eventType: "item.completed", message: "Recovered history", payload: {}, stream: null, level: null,
       color: null, createdAt: new Date() }]);
-    const retry = [...container.querySelectorAll("button")].find(button => button.textContent === "Retry events");
+    const retry = [...container.querySelectorAll("button")].find(button => button.textContent === t("runLogs.retryEvents"));
     expect(retry).toBeDefined();
     await act(async () => retry!.click());
     expect(container.textContent).toContain("Recovered history");
@@ -405,7 +406,7 @@ it("recovers a paginated live tail and preserves pages explicitly loaded afterwa
     });
     expect(container.textContent).toContain("activity-proof-5000-end");
     expect(events.mock.calls.some(call => call[1] === 4_000)).toBe(true);
-    const more = () => [...container.querySelectorAll("button")].find(button => button.textContent === "Load more events")!;
+    const more = () => [...container.querySelectorAll("button")].find(button => button.textContent === t("runLogs.loadMoreEvents"))!;
     await act(async () => more().click());
     expect(container.textContent).toContain("activity-proof-1500-end");
     expect(events.mock.calls.at(-1)?.slice(0, 3)).toEqual([run.id, 1_000, 1_000]);
@@ -458,7 +459,7 @@ it.each(["completed-return", "catchup-retry"].map(mode => ({ mode })))("preserve
         transcripts.receive({ type: "live.subscribed", version: 1, revision: sent.at(-1)?.revision });
       });
       expect(container.textContent).toContain("Could not load events. Try again.");
-      const retry = [...container.querySelectorAll("button")].find(button => button.textContent === "Retry events");
+      const retry = [...container.querySelectorAll("button")].find(button => button.textContent === t("runLogs.retryEvents"));
       expect(retry).toBeDefined();
       await act(async () => retry!.click());
       expect(container.textContent).toContain("mode-proof-5000-end");
@@ -497,7 +498,7 @@ it("recovers the latest saved tail when acknowledgement aborts the initial histo
     });
     expect(initialSignal.aborted).toBe(true);
     expect(container.textContent).toContain("initial-ack-proof-5000-end");
-    const more = [...container.querySelectorAll("button")].find(button => button.textContent === "Load more events");
+    const more = [...container.querySelectorAll("button")].find(button => button.textContent === t("runLogs.loadMoreEvents"));
     expect(more).toBeDefined();
     await act(async () => more!.click());
     expect(events.mock.calls.at(-1)?.slice(0, 3)).toEqual([run.id, 1_000, 1_000]);
@@ -522,12 +523,12 @@ it.each([429, 503])("keeps completed event-only history pending after an initial
   const root = createRoot(container);
   try {
     await act(async () => root.render(<LogViewer run={run} adapterType="paperclip_runner" />));
-    expect(container.textContent).toContain("Loading run logs...");
-    expect(container.textContent).not.toContain("No log events.");
+    expect(container.textContent).toContain(t("runLogs.loading"));
+    expect(container.textContent).not.toContain(t("runLogs.noEvents"));
     expect(container.textContent).not.toContain("Could not load events");
     await act(async () => vi.advanceTimersByTimeAsync(2000));
     expect(events).toHaveBeenCalledTimes(2);
-    expect(container.textContent).toContain("No log events.");
+    expect(container.textContent).toContain(t("runLogs.noEvents"));
     await act(async () => vi.advanceTimersByTimeAsync(90_000));
     expect(events).toHaveBeenCalledTimes(2);
   } finally { await act(async () => root.unmount()); }

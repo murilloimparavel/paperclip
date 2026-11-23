@@ -58,9 +58,9 @@ describe("BudgetIncidentCard", () => {
 
   it("labels a hard-stop incident as paused", async () => {
     const { div, buttons, cleanup } = await renderCard(incident());
-    expect(div.textContent).toContain("agent hard stop");
+    expect(div.textContent).toContain("Agent hard stop");
     expect(div.textContent).toContain("This scope is paused.");
-    expect(buttons()).toEqual(["Raise budget & resume", "Keep paused"]);
+    expect(buttons()).toEqual(["Raise budget and resume", "Keep paused"]);
     expect(div.querySelector("input")?.value).toBe("1010.00");
     await cleanup();
   });
@@ -69,7 +69,7 @@ describe("BudgetIncidentCard", () => {
     const { div, buttons, onKeepPaused, cleanup } = await renderCard(
       incident({ thresholdType: "soft", amountObserved: 80_000 }),
     );
-    expect(div.textContent).toContain("agent budget warning");
+    expect(div.textContent).toContain("Agent budget warning");
     expect(div.textContent).not.toContain("hard stop");
     expect(div.textContent).not.toContain("paused");
     expect(div.textContent).toContain("This warning does not pause work.");
@@ -84,7 +84,7 @@ describe("BudgetIncidentCard", () => {
 
   it("describes a paused project for a project hard stop", async () => {
     const { div, cleanup } = await renderCard(incident({ scopeType: "project", scopeName: "Website" }));
-    expect(div.textContent).toContain("project hard stop");
+    expect(div.textContent).toContain("Project hard stop");
     expect(div.textContent).toContain("Project execution is paused.");
     await cleanup();
   });

@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "@/api/client";
+import { i18n } from "@/i18n";
 import { areaFundraising, areaPortfolio, fundraisingBehind } from "../../../storybook/fixtures/responsibilities";
 import { AddResponsibilityDialog } from "./AddResponsibilityDialog";
 
@@ -82,6 +83,18 @@ describe("AddResponsibilityDialog", () => {
     expect(text).toContain("Describe the bar");
     expect(text).toContain("Name what you measure");
     expect(text).toContain("Set a target");
+  });
+
+  it("renders the creation form in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    await render();
+    const text = dialog().textContent ?? "";
+    expect(text).toContain("Adicionar uma responsabilidade");
+    expect(text).toContain("Pelo que você é responsável?");
+    expect(text).toContain("Tipo de medida");
+    expect(text).toContain("Valor-alvo");
+    expect(dialog().querySelector<HTMLInputElement>('input[placeholder="ex.: Pipeline de investidores"]')).not.toBeNull();
+    await i18n.changeLanguage("en");
   });
 
   it("creates it under the chosen area with direction, unit and a current reading", async () => {

@@ -15,6 +15,7 @@ import type {
   RequestConfirmationInteraction,
 } from "@/lib/issue-thread-interactions";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { i18n } from "@/i18n";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   expiredSecretProposalInteraction,
@@ -159,6 +160,126 @@ describe("TaskChatInteractionCard", () => {
     });
     expect(accept).toHaveBeenCalledExactlyOnceWith(interaction, undefined, undefined, false);
     expect(reject).not.toHaveBeenCalled();
+  });
+
+  it("localizes tool approval and secret labels in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    expect(i18n.t("taskChatInteractions.arguments")).toBe("Argumentos");
+    try {
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard
+                item={interactionItem(pendingToolActionLongProposalInteraction)}
+                presentation="takeover"
+                onAcceptInteraction={() => undefined}
+                onRejectInteraction={() => undefined}
+              />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
+      expect(container.querySelector("summary")?.textContent).toBe("Argumentos");
+      expect(container.textContent).toContain("Recusar");
+      expect(container.textContent).toContain("Aprovar e executar");
+
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(expiredSecretProposalInteraction)} />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
+      expect(container.textContent).toContain("Segredo");
+      expect(container.textContent).toContain("Vinculação");
+      expect(container.textContent).toContain("Motivo");
+      expect(container.textContent).toContain("Expira");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes checkbox confirmation counts and rejection controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    const interaction = {
+      ...pendingRequestCheckboxConfirmationInteraction,
+      payload: {
+        ...pendingRequestCheckboxConfirmationInteraction.payload,
+        acceptLabel: undefined,
+        rejectLabel: undefined,
+        rejectRequiresReason: true,
+        rejectReasonLabel: undefined,
+        declineReasonPlaceholder: undefined,
+      },
+    };
+    try {
+      await act(async () => {
+        flushSync(() =>
+          root.render(
+            <TooltipProvider>
+              <ThemeProvider>
+                <TaskChatInteractionCard
+                  item={interactionItem(interaction)}
+                  presentation="takeover"
+                  onAcceptInteraction={() => undefined}
+                  onRejectInteraction={() => undefined}
+                />
+              </ThemeProvider>
+            </TooltipProvider>,
+          ),
+        );
+      });
+
+      expect(container.textContent).toContain("0 opções selecionadas");
+      expect(container.textContent).toContain("Recusar");
+      expect(container.textContent).toContain("Confirmar seleção");
+      await act(async () => {
+        Array.from(container.querySelectorAll("button")).find(button => button.textContent?.trim() === "Recusar")?.click();
+      });
+      expect(container.querySelector("label[for$='-reject-reason']")?.textContent).toBe("O que deve mudar?");
+      expect(container.querySelector("textarea")?.placeholder).toBe("Adicione uma observação breve");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes fallback interaction titles and status badges in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const interaction = createRequestConfirmation({ title: null, status: "failed" });
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(interaction)} presentation="takeover" />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
+      expect(container.textContent).toContain("Confirmação");
+      expect(container.querySelector('[data-testid="interaction-status-badge"]')?.textContent).toContain("falhou");
+      expect(container.querySelector("summary")?.textContent).toContain("Ver solicitação original e resolução");
+      const accepted = createRequestConfirmation({
+        title: null,
+        status: "accepted",
+        result: { version: 1, outcome: "accepted" },
+      });
+      await act(async () => {
+        flushSync(() => root.render(
+          <TooltipProvider>
+            <ThemeProvider>
+              <TaskChatInteractionCard item={interactionItem(accepted)} presentation="timeline" />
+            </ThemeProvider>
+          </TooltipProvider>,
+        ));
+      });
+      expect(container.querySelector('[data-testid="task-chat-interaction-receipt"] > summary')?.textContent).toContain("Solicitação confirmada");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("keeps raw tool ids and the audit hash out of the tool approval card text", async () => {
@@ -356,6 +477,24 @@ describe("TaskChatInteractionCard", () => {
     expect(takeover!.id).toBe("");
     const ids = [...container.querySelectorAll("[id]")].map(node => node.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("localizes unanswered question labels and accessible text in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard item={interactionItem(pendingAskUserQuestionsInteraction)} showUnansweredQuestion onReviewRequest={() => {}} />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+      const button = container.querySelector('[data-testid="task-chat-unanswered-question"]');
+      expect(button?.textContent).toContain("Pergunta sem resposta");
+      expect(button?.getAttribute("aria-label")).toContain("Responder à pergunta:");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("renders a plan confirmation as a linked document preview", () => {
@@ -1237,6 +1376,34 @@ describe("TaskChatInteractionCard", () => {
     await act(async () => submitReason?.click());
     expect(container.textContent).toContain("3 of 5");
     expect(container.textContent).toContain("Founder's note on reliability");
+  });
+
+  it("localizes item verdict navigation and actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(
+        <TooltipProvider>
+          <ThemeProvider>
+            <TaskChatInteractionCard
+              item={interactionItem(pendingRequestItemVerdictsInteraction)}
+              presentation="takeover"
+              onSubmitInteractionVerdicts={() => undefined}
+            />
+          </ThemeProvider>
+        </TooltipProvider>,
+      ));
+
+      expect(container.textContent).toContain("1 de 5");
+      expect(container.querySelector('[aria-label="Paginação dos itens"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Item anterior"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Próximo item"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Decisão para Spring launch recap"]')).not.toBeNull();
+      expect(container.textContent).toContain("aprovar");
+      expect(container.textContent).toContain("rejeitar");
+      expect(container.textContent).toContain("Aplicar decisões");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("collapses an expired confirmation receipt at the request position", () => {

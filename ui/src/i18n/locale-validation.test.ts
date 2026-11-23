@@ -1,12 +1,27 @@
-import { describe, expect, it } from "vitest";
-import { t } from ".";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n, t } from ".";
+import { DEFAULT_LOCALE } from "./locales";
 import en from "./locales/en.json";
+import ptBR from "./locales/pt-BR.json";
 import { localeMessages } from "./locales";
 import { validateLocaleMessages } from "./locale-validation";
 
 describe("locale validation", () => {
-  it("resolves English messages with key and default fallbacks", () => {
-    expect(t("app.noCompanies.title")).toBe(en.app.noCompanies.title);
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
+  it("uses Brazilian Portuguese by default and supports key and default fallbacks", async () => {
+    expect(DEFAULT_LOCALE).toBe("pt-BR");
+    await i18n.changeLanguage(DEFAULT_LOCALE);
+    expect(t("app.noCompanies.title")).toBe(ptBR.app.noCompanies.title);
+    expect(t("sidebar.labels.Tasks")).toBe("Tarefas");
+    expect(t("accountMenu.open")).toBe("Abrir menu da conta");
+    expect(t("organizationMenu.create")).toBe("Criar organização");
+    expect(t("dashboardLive.title")).toBe("Execuções ativas de agentes");
+    expect(t("dashboard.importedAgentPaused", { count: 2 })).toContain("2 agentes importados");
+    expect(t("agentConfig.help.promptTemplate")).toContain("{{ agent.name }}");
+    expect(t("agentConfig.help.workspaceBranchTemplate")).toContain("{{issue.identifier}}");
     expect(t("app.missing", { defaultValue: "Fallback" })).toBe("Fallback");
     expect(t("app.missing")).toBe("app.missing");
   });
@@ -18,7 +33,8 @@ describe("locale validation", () => {
     }
   });
 
-  it("rejects missing and extra nested keys", () => {
+  it("accepts partial locale catalogs and rejects extra nested keys", () => {
+    expect(validateLocaleMessages({ app: { noCompanies: { title: ptBR.app.noCompanies.title } } })).toEqual([]);
     expect(
       validateLocaleMessages({
         app: {
@@ -31,7 +47,6 @@ describe("locale validation", () => {
       }),
     ).toEqual(
       expect.arrayContaining([
-        "app.noCompanies.newCompany is missing",
         "app.noCompanies.unexpected is not defined in English",
       ]),
     );
@@ -43,7 +58,7 @@ describe("locale validation", () => {
         app: {
           noCompanies: {
             ...en.app.noCompanies,
-            title: ["Create your first company"],
+            title: ["Create your first organization"],
           },
         },
       }),

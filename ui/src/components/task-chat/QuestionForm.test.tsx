@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PaperclipQuestionResponse, PaperclipQuestionSet } from "@paperclipai/adapter-utils";
 import { QuestionForm } from "./QuestionForm";
+import { i18n } from "@/i18n";
 
 vi.mock("./TaskChatRichInput", () => ({
   TaskChatRichInput: ({ value, onChange, onSubmit }: { value: string; onChange(value: string): void; onSubmit(): void }) =>
@@ -32,6 +33,19 @@ describe("QuestionForm initial text", () => {
     });
   }
   async function remount(set = questionSet) { await act(async () => root.unmount()); root = createRoot(container); await render(set); }
+  it("renders question controls and validation in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    await render({ schema: "paperclip.question_set.v1", questions: [
+      { id: "audience", prompt: "Who is the audience?", required: true, answerMode: "text" },
+      { id: "tone", prompt: "What tone should we use?", required: true, answerMode: "text" },
+    ] });
+    expect(container.textContent).toContain("Escreva uma resposta");
+    expect(container.textContent).toContain("1 de 2");
+    const next = Array.from(container.querySelectorAll("button")).find(button => button.textContent === "Próxima")!;
+    await act(async () => next.click());
+    expect(container.textContent).toContain("Esta pergunta é obrigatória.");
+    await i18n.changeLanguage("en");
+  });
   it.each([
     ["default", "single_select", "radio"],
     ["decision", "single_select", "radio"],

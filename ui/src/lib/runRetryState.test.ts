@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { describeRunRetryState, formatRetryReason } from "./runRetryState";
+import { t } from "@/i18n";
 
 describe("runRetryState", () => {
   it("formats internal retry reasons for operators", () => {
-    expect(formatRetryReason("transient_failure")).toBe("Transient failure");
-    expect(formatRetryReason("native_provider_overloaded")).toBe("Model at capacity");
-    expect(formatRetryReason("issue_continuation_needed")).toBe("Continuation needed");
-    expect(formatRetryReason("max_turns_continuation")).toBe("Max-turn continuation");
+    expect(formatRetryReason("transient_failure")).toBe(t("runRetry.reason.transientFailure"));
+    expect(formatRetryReason("native_provider_overloaded")).toBe(t("runRetry.reason.nativeProviderOverloaded"));
+    expect(formatRetryReason("issue_continuation_needed")).toBe(t("runRetry.reason.continuationNeeded"));
+    expect(formatRetryReason("max_turns_continuation")).toBe(t("runRetry.reason.maxTurnsContinuation"));
     expect(formatRetryReason("custom_reason")).toBe("custom reason");
   });
 
@@ -21,8 +22,8 @@ describe("runRetryState", () => {
       }),
     ).toMatchObject({
       kind: "scheduled",
-      badgeLabel: "Retry scheduled",
-      detail: "Attempt 2 · Transient failure",
+      badgeLabel: t("runRetry.retryScheduled"),
+      detail: `${t("runRetry.attempt", { count: 2 })} · ${t("runRetry.reason.transientFailure")}`,
     });
   });
 
@@ -37,8 +38,8 @@ describe("runRetryState", () => {
       }),
     ).toMatchObject({
       kind: "scheduled",
-      badgeLabel: "Continuation scheduled",
-      detail: "Attempt 1 · Max-turn continuation",
+      badgeLabel: t("runRetry.continuationScheduled"),
+      detail: `${t("runRetry.attempt", { count: 1 })} · ${t("runRetry.reason.maxTurnsContinuation")}`,
     });
   });
 
@@ -53,9 +54,9 @@ describe("runRetryState", () => {
       }),
     ).toMatchObject({
       kind: "exhausted",
-      badgeLabel: "Retry exhausted",
-      detail: "Attempt 4 · Transient failure · Automatic retries exhausted",
-      secondary: "Bounded retry exhausted after 4 scheduled attempts; no further automatic retry will be queued Manual intervention required.",
+      badgeLabel: t("runRetry.retryExhausted"),
+      detail: `${t("runRetry.attempt", { count: 4 })} · ${t("runRetry.reason.transientFailure")} · ${t("runRetry.automaticRetriesExhausted")}`,
+      secondary: `${t("runRetry.exhaustion", { count: 4 })} ${t("runRetry.manualIntervention")}`,
     });
   });
 });

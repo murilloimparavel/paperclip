@@ -63,6 +63,7 @@ import { ToolActionAuditHashCopy } from "./ToolActionAuditHashCopy";
 import { NeedsYouPanel, NeedsYouPanelNote, NeedsYouPanelRow } from "./coordinator/NeedsYouCardKit";
 import { claimReviseDraftWork, clearReviseDraft, releaseReviseDraftWork, reviseDraftKey, useReviseDraft, type ReviseDraftWork } from "@/lib/revise-draft-store";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { useTranslation } from "react-i18next";
 
 const OTHER_ANSWER_ID = "__paperclip_other__";
 
@@ -2031,6 +2032,7 @@ function RequestToolActionCard({
   onRejectInteraction?: (interaction: RequestConfirmationInteraction, reason?: string) => Promise<void> | void;
   externalReferences?: MarkdownExternalReferenceMap;
 }) {
+  const { t } = useTranslation();
   const payload = interaction.payload.toolAction!;
   const [working, setWorking] = useState<"accept" | "always" | "reject" | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -2078,13 +2080,13 @@ function RequestToolActionCard({
             <NeedsYouPanelRow icon={<Lock />} title={appName ? `${appName} · ${payload.toolDisplayName}` : payload.toolDisplayName} meta={previewIsLine ? preview.replace(/[*_`]/g, "") : toolArgumentsLine(payload.argumentsSummaryJson)} />
             {preview && !previewIsLine ? <DecisionPanelMarkdown markdown={preview} lead={false} externalReferences={externalReferences} /> : null}
             {isPending ? inspectableArguments ? <details>
-              <summary className="cursor-pointer text-xs font-medium text-muted-foreground">Arguments</summary>
+              <summary className="cursor-pointer text-xs font-medium text-muted-foreground">{t("taskChatInteractions.arguments")}</summary>
               <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>{payload.argumentsSummaryJson}</pre>
               <ToolActionAuditHashCopy hash={payload.argumentsHash} />
-            </details> : <p className="text-xs text-muted-foreground">Request arguments are unavailable.</p> : null}
+            </details> : <p className="text-xs text-muted-foreground">{t("taskChatInteractions.requestArgumentsUnavailable")}</p> : null}
             {isPending ? (
               <NeedsYouPanelNote>
-                {payload.risk === "destructive" ? "Destructive action. " : ""}Runs once when you allow it · {payload.expiresAt ? <>Expires {formatShortDate(payload.expiresAt)}</> : null}
+                {payload.risk === "destructive" ? `${t("taskChatInteractions.destructiveAction")} ` : ""}{t("taskChatInteractions.runsOnceWhenAllowed")} · {payload.expiresAt ? <>{t("taskChatInteractions.expires")} {formatShortDate(payload.expiresAt)}</> : null}
               </NeedsYouPanelNote>
             ) : null}
           </DecisionPanel>
@@ -2092,22 +2094,22 @@ function RequestToolActionCard({
         {isPending ? (
           <DecisionCardFooter leading={footerSlot}>
             <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
-              {working === "reject" ? "Denying…" : "Deny"}
+              {working === "reject" ? t("taskChatInteractions.denying") : t("taskChatInteractions.deny")}
             </Button>
-            <div className="inline-flex" role="group" aria-label="Approve request">
+            <div className="inline-flex" role="group" aria-label={t("taskChatInteractions.approveRequest")}>
               <Button size="sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-                {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? "Saving…" : "Allowing…"}</> : "Allow once"}
+                {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("taskChatInteractions.saving") : t("taskChatInteractions.allowing")}</> : t("taskChatInteractions.allowOnce")}
               </Button>
               {payload.rememberActionScope ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon-sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className="rounded-l-none border-l border-background/30" aria-label="Approval options" disabled={!onAcceptInteraction || working !== null}>
+                    <Button size="icon-sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className="rounded-l-none border-l border-background/30" aria-label={t("taskChatInteractions.approvalOptions")} disabled={!onAcceptInteraction || working !== null}>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={() => void decide("always")} title={payload.rememberActionScope} aria-description={payload.rememberActionScope}>
-                      Always allow
+                      {t("taskChatInteractions.alwaysAllow")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -2134,34 +2136,34 @@ function RequestToolActionCard({
       {isPending ? inspectableArguments ? (
         <details className="mt-3">
           <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-            Arguments
+            {t("taskChatInteractions.arguments")}
           </summary>
           <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
             {payload.argumentsSummaryJson}
           </pre>
           <ToolActionAuditHashCopy hash={payload.argumentsHash} />
         </details>
-      ) : <p className="mt-3 text-xs text-muted-foreground">Request arguments are unavailable.</p> : null}
+      ) : <p className="mt-3 text-xs text-muted-foreground">{t("taskChatInteractions.requestArgumentsUnavailable")}</p> : null}
       {isPending ? (
         <DecisionCardFooter leading={footerSlot} className="mt-3">
           <div className={cn(!footerSlot && "mt-3", "flex flex-wrap items-center justify-end gap-2")}>
           <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
-            {working === "reject" ? "Declining…" : "Decline"}
+            {working === "reject" ? t("taskChatInteractions.declining") : t("taskChatInteractions.decline")}
           </Button>
-          <div className="inline-flex" role="group" aria-label="Approve request">
+          <div className="inline-flex" role="group" aria-label={t("taskChatInteractions.approveRequest")}>
             <Button size="sm" variant={variant} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? "Saving…" : "Approving…"}</> : "Approve & run"}
+              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("taskChatInteractions.saving") : t("taskChatInteractions.approving")}</> : t("taskChatInteractions.approveAndRun")}
             </Button>
             {payload.rememberActionScope ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon-sm" variant={variant} className="rounded-l-none border-l border-background/30" aria-label="Approval options" disabled={!onAcceptInteraction || working !== null}>
+                  <Button size="icon-sm" variant={variant} className="rounded-l-none border-l border-background/30" aria-label={t("taskChatInteractions.approvalOptions")} disabled={!onAcceptInteraction || working !== null}>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onSelect={() => void decide("always")} title={payload.rememberActionScope} aria-description={payload.rememberActionScope}>
-                    Always allow
+                    {t("taskChatInteractions.alwaysAllow")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -22,7 +22,8 @@ test("real graph retains direct and indirect filesystem, process and opaque depe
   const write = (file, text) => writeFileSync(path.join(directory, file), text);
   write("vitest.config.mjs", 'export default {test:{projects:["ui"]}}');
   write("ui/vitest.config.mjs", `export default {resolve:{alias:{"@leaf":${JSON.stringify(path.join(directory, "ui/src/leaf.ts"))}}},test:{name:"fixture",include:["src/**/*.test.ts"],setupFiles:["./setup.ts"]}}`);
-  write("ui/setup.ts", 'import "./src/environment.ts";');
+  write("ui/src/config.json", '{"locale":"en"}');
+  write("ui/setup.ts", 'import "./src/environment.ts"; import config from "./src/config.json"; void config;');
   write("ui/src/environment.ts", "export const environment = true;");
   write("ui/src/leaf.ts", "export const value = 42;");
   write("ui/src/bridge.ts", 'export {value} from "@leaf";');
@@ -72,6 +73,9 @@ test("real graph retains direct and indirect filesystem, process and opaque depe
   const setup = await select(["ui/src/environment.ts"]);
   assert.equal(setup.setupChanged, true);
   assert.deepEqual(setup.selected, setup.inventory, "transitive setup edits affect every test");
+  const jsonSetup = await select(["ui/src/config.json"]);
+  assert.equal(jsonSetup.setupChanged, true);
+  assert.deepEqual(jsonSetup.selected, jsonSetup.inventory, "static JSON setup dependencies invalidate every test");
   write("ui/src/broken.test.ts", 'import "./missing";');
   const broken = await select(["ui/src/leaf.ts"]);
   assert.ok(broken.selected.includes("ui/src/broken.test.ts"), "an unresolved dependency must retain its test");

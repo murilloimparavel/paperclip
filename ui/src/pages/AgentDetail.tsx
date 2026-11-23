@@ -25,6 +25,7 @@ import { builtInAgentsApi, type BuiltInManagedResourceKind } from "../api/builtI
 import { companySkillsApi } from "../api/companySkills";
 import { heartbeatsApi } from "../api/heartbeats";
 import { runCancellationLabel } from "../lib/run-cancellation-label";
+import { configurationWarningMessages } from "../lib/configuration-warnings";
 import { stopFailedNativeRun } from "../lib/native-run-stop";
 import { instanceSettingsApi } from "../api/instanceSettings";
 import { ApiError } from "../api/client";
@@ -124,7 +125,6 @@ import {
   type Issue,
   type LiveEvent,
   isResponsibleUserDenialCode,
-  responsibleUserLabel,
 } from "@paperclipai/shared";
 import { ResponsibleUserDenialNotice } from "../components/ResponsibleUserDenialNotice";
 import { RunWorkspaceRecoverySurface } from "../components/RunWorkspaceRecoverySurface";
@@ -190,6 +190,7 @@ export {
   RunInvocationCard,
 } from "../components/run-log/RunDetails";
 import { ANALYTICS_MASK_CLASS, ANALYTICS_NO_CAPTURE_CLASS } from "@/lib/analytics/privacy";
+import { i18n, t } from "@/i18n";
 
 const AgentAdvancedTab = lazy(() => import("./AgentAdvancedTab").then(module => ({ default: module.AgentAdvancedTab })));
 
@@ -224,12 +225,19 @@ function shouldUseMarkdownInstructionsEditor(input: {
   return isMarkdown(input.selectedPath);
 }
 
-const sourceLabels: Record<string, string> = {
-  timer: "Timer",
-  assignment: "Assignment",
-  on_demand: "On-demand",
-  automation: "Automation",
-};
+function runSourceLabel(source: string): string {
+  switch (source) {
+    case "timer": return t("agentRuns.source.timer");
+    case "assignment": return t("agentRuns.source.assignment");
+    case "on_demand": return t("agentRuns.source.onDemand");
+    case "automation": return t("agentRuns.source.automation");
+    default: return source;
+  }
+}
+
+function runStatusLabel(status: string): string {
+  return t(`agentRuns.status.${status}`, { defaultValue: status.replace(/[_-]/g, " ") });
+}
 
 export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = "Discard unsaved agent configuration changes?";
 
@@ -324,17 +332,17 @@ const OVERVIEW_ACTIVITY_LIMIT = 200;
 function agentViewDescription(view: AgentDetailView, name: string): string | null {
   switch (view) {
     case "runtime":
-      return `How ${name} runs: harness, model and environment.`;
+      return t("agentDetailDescription.runtime", { name });
     case "secrets":
-      return "Secrets this agent can reach. Values are never shown here.";
+      return t("agentDetailDescription.secrets");
     case "permissions":
-      return `What ${name} may do without asking, and where.`;
+      return t("agentDetailDescription.permissions", { name });
     case "activity":
-      return `Everything ${name} did and everything done to ${name}.`;
+      return t("agentDetailDescription.activity", { name });
     case "runs":
-      return `Every execution of ${name}, newest first.`;
+      return t("agentDetailDescription.runs", { name });
     case "costs":
-      return `What ${name} spent, by model.`;
+      return t("agentDetailDescription.costs", { name });
     default:
       return null;
   }
@@ -659,7 +667,7 @@ export function AgentDetail() {
 
   useEffect(() => {
     const crumbs: { label: string; href?: string }[] = [
-      { label: "Agents", href: "/agents" },
+      { label: t("agentDetailNav.breadcrumbAgents"), href: "/agents" },
     ];
     const agentName = agent?.name ?? routeAgentRef ?? "Agent";
     if (activeView === "overview" && !urlRunId) {
@@ -799,7 +807,7 @@ export function AgentDetail() {
       {showLeftAgentNotice ? (
         <div className="flex items-center gap-3 border border-yellow-300/35 bg-yellow-300/10 px-3 py-2 text-sm text-yellow-900 dark:text-yellow-100">
           <p className="min-w-0 flex-1">
-            You left this agent. It no longer appears in your sidebar.
+            {t("agentDetailHeader.leftAgentNotice")}
           </p>
           <MembershipAction
             compact
@@ -823,7 +831,7 @@ export function AgentDetail() {
           <button
             type="button"
             className="h-6 w-6 shrink-0 text-yellow-900/70 hover:text-yellow-900 dark:text-yellow-100/70 dark:hover:text-yellow-100"
-            aria-label="Dismiss agent membership notice"
+            aria-label={t("agentDetailHeader.dismissMembershipNotice")}
             onClick={() => setDismissedLeftAgentIds((current) => new Set(current).add(agent.id))}
           >
             ×
@@ -834,7 +842,7 @@ export function AgentDetail() {
         <div className="flex items-start gap-3 border border-amber-300/35 bg-amber-300/10 px-3 py-2 text-sm text-amber-900 dark:text-amber-100">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div className="min-w-0 space-y-1">
-            <p className="font-medium">Escalation path is paused</p>
+            <p className="font-medium">{t("agentDetailHeader.escalationPaused")}</p>
             <p className="text-amber-900/90 dark:text-amber-100/90">{pausedEscalationWarning}</p>
           </div>
         </div>
@@ -843,9 +851,9 @@ export function AgentDetail() {
         <div className="flex items-start gap-3 border border-amber-300/35 bg-amber-300/10 px-3 py-2 text-sm text-amber-900 dark:text-amber-100">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div className="min-w-0 space-y-1">
-            <p className="font-medium">Invalid reporting chain</p>
+            <p className="font-medium">{t("agentDetailHeader.invalidReportingChain")}</p>
             <p className="text-amber-900/90 dark:text-amber-100/90">
-              {agent.name} cannot accept tasks or start runs until its reporting chain is repaired.
+              {t("agentDetailHeader.invalidReportingChainHelp", { name: agent.name })}
             </p>
             <p className="break-words font-mono text-xs text-amber-900/80 dark:text-amber-100/80">
               {formatOrgChainHealthPath(agent)}
@@ -854,7 +862,7 @@ export function AgentDetail() {
               <p className="text-amber-900/85 dark:text-amber-100/85">{agent.orgChainHealth.repairGuidance}</p>
             ) : (
               <p className="text-amber-900/85 dark:text-amber-100/85">
-                Assign this agent to an active manager/root, or explicitly pause or terminate the affected agent/subtree.
+                {t("agentDetailHeader.repairChainHelp")}
               </p>
             )}
           </div>
@@ -862,7 +870,7 @@ export function AgentDetail() {
       ) : null}
       {/* Header */}
       <header className="agent-character-header flex items-center gap-2">
-        <div role="img" aria-label={`${agent.name} avatar`} className="shrink-0">
+        <div role="img" aria-label={t("agentDetailHeader.avatar", { name: agent.name })} className="shrink-0">
           <AgentCharacter agent={agent} state={characterStateForAgent(currentAgent.status) === "rest" ? "idle" : characterStateForAgent(currentAgent.status)} size={128} className="agent-header-character" trackingScope="page" followCursor />
         </div>
         <div className="min-w-0 flex-1">
@@ -871,7 +879,7 @@ export function AgentDetail() {
               as="h1"
               value={agent.name}
               fitContent
-              placeholder="Agent name"
+              placeholder={t("agentDetailHeader.agentName")}
               className="min-w-0 truncate text-2xl font-semibold leading-8 text-foreground"
               onSave={(name) => saveHeaderField({ name })}
             />
@@ -903,16 +911,16 @@ export function AgentDetail() {
         <AgentActionButtons
           agent={currentAgent}
           companyId={resolvedCompanyId}
-          assignLabel="New task"
+          assignLabel={t("agentActions.newTask")}
           size="default"
           assignIcon={Paperclip}
           showChat
           showStatus={false}
           workActionsInMenu
-          menuItems={[{ label: "Agent history", icon: HistoryIcon, onSelect: () => setHistoryOpen(true) }]}
+          menuItems={[{ label: t("agentActions.agentHistory"), icon: HistoryIcon, onSelect: () => setHistoryOpen(true) }]}
           actionsDisabled={agentAction.isPending || (activeView === "advanced" && configSaving)}
           workActionsDisabled={hasInvalidOrgChain}
-          workActionsDisabledReason="Repair this agent's reporting chain before assigning tasks or starting runs"
+          workActionsDisabledReason={t("agentActions.repairReportingChain")}
           hasPendingNavigationChanges={configDirty}
           onBeforeNavigate={prepareAgentNavigation}
           onActionError={setActionError}
@@ -921,12 +929,10 @@ export function AgentDetail() {
           pauseConfirm={
             builtInState
               ? {
-                  title: `Pause the ${builtInState.definition.displayName}?`,
+                  title: t("agentDetailHeader.pauseBuiltInTitle", { name: builtInState.definition.displayName }),
                   description: (
                     <>
-                      {builtInFeatureLabel} depends on this agent. While paused,{" "}
-                      {builtInFeatureLabel.toLowerCase()} generation is skipped and the{" "}
-                      {builtInFeatureLabel} page shows a warning.
+                      {t("agentDetailHeader.pauseBuiltInHelp", { feature: builtInFeatureLabel })}
                     </>
                   ),
                 }
@@ -942,7 +948,7 @@ export function AgentDetail() {
                 <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
               </span>
-              <span className="text-(length:--text-micro) font-medium text-blue-600 dark:text-blue-400">Live</span>
+              <span className="text-(length:--text-micro) font-medium text-blue-600 dark:text-blue-400">{t("agentDetailHeader.live")}</span>
             </Link>
           )}
         </AgentActionButtons>
@@ -951,13 +957,13 @@ export function AgentDetail() {
       <AlertDialog open={pendingLeave !== null} onOpenChange={(open) => (open ? undefined : setPendingLeave(null))}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard unsaved changes?</AlertDialogTitle>
+            <AlertDialogTitle>{t("agentDetailHeader.discardUnsavedQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes to {agent.name}&rsquo;s {activeView === "runtime" ? "harness settings" : activeView === "secrets" ? "secrets and variables" : activeView === "advanced" ? "configuration" : "instructions"}. If you continue, they&rsquo;ll be lost.
+              {t("agentDetailHeader.discardUnsavedHelp", { name: agent.name, section: t(activeView === "runtime" ? "agentDetailHeader.section.runtime" : activeView === "secrets" ? "agentDetailHeader.section.secrets" : activeView === "advanced" ? "agentDetailHeader.section.configuration" : "agentDetailHeader.section.instructions") })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="sm:justify-between">
-            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogCancel>{t("agentDetailHeader.keepEditing")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white hover:bg-destructive/90"
               onClick={() => {
@@ -973,7 +979,7 @@ export function AgentDetail() {
                 }
               }}
             >
-              Discard changes
+              {t("agentDetailHeader.discardChanges")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -982,7 +988,7 @@ export function AgentDetail() {
       {builtInState && (
         <InlineBanner
           tone="info"
-          title="Built-in agent"
+          title={t("agentDetailHeader.builtInAgent")}
           actions={
             <Button
               variant="outline"
@@ -990,13 +996,11 @@ export function AgentDetail() {
               onClick={() => resetBuiltIn.mutate()}
               disabled={resetBuiltIn.isPending}
             >
-              {resetBuiltIn.isPending ? "Resetting…" : "Reset to defaults"}
+              {resetBuiltIn.isPending ? t("agentDetailHeader.resetting") : t("agentDetailHeader.resetToDefaults")}
             </Button>
           }
         >
-          Ships with Paperclip and powers <strong>{builtInFeatureLabel}</strong>. Configure it like
-          any agent — model, instructions, budget. It can be paused but not deleted; pausing it
-          pauses {builtInFeatureLabel}.
+          {t("agentDetailHeader.builtInHelp", { feature: builtInFeatureLabel })}
         </InlineBanner>
       )}
 
@@ -1030,7 +1034,7 @@ export function AgentDetail() {
       {actionError && <p className="text-sm text-destructive">{actionError}</p>}
       {isPendingApproval && (
         <div className="flex flex-wrap items-center gap-3 rounded-md border border-amber-300/60 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-400/40 dark:bg-amber-950/30 dark:text-amber-200">
-          <span>This agent is pending board approval and cannot be invoked yet.</span>
+          <span>{t("agentDetailHeader.pendingApproval")}</span>
           <Button
             variant="outline"
             size="sm"
@@ -1038,7 +1042,7 @@ export function AgentDetail() {
             disabled={agentAction.isPending}
           >
             <CheckCircle2 className="h-3.5 w-3.5 sm:mr-1" />
-            <span>Approve agent</span>
+            <span>{t("agentDetailHeader.approveAgent")}</span>
           </Button>
         </div>
       )}
@@ -1163,7 +1167,7 @@ export function AgentDetail() {
       )}
 
       {activeView === "advanced" && (
-        <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Loading configuration…</p>}>
+        <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">{t("agentDetailHeader.loadingConfiguration")}</p>}>
           <AgentAdvancedTab key={agent.id} agent={agent} onDirtyChange={setConfigDirty} onSavingChange={setConfigSaving}
             onSaved={updated => {
               const nextRef = agentRouteRef(updated);
@@ -1351,7 +1355,7 @@ function LatestRunCard({
       >
         <div className="flex items-center gap-2">
           <StatusIcon className={cn("h-3.5 w-3.5", statusInfo.color, run.status === "running" && "animate-spin")} />
-          <StatusBadge status={run.status} />
+          <StatusBadge status={run.status} label={runStatusLabel(run.status)} />
           {task ? (
             <>
               <StatusGlyph status={task.status} size="sm" />
@@ -1370,7 +1374,7 @@ function LatestRunCard({
                   : run.invocationSource === "on_demand" ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
                   : "bg-muted text-muted-foreground"
               )}>
-                {sourceLabels[run.invocationSource] ?? run.invocationSource}
+                {runSourceLabel(run.invocationSource)}
               </Badge>
             </>
           )}
@@ -1409,9 +1413,9 @@ export function AgentOverview({
   const agentRef = agentRouteRef(agent);
   const { openNewIssue } = useDialogActions();
   const taskSuggestions = [
-    "Research a topic and summarize the key findings",
-    "Create a step-by-step plan for a project",
-    "Review a document and suggest improvements",
+    t("agentOverview.suggestionResearch"),
+    t("agentOverview.suggestionPlan"),
+    t("agentOverview.suggestionReview"),
   ];
   const hasHumanCreator = Boolean(humanAgentCreatorUserId(agent.createdByUserId));
   const userDirectory = useQuery({
@@ -1440,72 +1444,72 @@ export function AgentOverview({
         <AgentMetricTile
           icon={ActivityIcon}
           value={activity.isLoading ? "–" : formatWindowCount(activityThisWeek)}
-          label="Activity"
-          description="Events this week"
+          label={t("agentOverview.activity")}
+          description={t("agentOverview.eventsThisWeek")}
           to={agentDetailHref(agentRef, "activity")}
         />
         <AgentMetricTile
           icon={PlayCircle}
           value={formatWindowCount(runsThisWeek)}
-          label="Runs"
-          description={`${formatWindowCount(recentFailures)} failed in the last 2 days`}
+          label={t("agentOverview.runs")}
+          description={t("agentOverview.failedRecently", { failures: formatWindowCount(recentFailures) })}
           to={agentDetailHref(agentRef, "runs")}
         />
         <AgentMetricTile
           icon={ReceiptText}
           value={formatCents(spent)}
-          label="Costs"
-          description="Month to date"
+          label={t("agentOverview.costs")}
+          description={t("agentOverview.monthToDate")}
           to={agentDetailHref(agentRef, "costs")}
         />
         <AgentMetricTile
           icon={Gauge}
           value={budgetPercent === null ? "–" : `${budgetPercent}%`}
-          label="Budget used"
-          description={budgetPercent === null ? "No monthly budget set" : `of ${formatCents(budget)} this month`}
+          label={t("agentOverview.budgetUsed")}
+          description={budgetPercent === null ? t("agentOverview.noMonthlyBudget") : t("agentOverview.ofBudgetThisMonth", { budget: formatCents(budget) })}
           to={agentDetailHref(agentRef, "budgets")}
         />
-        <AgentPanel title="Profile" className="min-h-(--agent-detail-tile-min-h) sm:col-span-2" aria-label="Profile"
+        <AgentPanel title={t("agentOverview.profile")} className="min-h-(--agent-detail-tile-min-h) sm:col-span-2" aria-label={t("agentOverview.profile")}
           meta={<span className={creatorFailed ? "text-destructive" : undefined}>
-            {creatorFailed ? "Could not load creator" : creatorLabel ? `Created by ${creatorLabel} · ${formatDate(agent.createdAt)}` : `Created ${formatDate(agent.createdAt)}`}
+            {creatorFailed ? t("agentOverview.creatorLoadFailed") : creatorLabel ? t("agentOverview.createdBy", { name: creatorLabel, date: formatDate(agent.createdAt) }) : t("agentOverview.created", { date: formatDate(agent.createdAt) })}
           </span>}>
           <div className="flex flex-col pb-3">
             <AgentReportingManager key={agent.id} agent={agent} />
             {directReports.length > 0 && <div className="flex flex-col gap-1.5 px-(--agent-detail-module-inset) py-1.5 text-sm">
-              <span className="text-muted-foreground">Direct reports:</span>
+              <span className="text-muted-foreground">{t("agentOverview.directReportsLabel")}</span>
               <AgentDirectReports reports={directReports} />
             </div>}
 
           </div>
         </AgentPanel>
         <AgentPanel
-          title="Skills"
-          meta={<span>{skillNames.length} enabled</span>}
+          title={t("agentOverview.skills")}
+          meta={<span>{t(skillNames.length === 1 ? "agentOverview.enabledSkills_one" : "agentOverview.enabledSkills_other", { count: skillNames.length })}</span>}
           className="min-h-(--agent-detail-tile-min-h) sm:col-span-2"
-          aria-label="Skills"
+          aria-label={t("agentOverview.skills")}
         >
           <div className="flex flex-wrap gap-1.5 px-(--agent-detail-module-inset) pt-1 pb-(--agent-detail-module-inset)">
             {skillNames.map((name) => <AgentChip key={name} className="h-7 px-2">{name}</AgentChip>)}
             <Link to={agentDetailHref(agentRef, "skills")} className="inline-flex h-7 items-center gap-1.5 rounded-md border border-dashed border-border px-2 py-1 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground">
-              Explore skills <ArrowUpRight className="size-3.5" aria-hidden />
+              {t("agentOverview.exploreSkills")} <ArrowUpRight className="size-3.5" aria-hidden />
             </Link>
           </div>
         </AgentPanel>
       </div>
 
-      <section className="flex flex-col gap-3" aria-label="Recent tasks">
+      <section className="flex flex-col gap-3" aria-label={t("agentOverview.recentTasks")}>
         <AgentSectionHeading
-          title="Recent tasks"
+          title={t("agentOverview.recentTasks")}
           action={
             <Link to={`/issues?participantAgentId=${agent.id}`} className="text-xs text-muted-foreground no-underline transition-colors hover:text-foreground">
-              See all tasks
+              {t("agentOverview.seeAllTasks")}
             </Link>
           }
         />
         {assignedIssues.length === 0 ? (
           <div className="flex flex-col gap-3">
-            <p className="text-sm text-muted-foreground">Start with a suggested task</p>
-            <ul className="overflow-hidden rounded-lg border border-border bg-(--agent-detail-tile) divide-y divide-dashed divide-border" aria-label="Suggested tasks">
+            <p className="text-sm text-muted-foreground">{t("agentOverview.startSuggestedTask")}</p>
+            <ul className="overflow-hidden rounded-lg border border-border bg-(--agent-detail-tile) divide-y divide-dashed divide-border" aria-label={t("agentOverview.suggestedTasks")}>
               {taskSuggestions.map((title) => (
                 <li key={title}>
                   <button
@@ -1562,11 +1566,11 @@ export function AgentRevisionsTab({
   return (
     <div className="max-w-3xl space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h3 className="text-sm font-medium">Configuration Revisions</h3>
-        <span className="text-xs text-muted-foreground">{configRevisions?.length ?? 0} total</span>
+        <h3 className="text-sm font-medium">{t("agentRevisions.title")}</h3>
+        <span className="text-xs text-muted-foreground">{t("agentRevisions.total", { count: configRevisions?.length ?? 0 })}</span>
       </div>
       {(configRevisions ?? []).length === 0 ? (
-        <p className="text-sm text-muted-foreground">No configuration revisions yet.</p>
+        <p className="text-sm text-muted-foreground">{t("agentRevisions.empty")}</p>
       ) : (
         <div className="space-y-2">
           {(configRevisions ?? []).map((revision) => (
@@ -1585,11 +1589,11 @@ export function AgentRevisionsTab({
                   onClick={() => rollbackConfig.mutate(revision.id)}
                   disabled={rollbackConfig.isPending}
                 >
-                  Restore
+                  {t("agentRevisions.restore")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Changed: {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : "no tracked changes"}
+                {t("agentRevisions.changed")}: {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : t("agentRevisions.noTrackedChanges")}
               </p>
             </div>
           ))}
@@ -1675,8 +1679,8 @@ export function ConfigurationTab({
         || !syncAgentRouteAfterRename(queryClient, navigate, target, updated, urlTab ?? content)) {
         queryClient.invalidateQueries({ queryKey: queryKeys.agents.detail(target.urlKey) });
       }
-      pushToast({ title: "Agent saved", tone: updated.configurationWarnings?.length ? "warn" : "success",
-        body: updated.configurationWarnings?.map(warning => warning.message).join("\n") });
+      pushToast({ title: t("agentAdvanced.agentSaved"), tone: updated.configurationWarnings?.length ? "warn" : "success",
+        body: configurationWarningMessages(updated) ?? undefined });
     },
     onError: (err) => {
       setAwaitingRefreshAfterSave(false);
@@ -2242,7 +2246,7 @@ export function PromptsTab({
       if (fileSaveLock.current) return;
       const save = async () => {
         if (fileNameInvalid) {
-          setFileNameError(nameConflict ? "A file with this name already exists." : "Use letters, numbers, hyphens or underscores.");
+          setFileNameError(nameConflict ? t("agentInstructions.fileNameConflict") : t("agentInstructions.fileNameCharacters"));
           setEditingFileName(true);
           return;
         }
@@ -2294,7 +2298,7 @@ export function PromptsTab({
         }
         onSaved?.();
       };
-      void save().catch((error) => setFileNameError(error instanceof Error ? error.message : "Could not save the file. Your unsaved edits are retained.")).finally(() => { fileSaveLock.current = false; setFileSaveInProgress(false); });
+      void save().catch((error) => setFileNameError(error instanceof Error ? error.message : t("agentInstructions.saveFailed"))).finally(() => { fileSaveLock.current = false; setFileSaveInProgress(false); });
     } : null);
   }, [
     bundle,
@@ -2374,7 +2378,7 @@ export function PromptsTab({
     return (
       <div className="max-w-3xl">
         <p className="text-sm text-muted-foreground">
-          Instructions bundles are only available for local adapters.
+          {t("agentInstructions.localAdaptersOnly")}
         </p>
       </div>
     );
@@ -2396,7 +2400,7 @@ export function PromptsTab({
         </div>
       )}
       {showSaveNotice && <p className="text-xs text-muted-foreground">
-        Saved instructions affect the next run. Active runs keep the instructions they started with, and instruction changes may start a fresh adapter session.
+        {t("agentInstructions.savedNotice")}
       </p>}
 
       <InstructionsBundleSettings
@@ -2425,17 +2429,17 @@ export function PromptsTab({
           isMobile && !showFilePanel && "hidden",
         )}>
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-foreground">Files</h4>
+            <h4 className="text-sm font-semibold text-foreground">{t("agentInstructions.files")}</h4>
             <div className="flex items-center gap-1">
               {(
                 <Button
                   type="button"
                   size="icon-xs"
                   variant="ghost"
-                  aria-label="Add agent file"
+                  aria-label={t("agentInstructions.addFile")}
                   disabled={isSaving}
                   onClick={() => {
-                    if (isDirty && !window.confirm(DISCARD_AGENT_CONFIG_CHANGES_MESSAGE)) return;
+                    if (isDirty && !window.confirm(t("agentDetailHeader.discardUnsavedQuestion"))) return;
                     let candidate = "Untitled.md";
                     let suffix = 2;
                     while (fileOptions.some(path => path.toLowerCase() === candidate.toLowerCase())) candidate = `Untitled-${suffix++}.md`;
@@ -2482,7 +2486,7 @@ export function PromptsTab({
             })}
             onSelectFile={(filePath) => {
               if (filePath === selectedOrEntryFile) return;
-              if (isDirty && !window.confirm(DISCARD_AGENT_CONFIG_CHANGES_MESSAGE)) return;
+              if (isDirty && !window.confirm(t("agentDetailHeader.discardUnsavedQuestion"))) return;
               setDraft(null);
               setPendingFiles([]);
               setFileNameDraft(null);
@@ -2496,6 +2500,7 @@ export function PromptsTab({
             onToggleCheck={() => {}}
             showCheckboxes={false}
             wrapLabels={false}
+            ariaLabel={t("agentInstructions.files")}
             fileRowClassName={(node) => cn("agent-instruction-file-row font-mono", pendingFiles.includes(node.path) && "agent-instruction-file-pending italic text-muted-foreground/60")}
             renderFileExtra={(node) => {
               const file = bundle?.files.find((entry) => entry.path === node.path);
@@ -2505,18 +2510,18 @@ export function PromptsTab({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className="ml-3 shrink-0 rounded border border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 text-(length:--text-nano) uppercase tracking-wide cursor-help">
-                        virtual file
+                        {t("agentInstructions.virtualFile")}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
-                      Legacy inline prompt — this deprecated virtual file preserves the old promptTemplate content
+                      {t("agentInstructions.legacyVirtualFileHelp")}
                     </TooltipContent>
                   </Tooltip>
                 );
               }
               return (
                 <span className={cn("ml-3 shrink-0 rounded text-muted-foreground px-1.5 py-0.5 font-sans text-(length:--text-nano) uppercase tracking-wide", file.isEntryFile && "bg-(--agent-detail-tile-chip)")}>
-                  {file.isEntryFile ? "ROOT" : `${file.size}b`}
+                  {file.isEntryFile ? t("agentInstructions.rootFile") : `${file.size}b`}
                 </span>
               );
             }}
@@ -2549,7 +2554,7 @@ export function PromptsTab({
                 <div className="agent-identity-file-heading flex min-w-0 items-center gap-2">
                   {editingFileName ? (
                     <div className="agent-identity-preview-title flex min-w-0 items-baseline font-mono text-(length:--agent-identity-preview-title-size)">
-                      <input ref={fileNameInputRef} aria-label="Markdown file name" autoFocus
+                      <input ref={fileNameInputRef} aria-label={t("agentInstructions.markdownFileName")} autoFocus
                         value={fileNameDraft === null && pendingFiles.includes(selectedOrEntryFile) ? "" : namingPrefix}
                         placeholder={selectedOrEntryFile.replace(/\.md$/i, "")}
                         aria-invalid={fileNameInvalid || undefined}
@@ -2566,26 +2571,26 @@ export function PromptsTab({
                     </div>
                   ) : (
                     <button type="button" disabled={isSaving || Boolean(candidateRunId) || selectedFileSummary?.deprecated || selectedFileDetail?.binary || !selectedOrEntryFile.endsWith(".md")}
-                      aria-label={`Rename ${displayedFilePath}`} onClick={() => setEditingFileName(true)}
+                      aria-label={t("agentInstructions.renameFile", { file: displayedFilePath })} onClick={() => setEditingFileName(true)}
                       className={cn("agent-identity-preview-title min-w-0 truncate rounded font-mono text-(length:--agent-identity-preview-title-size) text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", pendingFiles.includes(selectedOrEntryFile) ? "italic text-muted-foreground/60" : "text-foreground")}>
                       {displayedFilePath}
                     </button>
                   )}
-                  <AgentChip>{currentMode === "external" ? "Managed externally" : "Managed by you"}</AgentChip>
+                  <AgentChip>{currentMode === "external" ? t("agentInstructions.managedExternally") : t("agentInstructions.managedByYou")}</AgentChip>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
-                      ? "Deprecated virtual file"
+                      ? t("agentInstructions.deprecatedVirtualFile")
                       : instructionFileDateLabel(selectedFileDetail ?? selectedFileSummary)
-                    : "New file in this bundle"}
+                    : t("agentInstructions.newFile")}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span role="status" aria-hidden={!copyVisible} className={cn("agent-file-copy-notice flex items-center gap-1.5 whitespace-nowrap text-xs text-muted-foreground", !copyVisible && "opacity-0", copyNotice === "error" && "text-destructive")}>
                 {copyNotice === "copied" && <CheckCircle2 className="size-3.5" aria-hidden />}
-                {copyNotice === "copied" ? "File copied" : copyNotice === "error" ? "Copy failed" : null}
+                {copyNotice === "copied" ? t("agentInstructions.fileCopied") : copyNotice === "error" ? t("agentInstructions.copyFailed") : null}
               </span>
               <Button
                 type="button"
@@ -2593,8 +2598,8 @@ export function PromptsTab({
                 size="icon-xs"
                 className={cn("size-8", instructionMode === "edit" && "bg-(--agent-detail-tile-chip) text-foreground")}
                 aria-pressed={instructionMode === "edit"}
-                aria-label={instructionMode === "edit" ? `Stop editing ${selectedOrEntryFile}` : `Edit ${selectedOrEntryFile}`}
-                title={instructionMode === "edit" ? "Stop editing" : "Edit"}
+                aria-label={instructionMode === "edit" ? t("agentInstructions.stopEditingFile", { file: selectedOrEntryFile }) : t("agentInstructions.editFile", { file: selectedOrEntryFile })}
+                title={instructionMode === "edit" ? t("agentInstructions.stopEditing") : t("agentInstructions.edit")}
                 disabled={Boolean(selectedFileDetail?.binary)}
                 onClick={() => setInstructionMode(instructionMode === "edit" ? "raw" : "edit")}
               >
@@ -2602,7 +2607,7 @@ export function PromptsTab({
               </Button>
               {!fileLoading && (
                 <Button type="button" variant="ghost" size="icon-xs" className="size-8"
-                  aria-label="Copy instructions file as markdown" title="Copy as markdown"
+                  aria-label={t("agentInstructions.copyAsMarkdown")} title={t("agentInstructions.copyAsMarkdownTitle")}
                   onClick={async () => {
                     clearTimeout(copyTimer.current);
                     setCopyVisible(true);
@@ -2616,11 +2621,11 @@ export function PromptsTab({
               {selectedOrEntryFile === currentEntryFile && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span tabIndex={0} aria-label="This file is required" className="inline-flex">
-                      <Button type="button" variant="ghost" size="icon-xs" className="size-8" aria-label={`Delete ${selectedOrEntryFile}`} disabled><Trash2 className="size-4" /></Button>
+                    <span tabIndex={0} aria-label={t("agentInstructions.fileRequired")} className="inline-flex">
+                      <Button type="button" variant="ghost" size="icon-xs" className="size-8" aria-label={t("agentInstructions.deleteFile", { file: selectedOrEntryFile })} disabled><Trash2 className="size-4" /></Button>
                     </span>
                   </TooltipTrigger>
-                  <TooltipContent>This file is required</TooltipContent>
+                  <TooltipContent>{t("agentInstructions.fileRequired")}</TooltipContent>
                 </Tooltip>
               )}
               {selectedFileExists && !selectedFileSummary?.deprecated && selectedOrEntryFile !== currentEntryFile && (
@@ -2629,10 +2634,10 @@ export function PromptsTab({
                   size="icon-xs"
                   variant="ghost"
                   className="size-8"
-                  aria-label={`Delete ${selectedOrEntryFile}`}
-                  title="Delete file"
+                  aria-label={t("agentInstructions.deleteFile", { file: selectedOrEntryFile })}
+                  title={t("agentInstructions.deleteFileTitle")}
                   onClick={() => {
-                    if (confirm(`Delete ${selectedOrEntryFile}?`)) {
+                    if (confirm(t("agentInstructions.deleteFileConfirm", { file: selectedOrEntryFile }))) {
                       deleteFile.mutate(selectedOrEntryFile, {
                         onSuccess: () => {
                           setSelectedFile(currentEntryFile);
@@ -2653,8 +2658,8 @@ export function PromptsTab({
           <div className="space-y-3 px-(--agent-identity-panel-gap) pt-4 empty:hidden">
           {currentMode === "managed" && preservedCandidates.length > 0 && (
             <div className="space-y-3">
-              <p className="text-sm font-medium">Preserved instruction edits</p>
-              <p className="text-sm text-muted-foreground">Older instruction-only sessions have edits to review.</p>
+              <p className="text-sm font-medium">{t("agentInstructions.preservedEdits")}</p>
+              <p className="text-sm text-muted-foreground">{t("agentInstructions.olderSessionsHelp")}</p>
               {preservedCandidates.map((candidate) => (
                 <div key={candidate.runId} className="flex flex-wrap items-center gap-3">
                   <span className="font-mono text-xs text-muted-foreground">{candidate.runId.slice(0, 8)}</span>
@@ -2668,15 +2673,15 @@ export function PromptsTab({
                       } else {
                         loadCandidate.mutate(candidate);
                       }
-                    }}>Review preserved edits</Button>
+                    }}>{t("agentInstructions.reviewPreservedEdits")}</Button>
                   {candidate.errorMessage && <p className="text-sm text-muted-foreground">{candidate.errorMessage}</p>}
-                  {candidate.entryFile !== currentEntryFile && <p className="text-sm text-muted-foreground">The instruction entry changed. These edits remain preserved for the original file.</p>}
+                  {candidate.entryFile !== currentEntryFile && <p className="text-sm text-muted-foreground">{t("agentInstructions.entryChangedHelp")}</p>}
                   {candidate.entryFile !== currentEntryFile && candidate.content !== null && readOnlyCandidateRunId === candidate.runId && (
                     <div role="region" aria-label={`Preserved edits for ${candidate.entryFile}`} className="w-full space-y-3">
-                      <p className="text-sm text-muted-foreground">Read only: {candidate.entryFile}. To keep any of these edits in {currentEntryFile}, copy them and edit the current entry explicitly.</p>
-                      <CopyText text={candidate.content} ariaLabel={`Copy preserved edits for ${candidate.entryFile}`}
+                      <p className="text-sm text-muted-foreground">{t("agentInstructions.readOnlyFile", { file: candidate.entryFile, entry: currentEntryFile })}</p>
+                      <CopyText text={candidate.content} ariaLabel={t("agentInstructions.copyPreservedEditsFor", { file: candidate.entryFile })}
                         className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground">
-                        <Copy className="h-3.5 w-3.5" />Copy preserved edits
+                        <Copy className="h-3.5 w-3.5" />{t("agentInstructions.copyPreservedEdits")}
                       </CopyText>
                       <pre className={cn("overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-muted p-3 font-mono text-sm", ANALYTICS_MASK_CLASS)}>{candidate.content}</pre>
                     </div>
@@ -2686,17 +2691,17 @@ export function PromptsTab({
             </div>
           )}
           {candidateRunId && <div role="status" className="space-y-3">
-            <p className="text-sm text-muted-foreground">Reviewing preserved edits. Save to apply your resolved draft and close this preserved edit.</p>
-            <details><summary className="cursor-pointer text-sm text-muted-foreground">Compare current instructions</summary>
+            <p className="text-sm text-muted-foreground">{t("agentInstructions.reviewingEdits")}</p>
+            <details><summary className="cursor-pointer text-sm text-muted-foreground">{t("agentInstructions.compareCurrent")}</summary>
               <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border p-3 font-mono text-sm", ANALYTICS_MASK_CLASS)}>{currentContent}</pre>
             </details>
-            {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">The current instructions changed after this draft was loaded. Refresh the current revision, compare the instructions, and save your resolved draft again.</p>}
-            {(resolveCandidate.error || draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null)) && <Button type="button" variant="outline" size="sm" disabled={isSaving} onClick={() => refreshCandidateBase.mutate()}>Refresh current revision</Button>}
+            {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">{t("agentInstructions.draftChangedHelp")}</p>}
+            {(resolveCandidate.error || draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null)) && <Button type="button" variant="outline" size="sm" disabled={isSaving} onClick={() => refreshCandidateBase.mutate()}>{t("agentInstructions.refreshRevision")}</Button>}
           </div>}
-          {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} Your preserved edits remain available.</p>}
-          {(fileNameError || (editingFileName && fileNameInvalid)) && <p role="alert" className="text-sm text-destructive">{fileNameError ?? (nameConflict ? "A file with this name already exists." : "Use letters, numbers, hyphens or underscores.")}</p>}
-          {(saveFile.error || fileError || updateBundle.error) && <p role="alert" className="text-sm text-destructive">{(saveFile.error ?? fileError ?? updateBundle.error)?.message} Your unsaved edits are retained.</p>}
-          {selectedFileDetail?.receipt?.materialization === "pending" && <p role="status" className="text-sm text-muted-foreground">Revision saved. The instruction file still needs to be rebuilt from the saved revision.</p>}
+          {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} {t("agentInstructions.preservedRemain")}</p>}
+          {(fileNameError || (editingFileName && fileNameInvalid)) && <p role="alert" className="text-sm text-destructive">{fileNameError ?? (nameConflict ? t("agentInstructions.fileNameConflict") : t("agentInstructions.fileNameCharacters"))}</p>}
+          {(saveFile.error || fileError || updateBundle.error) && <p role="alert" className="text-sm text-destructive">{(saveFile.error ?? fileError ?? updateBundle.error)?.message} {t("agentInstructions.unsavedEditsRetained")}</p>}
+          {selectedFileDetail?.receipt?.materialization === "pending" && <p role="status" className="text-sm text-muted-foreground">{t("agentInstructions.revisionNeedsRebuild")}</p>}
           {selectedFileDetail?.revision && currentMode === "managed" && bundle?.persistence !== "agent_files" && <InstructionHistory
             key={selectedOrEntryFile} agentId={agent.id} companyId={companyId} path={selectedOrEntryFile}
             currentRevisionId={selectedFileDetail.revision.id} disabled={isDirty || isSaving}
@@ -2711,8 +2716,8 @@ export function PromptsTab({
           </div>
           {selectedFileDetail?.binary ? (
             <div className="space-y-3 px-(--agent-identity-panel-gap) py-5">
-              <p className="text-sm text-muted-foreground">This file is preserved with the agent directory. Download it to view its contents.</p>
-              <a className="text-sm text-primary underline" href={agentsApi.downloadInstructionsFile(agent.id, selectedOrEntryFile, companyId)} download>Download {selectedOrEntryFile}</a>
+              <p className="text-sm text-muted-foreground">{t("agentInstructions.binaryFileHelp")}</p>
+              <a className="text-sm text-primary underline" href={agentsApi.downloadInstructionsFile(agent.id, selectedOrEntryFile, companyId)} download>{t("agentInstructions.downloadFile", { file: selectedOrEntryFile })}</a>
             </div>
           ) : selectedFileExists && fileLoading && !selectedFileDetail ? (
             <div className="px-(--agent-identity-panel-gap) py-5">
@@ -2720,7 +2725,7 @@ export function PromptsTab({
             </div>
           ) : instructionMode === "edit" ? (
             <textarea
-              aria-label="Instruction file editor"
+              aria-label={t("agentInstructions.fileEditor")}
               autoFocus={!editingFileName}
               value={displayValue}
               spellCheck={false}
@@ -2730,10 +2735,10 @@ export function PromptsTab({
                 setDraft(event.target.value);
               }}
               className="block min-h-(--sz-420px) w-full field-sizing-content resize-none bg-transparent p-(--agent-identity-panel-gap) font-mono text-xs leading-5 whitespace-pre-wrap text-foreground outline-none"
-              placeholder="File contents"
+              placeholder={t("agentInstructions.fileContents")}
             />
           ) : (
-            <div role="button" tabIndex={0} aria-label={`Edit ${selectedOrEntryFile} contents`}
+            <div role="button" tabIndex={0} aria-label={t("agentInstructions.editContents", { file: selectedOrEntryFile })}
               className="cursor-text outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() => setInstructionMode("edit")}
               onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setInstructionMode("edit"); } }}>
@@ -2742,7 +2747,7 @@ export function PromptsTab({
               className={cn("block min-h-(--sz-420px) w-full overflow-x-auto p-(--agent-identity-panel-gap) font-mono text-xs leading-5 whitespace-pre-wrap break-words text-muted-foreground", ANALYTICS_MASK_CLASS)}
             >
               {displayValue}
-            </pre> : <p className="min-h-(--sz-420px) p-(--agent-identity-panel-gap) text-sm text-muted-foreground">This instruction file is empty.</p>}
+            </pre> : <p className="min-h-(--sz-420px) p-(--agent-identity-panel-gap) text-sm text-muted-foreground">{t("agentInstructions.emptyFile")}</p>}
             </div>
           )}
         </div>
@@ -2837,7 +2842,7 @@ function RunListItem({ run, isSelected, agentId }: { run: HeartbeatRun; isSelect
             : run.invocationSource === "on_demand" ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
             : "bg-muted text-muted-foreground"
         )}>
-          {sourceLabels[run.invocationSource] ?? run.invocationSource}
+          {runSourceLabel(run.invocationSource)}
         </Badge>
         {sourceResolvedFold ? <SourceResolvedFoldBadge showIcon={false} className="shrink-0 text-(length:--text-nano) py-0" /> : null}
         <span className="ml-auto text-(length:--text-micro) text-muted-foreground shrink-0">
@@ -2851,7 +2856,7 @@ function RunListItem({ run, isSelected, agentId }: { run: HeartbeatRun; isSelect
       )}
       {(metrics.usageUnavailable || (metrics.totalTokens ?? 0) > 0 || (metrics.cost ?? 0) > 0) && (
         <div className="flex items-center gap-2 pl-5.5 text-(length:--text-micro) text-muted-foreground tabular-nums">
-          {metrics.usageUnavailable && <span>Usage and cost unavailable</span>}
+          {metrics.usageUnavailable && <span>{t("agentRuns.usageUnavailable")}</span>}
           {metrics.totalTokens !== null && metrics.totalTokens > 0 && <span>{formatTokens(metrics.totalTokens)} tok</span>}
           {metrics.cost !== null && metrics.cost > 0 && <span>${metrics.cost.toFixed(3)}</span>}
         </div>
@@ -2889,13 +2894,13 @@ export function RunsTab({
   const selection = useSelectedHeartbeatRun(sorted, effectiveRunId, companyId, agentId);
   const selectedRun = selection.run;
   if (selectedRunId && !selectedRun) {
-    if (selection.loading) return <p className="text-sm text-muted-foreground">Loading run…</p>;
+    if (selection.loading) return <p className="text-sm text-muted-foreground">{t("agentRuns.loading")}</p>;
     return <div role="alert">
-      <p className="text-sm text-destructive">{selection.error instanceof Error ? selection.error.message : "This run is unavailable for this agent."}</p>
-      {selection.error && <Button variant="outline" onClick={() => { void selection.retry(); }}>Try again</Button>}
+      <p className="text-sm text-destructive">{selection.error instanceof Error ? selection.error.message : t("agentRuns.unavailable")}</p>
+      {selection.error && <Button variant="outline" onClick={() => { void selection.retry(); }}>{t("agentRuns.tryAgain")}</Button>}
     </div>;
   }
-  if (runs.length === 0 && !selectedRun) return <p className="text-sm text-muted-foreground">No runs yet.</p>;
+  if (runs.length === 0 && !selectedRun) return <p className="text-sm text-muted-foreground">{t("agentRuns.noneYet")}</p>;
 
   // Mobile: show either run list OR run detail with back button
   if (isMobile) {
@@ -2907,7 +2912,7 @@ export function RunsTab({
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to runs
+            {t("agentRuns.backToRuns")}
           </Link>
           <RunDetail key={selectedRun.id} run={selectedRun} agentRouteId={agentRouteId} adapterType={adapterType} adapterConfig={adapterConfig} />
         </div>
@@ -2958,8 +2963,8 @@ export function AgentFileRunNotice({ resultJson }: { resultJson: HeartbeatRun["r
   // I/O failure must stay visible even when storage was full at run start.
   const showSyncFailure = syncFailure && (!storageWarning || save?.errorCode !== "AGENT_FILES_LIMIT_EXCEEDED");
   return <>
-    {storageWarning && <InlineBanner tone="warning" title="Agent storage warning" compact>{storageWarning}</InlineBanner>}
-    {showSyncFailure && <InlineBanner tone="warning" title="Agent file sync failed for this run" compact>{error}</InlineBanner>}
+    {storageWarning && <InlineBanner tone="warning" title={t("agentRuns.agentStorageWarning")} compact>{storageWarning}</InlineBanner>}
+    {showSyncFailure && <InlineBanner tone="warning" title={t("agentRuns.fileSyncFailed")} compact>{error}</InlineBanner>}
   </>;
 }
 
@@ -2967,10 +2972,10 @@ export function RunAccountingMetrics({ run }: { run: HeartbeatRun }) {
   const metrics = runMetrics(run);
   if (!metrics.usageUnavailable && ![metrics.input, metrics.output, metrics.cached, metrics.cost].some(value => (value ?? 0) > 0)) return null;
   const values = [
-    ["Input", metrics.input === null ? "Unavailable" : formatTokens(metrics.input)],
-    ["Output", metrics.output === null ? "Unavailable" : formatTokens(metrics.output)],
-    ["Cached", metrics.cached === null ? "Unavailable" : formatTokens(metrics.cached)],
-    ["Cost", metrics.cost === null ? "Unavailable" : metrics.cost > 0 ? `$${metrics.cost.toFixed(4)}` : "-"],
+    [t("agentRuns.input"), metrics.input === null ? t("agentRuns.unavailableMetric") : formatTokens(metrics.input)],
+    [t("agentRuns.output"), metrics.output === null ? t("agentRuns.unavailableMetric") : formatTokens(metrics.output)],
+    [t("agentRuns.cached"), metrics.cached === null ? t("agentRuns.unavailableMetric") : formatTokens(metrics.cached)],
+    [t("agentRuns.cost"), metrics.cost === null ? t("agentRuns.unavailableMetric") : metrics.cost > 0 ? `$${metrics.cost.toFixed(4)}` : "-"],
   ];
   return (
     <div className="border-t sm:border-t-0 sm:border-l border-border p-4 grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-3 content-center tabular-nums">
@@ -3181,8 +3186,9 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
   }, [isRunning, run.startedAt]);
 
   const timeFormat: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
-  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString("en-US", timeFormat) : null;
-  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString("en-US", timeFormat) : null;
+  const timeLocale = i18n.resolvedLanguage || undefined;
+  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString(timeLocale, timeFormat) : null;
+  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString(timeLocale, timeFormat) : null;
   const durationSec = run.startedAt && run.finishedAt
     ? Math.round((new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000)
     : null;
@@ -3199,14 +3205,14 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
           break-glass handlers as the task detail page. */}
       <RunWorkspaceRecoverySurface run={run} />
       <AiConnectionPoolRunDetails context={run.contextSnapshot} />
-      {grokWork && <p className="text-sm text-muted-foreground">Runs in Grok Bot. Usage not reported. Stopping this session revokes Paperclip authority; remote execution may continue. Open the Grok Bot desktop app to inspect it. This view contains Paperclip-reported activity.</p>}
+      {grokWork && <p className="text-sm text-muted-foreground">{t("agentRuns.grokNotice")}</p>}
       {/* Run summary card */}
       <div className="border border-border rounded-lg overflow-hidden">
         <div className="flex flex-col sm:flex-row">
           {/* Left column: status + timing */}
           <div className="flex-1 p-4 space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <StatusBadge status={run.status} />
+              <StatusBadge status={run.status} label={runStatusLabel(run.status)} />
               <ProviderTraceStatusBadge
                 trace={providerTraceMetadata}
                 requested={runRequestedProviderTrace(run.contextSnapshot)}
@@ -3232,7 +3238,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={resumeRun.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {resumeRun.isPending ? "Resuming…" : "Resume"}
+                  {resumeRun.isPending ? t("agentRuns.resumePending") : t("agentRuns.resume")}
                 </Button>
               )}
               {canRetryRun && !canResumeLostRun && (
@@ -3244,7 +3250,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={retryRun.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {retryRun.isPending ? "Retrying…" : "Retry"}
+                  {retryRun.isPending ? t("agentRuns.retryPending") : t("agentRuns.retry")}
                 </Button>
               )}
               <Button
@@ -3254,7 +3260,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 onClick={() => setInspectorOpen(true)}
               >
                 <Eye className="h-3.5 w-3.5 mr-1" />
-                Inspect run
+                {t("agentRuns.inspect")}
               </Button>
               <HoneycombRunLink
                 runId={run.id}
@@ -3269,7 +3275,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={rerunWithTrace.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {rerunWithTrace.isPending ? "Starting…" : "Re-run with provider trace"}
+                  {rerunWithTrace.isPending ? t("agentRuns.traceRerunPending") : t("agentRuns.traceRerun")}
                 </Button>
               ) : null}
             </div>
@@ -3299,21 +3305,21 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 data-testid="run-detail-on-behalf-of"
                 className="text-xs text-muted-foreground"
               >
-                On behalf of{" "}
+                {t("agentRuns.onBehalfOf")} {" "}
                 <span className={cn("text-foreground", ANALYTICS_MASK_CLASS)}>
-                  {responsibleUserName ?? responsibleUserLabel(null)}
+                  {responsibleUserName ?? t("agentRuns.noResponsiblePerson")}
                 </span>
               </div>
             )}
             {Boolean(run.identityHistory?.length) && (
               <details className="text-xs text-muted-foreground" data-testid="run-identity-history">
-                <summary className="cursor-pointer">GitHub identity history</summary>
+                <summary className="cursor-pointer">{t("agentRuns.identityHistory")}</summary>
                 <ol className={cn("mt-2 space-y-2", ANALYTICS_MASK_CLASS)}>
                   {run.identityHistory!.map((identity) => {
                     const person = userDirectory?.users.find((entry) => entry.principalId === identity.responsibleUserId);
                     return (
                       <li key={identity.id}>
-                        <span className="text-foreground">{person?.user?.name ?? person?.user?.email ?? identity.responsibleUserId ?? "No responsible person"}</span>
+                        <span className="text-foreground">{person?.user?.name ?? person?.user?.email ?? identity.responsibleUserId ?? t("agentRuns.noResponsiblePerson")}</span>
                         {" · "}{identity.cause}{" · "}{identity.status}
                         {identity.github ? (
                           <span className="block">
@@ -3321,7 +3327,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                             {identity.github.source ? `${identity.github.source} · ` : ""}
                             {identity.github.status}{identity.github.reason ? `: ${identity.github.reason}` : ""}
                           </span>
-                        ) : <span className="block">No GitHub operation recorded</span>}
+                        ) : <span className="block">{t("agentRuns.noGithubOperation")}</span>}
                       </li>
                     );
                   })}
@@ -3330,17 +3336,17 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             )}
             {cancelRun.error && (
               <div className="text-xs text-destructive" role="alert">
-                {cancelRun.error instanceof Error ? cancelRun.error.message : "Failed to stop run"}
+                {cancelRun.error instanceof Error ? cancelRun.error.message : t("agentRuns.cancelFailed")}
               </div>
             )}
             {resumeRun.isError && ( // query-error-ok: mutation result, not a query
               <div className="text-xs text-destructive">
-                {resumeRun.error instanceof Error ? resumeRun.error.message : "Failed to resume run"}
+                {resumeRun.error instanceof Error ? resumeRun.error.message : t("agentRuns.resumeFailed")}
               </div>
             )}
             {retryRun.isError && ( // query-error-ok: mutation result, not a query
               <div className="text-xs text-destructive">
-                {retryRun.error instanceof Error ? retryRun.error.message : "Failed to retry run"}
+                {retryRun.error instanceof Error ? retryRun.error.message : t("agentRuns.retryFailed")}
               </div>
             )}
             {startTime && (
@@ -3356,7 +3362,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 </div>
                 {displayDurationSec !== null && (
                   <div className="text-xs text-muted-foreground">
-                    Duration: {displayDurationSec >= 60 ? `${Math.floor(displayDurationSec / 60)}m ${displayDurationSec % 60}s` : `${displayDurationSec}s`}
+                    {t("agentRuns.duration", { duration: displayDurationSec >= 60 ? `${Math.floor(displayDurationSec / 60)}m ${displayDurationSec % 60}s` : `${displayDurationSec}s` })}
                   </div>
                 )}
               </div>
@@ -3379,18 +3385,18 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   onClick={() => runClaudeLogin.mutate()}
                   disabled={runClaudeLogin.isPending}
                 >
-                  {runClaudeLogin.isPending ? "Running claude login..." : "Login to Claude Code"}
+                  {runClaudeLogin.isPending ? t("agentRuns.claudeLoginPending") : t("agentRuns.claudeLogin")}
                 </Button>
                 {runClaudeLogin.isError && ( // query-error-ok: mutation result, not a query
                   <p className="text-xs text-destructive">
                     {runClaudeLogin.error instanceof Error
                       ? runClaudeLogin.error.message
-                      : "Failed to run Claude login"}
+                      : t("agentRuns.claudeLoginFailed")}
                   </p>
                 )}
                 {claudeLoginResult?.loginUrl && (
                   <p className="text-xs">
-                    Login URL:
+                    {t("agentRuns.loginUrl")}
                     <a
                       href={claudeLoginResult.loginUrl}
                       className="text-blue-600 underline underline-offset-2 ml-1 break-all dark:text-blue-400"
@@ -3425,7 +3431,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             )}
             {hasNonZeroExit && (
               <div className="text-xs text-red-600 dark:text-red-400">
-                Exit code {run.exitCode}
+                {t("agentRuns.exitCode", { code: run.exitCode })}
                 {run.signal && <span className="text-muted-foreground ml-1">(signal: {run.signal})</span>}
               </div>
             )}
@@ -3443,20 +3449,20 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
               onClick={() => setSessionOpen((v) => !v)}
             >
               <ChevronRight className={cn("h-3 w-3 transition-transform", sessionOpen && "rotate-90")} />
-              Session
-              {sessionChanged && <span className="text-yellow-400 ml-1">(changed)</span>}
+              {t("agentRuns.session")}
+              {sessionChanged && <span className="text-yellow-400 ml-1">{t("agentRuns.sessionChanged")}</span>}
             </button>
             {sessionOpen && (
               <div className="px-4 pb-3 space-y-1 text-xs">
                 {run.sessionIdBefore && (
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground w-12">{sessionChanged ? "Before" : "ID"}</span>
+                    <span className="text-muted-foreground w-12">{sessionChanged ? t("agentRuns.before") : t("agentRuns.id")}</span>
                     <CopyText text={run.sessionIdBefore} className="font-mono" />
                   </div>
                 )}
                 {sessionChanged && run.sessionIdAfter && (
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground w-12">After</span>
+                    <span className="text-muted-foreground w-12">{t("agentRuns.after")}</span>
                     <CopyText text={run.sessionIdAfter} className="font-mono" />
                   </div>
                 )}
@@ -3469,21 +3475,21 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                       onClick={() => {
                         const issueCount = touchedIssueIds.length;
                         const confirmed = window.confirm(
-                          `Clear session for ${issueCount} issue${issueCount === 1 ? "" : "s"} touched by this run?`,
+                          t("agentRuns.clearSessionConfirm", { count: issueCount }),
                         );
                         if (!confirmed) return;
                         clearSessionsForTouchedIssues.mutate();
                       }}
                     >
                       {clearSessionsForTouchedIssues.isPending
-                        ? "clearing session..."
-                        : "clear session for these tasks"}
+                        ? t("agentRuns.clearingSession")
+                        : t("agentRuns.clearSessionForTasks")}
                     </button>
                     {clearSessionsForTouchedIssues.isError && ( // query-error-ok: mutation result, not a query
                       <p className="text-(length:--text-micro) text-destructive mt-1">
                         {clearSessionsForTouchedIssues.error instanceof Error
                           ? clearSessionsForTouchedIssues.error.message
-                          : "Failed to clear sessions"}
+                          : t("agentRuns.clearSessionFailed")}
                       </p>
                     )}
                   </div>
@@ -3497,7 +3503,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
       {/* Issues touched by this run */}
       {touchedIssues && touchedIssues.length > 0 && (
         <div className="space-y-2">
-          <span className="text-xs font-medium text-muted-foreground">Tasks Touched ({touchedIssues.length})</span>
+          <span className="text-xs font-medium text-muted-foreground">{t("agentRuns.tasksTouched", { count: touchedIssues.length })}</span>
           <div className="border border-border rounded-lg divide-y divide-border">
             {touchedIssues.map((issue) => (
               <Link
@@ -3519,7 +3525,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
       {/* stderr excerpt for failed runs */}
       {run.stderrExcerpt && (
         <div className="space-y-1">
-          <span className="text-xs font-medium text-red-600 dark:text-red-400">stderr</span>
+          <span className="text-xs font-medium text-red-600 dark:text-red-400">{t("agentRuns.stderr")}</span>
           <pre className={cn("bg-neutral-100 dark:bg-neutral-950 rounded-md p-3 text-xs font-mono text-red-700 dark:text-red-300 overflow-x-auto whitespace-pre-wrap", ANALYTICS_MASK_CLASS)}>{run.stderrExcerpt}</pre>
         </div>
       )}
@@ -3527,7 +3533,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
       {/* stdout excerpt when no log is available */}
       {run.stdoutExcerpt && !run.logRef && (
         <div className="space-y-1">
-          <span className="text-xs font-medium text-muted-foreground">stdout</span>
+          <span className="text-xs font-medium text-muted-foreground">{t("agentRuns.stdout")}</span>
           <pre className={cn("bg-neutral-100 dark:bg-neutral-950 rounded-md p-3 text-xs font-mono text-foreground overflow-x-auto whitespace-pre-wrap", ANALYTICS_MASK_CLASS)}>{run.stdoutExcerpt}</pre>
         </div>
       )}

@@ -2,7 +2,9 @@ import type { Resource } from "i18next";
 
 import { assertValidLocaleMessages } from "./locale-validation";
 
-export const DEFAULT_LOCALE = "en" as const;
+// Browser E2E keeps the existing English selectors stable. Production builds
+// omit this override and therefore start in Brazilian Portuguese.
+export const DEFAULT_LOCALE = import.meta.env.VITE_DEFAULT_LOCALE === "en" ? "en" : "pt-BR";
 
 const localeModules = import.meta.glob("./locales/*.json", {
   eager: true,

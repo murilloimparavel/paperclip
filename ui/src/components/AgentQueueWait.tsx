@@ -1,5 +1,6 @@
 import type { ExecutionAgentQueue } from "@paperclipai/shared";
 import { Hourglass } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "@/lib/router";
 import { agentQueueConfigureHref, agentQueueWaitParts } from "@/lib/agent-queue-wait";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,8 @@ export function AgentQueueWait({
   showConfigure?: boolean;
   className?: string;
 }) {
-  const [waiting, limit, line] = agentQueueWaitParts(queue);
+  const { t } = useTranslation();
+  const [waiting, limit, line] = agentQueueWaitParts(queue, (key, options) => t(key, options));
   return (
     <span
       className={cn("flex min-w-0 flex-wrap items-center gap-x-1.5 text-sm text-muted-foreground", className)}
@@ -40,9 +42,9 @@ export function AgentQueueWait({
           <Link
             to={agentQueueConfigureHref(queue)}
             className="text-foreground/80 underline-offset-2 hover:text-foreground hover:underline"
-            aria-label={`Configure ${queue.agentName}'s concurrent run limit`}
+            aria-label={t("agentQueueWait.configureAria", { name: queue.agentName })}
           >
-            Configure
+            {t("agentQueueWait.configure")}
           </Link>
         </>
       ) : null}
@@ -52,7 +54,10 @@ export function AgentQueueWait({
 
 /** List-row form: one muted word, the full sentence on hover. */
 export function AgentQueueWaitChip({ queue }: { queue: ExecutionAgentQueue | null }) {
-  const title = queue ? agentQueueWaitParts(queue).join(" · ") : "Waiting to start";
+  const { t } = useTranslation();
+  const title = queue
+    ? agentQueueWaitParts(queue, (key, options) => t(key, options)).join(" · ")
+    : t("agentQueueWait.waitingToStart");
   return (
     <span
       className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground"
@@ -61,7 +66,7 @@ export function AgentQueueWaitChip({ queue }: { queue: ExecutionAgentQueue | nul
       data-testid="agent-queue-wait-chip"
     >
       <Hourglass className="size-3" aria-hidden="true" />
-      Waiting
+      {t("agentQueueWait.waiting")}
     </span>
   );
 }

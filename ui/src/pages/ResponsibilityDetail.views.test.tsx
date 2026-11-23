@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { i18n } from "@/i18n";
 import {
   areaFundraising,
   homeAutomationFixture,
@@ -193,6 +194,64 @@ describe("ResponsibilityDetail views", () => {
     expect(page.textContent).toContain("1 finished item is not listed.");
     expect(page.querySelector('[data-testid="responsibility-strip"]')?.querySelectorAll("li")).toHaveLength(4);
     expect(page.textContent).toContain("And 61 more artifacts.");
+  });
+
+  it("localizes the work summary and signal tones in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      mocks.search = "?view=moving";
+      await render();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="moving"]')!;
+      expect(page.textContent).toContain("Visão do andamento");
+      expect(page.textContent).toContain("Precisa de atenção");
+      expect(page.textContent).toContain("Todo o restante");
+      expect(page.textContent).toContain("Trabalho");
+      expect(page.textContent).toContain("1 item concluído não está listado.");
+      expect(page.textContent).toContain("(precisa de atenção)");
+      expect(page.textContent).toContain("(indo bem)");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes the responsibility header and written status in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      mocks.search = "?view=one_screen";
+      mocks.api.statusReport.mockResolvedValue(statusReportFixture());
+      await render();
+      await flush();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="one_screen"]')!;
+      expect(page.textContent).toContain("Pedir uma atualização a CodexCoder");
+      expect(page.textContent).toContain("Escrito por CodexCoder · há 2 dias");
+      expect(page.textContent).toContain("Em risco");
+      expect(page.textContent).toContain("Com base no indicador");
+      expect(page.querySelector('[aria-label="Mais ações para esta responsabilidade"]')).not.toBeNull();
+      expect(page.textContent).toContain("Nova tarefa para um agente");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes the One screen sections, legends and automation actions in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      mocks.search = "?view=one_screen";
+      await render();
+      await flush();
+      const page = host.querySelector<HTMLElement>('[data-responsibility-view="one_screen"]')!;
+      expect(page.textContent).toContain("A meta");
+      expect(page.textContent).toContain("Editar a meta");
+      expect(page.textContent).toContain("Projetos");
+      expect(page.textContent).toContain("Tarefas");
+      expect(page.textContent).toContain("Rotinas");
+      expect(page.textContent).toContain("Impede o avanço da meta");
+      expect(page.textContent).toContain("Contribui para a meta");
+      expect(page.querySelector('[aria-label^="Automatizar com CodexCoder"]')).not.toBeNull();
+      expect(page.querySelector('[aria-label^="Configurar"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("One screen: the bar beside short capped lists of the work, each item marked with how it bears on the number", async () => {

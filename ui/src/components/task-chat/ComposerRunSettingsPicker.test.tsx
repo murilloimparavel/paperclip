@@ -13,6 +13,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import type { ComposerRunSettings } from "./composer-run-settings";
 import { getLastComposerEffort, rememberComposerEffort } from "@/lib/recent-composer-effort";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { i18n } from "@/i18n";
 
 const agent = {
   id: "a1", companyId: "company-1", name: "Clippy",
@@ -63,6 +64,20 @@ afterEach(() => {
 });
 
 describe("composer assignee picker", () => {
+  it("renders model and assignee controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      await act(async () => { render(vi.fn(), vi.fn(), false, { mobile: true, initialOpen: true }); });
+      expect(container!.querySelector('[aria-label="Selecionar responsável"]')).not.toBeNull();
+      expect(container!.querySelector('[aria-label="Selecionar modelo e nível de esforço"]')).not.toBeNull();
+      expect(document.querySelector('[aria-label="Escolher modelo exato"]')).not.toBeNull();
+      expect(document.querySelector<HTMLInputElement>('input[aria-label="Nível de esforço"]')?.getAttribute("aria-valuetext")).toBe("Alto");
+      expect(document.body.textContent).toContain("gpt-6-sol");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
   it.each(["antigravity", "copilot"])("applies the Cloud allowlist to saved %s model settings", async acpxAgent => {
     const selectedAgent = { ...agent, adapterType: "paperclip_runner", adapterConfig: { provider: "acpx", acpxAgent, model: "saved-model" } } as Agent;
     const client = render(vi.fn(), vi.fn(), false, { agents: new Map([[selectedAgent.id, selectedAgent]]) });

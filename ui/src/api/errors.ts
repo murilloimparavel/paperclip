@@ -13,6 +13,7 @@
  */
 
 import { CancelledError } from "@tanstack/react-query";
+import { i18n, t } from "@/i18n";
 
 export type ErrorKind =
   | "transient"
@@ -131,7 +132,12 @@ const KIND_COPY: Record<ErrorKind, { title: string; body: string }> = {
 
 /** Copy for a specific code or kind, for callers that build their own messages. */
 export function errorCopy(key: string): { title: string; body: string } {
-  return CODE_COPY[key] ?? KIND_COPY[key as ErrorKind] ?? KIND_COPY.unknown;
+  const fallback = CODE_COPY[key] ?? KIND_COPY[key as ErrorKind] ?? KIND_COPY.unknown;
+  const namespace = CODE_COPY[key] ? "copy" : "kinds";
+  return {
+    title: t(`errors.${namespace}.${key}.title`, { defaultValue: fallback.title }),
+    body: t(`errors.${namespace}.${key}.body`, { defaultValue: fallback.body }),
+  };
 }
 
 // --- Field extraction -------------------------------------------------------------
@@ -292,16 +298,20 @@ export function errorRetryAfterMs(err: unknown): number | null {
 export function describeError(err: unknown, options: DescribeErrorOptions = {}): ErrorDescription {
   const kind = classifyError(err);
   const retryable = kind === "transient" || kind === "unknown";
-  const coded = errorCodes(err).map((code) => CODE_COPY[code]).find(Boolean);
-  const fallback = KIND_COPY[kind];
+  const codedKey = errorCodes(err).find((code) => CODE_COPY[code]);
+  const coded = codedKey ? errorCopy(codedKey) : null;
+  const fallback = errorCopy(kind);
 
   let body: string;
   if (coded) body = coded.body;
   else if (kind === "transient" || kind === "aborted") body = fallback.body;
   else body = readableServerMessage(err) ?? fallback.body;
 
+  const translatedAction = options.action
+    ? t(`errors.actions.${options.action}`, { defaultValue: i18n.language.startsWith("pt") ? t("errors.genericAction") : options.action })
+    : "";
   const title = options.action && kind !== "transient"
-    ? `Couldn't ${options.action}`
+    ? t("errors.actionFailed", { action: translatedAction })
     : (coded?.title ?? fallback.title);
   return { title, body, retryable };
 }

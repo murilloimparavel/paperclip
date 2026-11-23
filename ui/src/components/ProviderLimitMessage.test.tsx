@@ -1,8 +1,11 @@
 // @vitest-environment jsdom
+import { act } from "react";
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ProviderLimitMessage } from "./ProviderLimitMessage";
+import { i18n } from "@/i18n";
+import { formatProviderLimitMessage } from "@/lib/provider-limit-message";
 
 describe("live provider reset messages", () => {
   let container: HTMLDivElement;
@@ -11,7 +14,8 @@ describe("live provider reset messages", () => {
   const resetAt = new Date(2099, 10, 18, 12, 17, 34, 353);
   const message = `The provider usage limit for this agent is expected to reset at ${resetAt.toISOString()}. Paperclip will start this work then.`;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("en");
     vi.useFakeTimers();
     vi.setSystemTime(new Date(resetAt.getTime() - 44 * 60_000));
     visibility = "visible";
@@ -39,6 +43,45 @@ describe("live provider reset messages", () => {
     flushSync(() => vi.advanceTimersByTime(60_000));
     expect(container.textContent).toContain("in 43 minutes (Nov 18, 2099, 12:17 PM");
     expect(parentRenders).toBe(1);
+  });
+
+  it("localizes known provider limit copy and relative reset time in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(<ProviderLimitMessage>{message}</ProviderLimitMessage>));
+      expect(container.textContent).toContain("O limite de uso do provedor para este agente deve ser redefinido em 44 minutos (");
+      expect(container.textContent).toContain("O Paperclip iniciará este trabalho nesse momento.");
+      expect(container.textContent).not.toContain("The provider usage limit");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
+
+  it("localizes the recognized provider limit lifecycle messages while retaining their dates", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      const samples = [
+        `Waiting for the provider usage limit to reset at ${resetAt.toISOString()} before starting work`,
+        `The provider usage limit resets at ${resetAt.toISOString()}; this wake could not schedule its retry and released the task`,
+        `Waiting for the agent's provider usage limit to reset; the work starts at ${resetAt.toISOString()}.`,
+        `This agent's provider usage limit has no reported reset time. Work is held; a retry can recheck availability after ${resetAt.toISOString()}; the limit may still apply then.`,
+        `Waiting to recheck the provider usage limit after ${resetAt.toISOString()} before starting work`,
+        `Paperclip will recheck the agent's provider usage limit at ${resetAt.toISOString()} before starting work.`,
+      ];
+      const localized = samples.map((sample) => formatProviderLimitMessage(
+        sample,
+        resetAt.getTime() - 44 * 60_000,
+        "pt-BR",
+        (key) => i18n.t(key),
+      ));
+      for (const message of localized) {
+        expect(message).toContain("em 44 minutos (");
+        expect(message).not.toContain("provider usage limit");
+        expect(message).not.toContain("before starting work");
+      }
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("shares one timer across messages and stops it on unmount", () => {

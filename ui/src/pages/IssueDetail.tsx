@@ -1,4 +1,5 @@
 import { createUuid } from "@/lib/uuid";
+import { t as i18nT } from "@/i18n";
 import { invalidateInteractionRecordViews } from "@/lib/attention-record-views";
 import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { NativeControllerContainmentRecovery } from "../components/IssueRecoveryActionCard";
@@ -5420,7 +5421,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           interaction.kind === "request_confirmation"
-            ? buildIssueThreadInteractionSummary(interaction)
+            ? buildIssueThreadInteractionSummary(interaction, (key, values) => i18nT(key, values))
             : "Suggestion rejected",
         tone: "success",
       });
@@ -7878,7 +7879,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     "text-(length:--text-nano)",
                     workModeMeta.classes.badge,
                   )}
-                  title={`This task is in ${workModeMeta.label.toLowerCase()}.`}
+                  title={workModeMeta.label}
                 >
                   <WorkModeIcon className="h-3 w-3" aria-hidden />
                   {workModeMeta.label}

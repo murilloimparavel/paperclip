@@ -842,7 +842,7 @@ jobs:
     needs: [gate]
     if: ${{ needs.gate.outputs.full_ci == 'true' && (needs.gate.outputs.plan == '' || fromJSON(needs.gate.outputs.plan).jobs.verify_paperclip_runner.run) }}
     runs-on: ${{ needs.gate.outputs.runner }}
-    timeout-minutes: 20
+    timeout-minutes: ${{ matrix.lane_label == 'vitest native server' && 30 || 20 }}
     strategy:
       fail-fast: false
       max-parallel: ${{ needs.gate.outputs.runner == 'ubuntu-latest' && 4 || 256 }}

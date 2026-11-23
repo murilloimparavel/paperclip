@@ -1,4 +1,5 @@
 import { auditSectionHref, type AuditSection } from "./audit/audit-navigation";
+import { t } from "@/i18n";
 
 export type AgentAuditView = Extract<AuditSection, "activity" | "runs" | "costs" | "budgets">;
 
@@ -60,8 +61,28 @@ export function isAgentAuditView(view: AgentDetailView): view is AgentAuditView 
 }
 
 export function agentDetailViewLabel(view: AgentLocalDetailView): string {
-  const item = AGENT_DETAIL_NAVIGATION.flatMap((section) => section.items).find((entry) => entry.value === view);
-  return item?.label ?? HIDDEN_VIEW_LABELS[view] ?? "Overview";
+  const labels: Record<AgentLocalDetailView, string> = {
+    overview: "agentDetailNav.overview",
+    instructions: "agentDetailNav.identity",
+    runtime: "agentDetailNav.runtime",
+    secrets: "agentDetailNav.secrets",
+    permissions: "agentDetailNav.permissions",
+    advanced: "agentDetailNav.advanced",
+    activity: "agentDetailNav.activity",
+    runs: "agentDetailNav.runs",
+    costs: "agentDetailNav.costs",
+    budgets: "agentDetailNav.budgets",
+    skills: "agentDetailNav.skills",
+    tools: "agentDetailNav.tools",
+    channels: "agentDetailNav.channels",
+    "api-keys": "agentDetailNav.apiKeys",
+    revisions: "agentDetailNav.agentHistory",
+  };
+  return t(labels[view], { defaultValue: HIDDEN_VIEW_LABELS[view] ?? "Overview" });
+}
+
+export function agentDetailSectionLabel(section: string): string {
+  return t(section === "Audit" ? "agentDetailNav.auditSection" : "agentDetailNav.agentSection", { defaultValue: section });
 }
 
 export function parseAgentDetailView(value: string | null): AgentLocalDetailView {

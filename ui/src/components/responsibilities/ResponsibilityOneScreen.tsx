@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import type { AutomationCandidate } from "@paperclipai/shared";
+import { responsibilityAutomationPercent, type AutomationCandidate } from "@paperclipai/shared";
 import { ArrowUpRight, CircleAlert, MessagesSquare, Pencil, Repeat, Wrench } from "lucide-react";
 import { responsibilitiesApi } from "@/api/responsibilities";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { Card } from "@/components/ui/card";
 import { queryKeys } from "@/lib/queryKeys";
 import { describeError } from "@/api/errors";
 import { useOpenAutomationConversation } from "@/hooks/useOpenAutomationConversation";
-import { automationShareLabel, automationSplitWords, conversationButtonLabel } from "@/lib/responsibility-automation";
 import { capList, workBearings, type BearingItem, type WorkBearing, type WorkItemKind } from "@/lib/responsibility-views";
 import { Link } from "@/lib/router";
 import { cn } from "@/lib/utils";
@@ -29,19 +29,6 @@ import {
 import type { ResponsibilityViewProps } from "./view-props";
 
 const CAP: Record<WorkItemKind, number> = { project: 3, task: 4, routine: 3 };
-const TITLE: Record<WorkItemKind, string> = { project: "Projects", task: "Tasks", routine: "Routines" };
-const EMPTY: Record<WorkItemKind, string> = {
-  project: "No open projects.",
-  task: "No open tasks.",
-  routine: "No routines.",
-};
-
-/** Words for screen readers before the reason; the icon and the reason say it on screen. */
-const BEARING_PREFIX: Record<WorkBearing, string> = {
-  holding: "Holding the number back: ",
-  moving: "Moving the number: ",
-  neutral: "",
-};
 const BEARING_TEXT: Record<WorkBearing, string> = {
   holding: "text-(--status-task-icon-blocked)",
   moving: "text-(--status-task-icon-done)",
@@ -69,6 +56,7 @@ interface AutomateActions {
  * (`automate`): automate it with the agent, or set it up by hand.
  */
 function BearingRow({ entry, automate }: { entry: BearingItem; automate?: AutomateActions }) {
+  const { t } = useTranslation();
   const { item, bearing, reason } = entry;
   const onMakeRoutine = automate?.onByHand;
   return (
@@ -101,7 +89,11 @@ function BearingRow({ entry, automate }: { entry: BearingItem; automate?: Automa
           <span className={cn("flex min-w-0 items-center gap-1 text-xs", BEARING_TEXT[bearing])} data-bearing-reason="">
             <BearingIcon bearing={bearing} />
             <span className="line-clamp-1" title={reason}>
-              <span className="sr-only">{BEARING_PREFIX[bearing]}</span>
+              {bearing !== "neutral" ? <>
+                <span className="sr-only">
+                  {t(bearing === "holding" ? "responsibilityOneScreen.bearing.holding" : "responsibilityOneScreen.bearing.movingAccessible")}:
+                </span>{" "}
+              </> : null}
               {reason}
             </span>
           </span>
@@ -115,7 +107,7 @@ function BearingRow({ entry, automate }: { entry: BearingItem; automate?: Automa
             variant="ghost"
             className="text-muted-foreground"
             disabled={automate.busy}
-            aria-label={`${automate.label}: “${item.title}”`}
+            aria-label={t("responsibilityOneScreen.automateItem", { label: automate.label, title: item.title })}
             title={automate.label}
             onClick={automate.onTalk}
             data-automate-with-agent=""
@@ -127,8 +119,8 @@ function BearingRow({ entry, automate }: { entry: BearingItem; automate?: Automa
             size="icon-xs"
             variant="ghost"
             className="text-muted-foreground"
-            aria-label={`Set up “${item.title}” by hand`}
-            title="Set it up by hand"
+            aria-label={t("responsibilityOneScreen.setUpItemByHand", { title: item.title })}
+            title={t("responsibilityOneScreen.setItUpByHand")}
             onClick={automate.onByHand}
             data-make-routine=""
           >
@@ -153,6 +145,7 @@ function CappedList({
   /** For a manual task that could be automated, how; undefined for every other row. */
   automateFor?: (entry: BearingItem) => AutomateActions | undefined;
 }) {
+  const { t } = useTranslation();
   const { shown } = capList(items, CAP[kind]);
   const more = Math.max(0, total - shown.length);
   const headingId = `one-screen-${kind}-heading`;
@@ -160,7 +153,7 @@ function CappedList({
     <section aria-labelledby={headingId} data-work-list={kind}>
       <Card elevation="low" className="gap-0 overflow-hidden py-0">
         <h2 id={headingId} className="flex items-baseline gap-2 border-b border-border px-4 py-2 text-sm font-semibold text-foreground">
-          {TITLE[kind]} <span className="text-xs font-normal tabular-nums text-muted-foreground">{total}</span>
+          {t(`responsibilityOneScreen.kind.${kind}`)} <span className="text-xs font-normal tabular-nums text-muted-foreground">{total}</span>
         </h2>
         {shown.length > 0 ? (
           <ul className="flex flex-col">
@@ -169,9 +162,13 @@ function CappedList({
             ))}
           </ul>
         ) : (
-          <p className="px-4 py-2 text-sm text-muted-foreground">{EMPTY[kind]}</p>
+          <p className="px-4 py-2 text-sm text-muted-foreground">{t(`responsibilityOneScreen.empty.${kind}`)}</p>
         )}
-        {more > 0 ? <p className="border-t border-border px-4 py-1.5 text-xs text-muted-foreground">and {more} more</p> : null}
+        {more > 0 ? (
+          <p className="border-t border-border px-4 py-1.5 text-xs text-muted-foreground">
+            {more === 1 ? t("responsibilityOneScreen.oneMore") : t("responsibilityOneScreen.moreItems", { count: more })}
+          </p>
+        ) : null}
       </Card>
     </section>
   );
@@ -179,15 +176,16 @@ function CappedList({
 
 /** The key to the marks on the rows, in words. */
 function BearingKey() {
+  const { t } = useTranslation();
   return (
     <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground" data-bearing-key="">
       <span className={cn("flex items-center gap-1", BEARING_TEXT.holding)}>
         <BearingIcon bearing="holding" />
-        Holding the number back
+        {t("responsibilityOneScreen.bearing.holding")}
       </span>
       <span className={cn("flex items-center gap-1", BEARING_TEXT.moving)}>
         <BearingIcon bearing="moving" />
-        Moving it
+        {t("responsibilityOneScreen.bearing.moving")}
       </span>
     </p>
   );
@@ -215,6 +213,7 @@ export function ResponsibilityOneScreen({
   onReviewProposal,
   onEditBar,
 }: ResponsibilityViewProps) {
+  const { t } = useTranslation();
   const { rollup } = responsibility;
   // How automated it is, from the owner's automation read (active responsibilities only).
   const automationQuery = useQuery({
@@ -233,8 +232,15 @@ export function ResponsibilityOneScreen({
     const candidate: AutomationCandidate | undefined = automation.candidates.find((item) => item.issueId === task.id);
     // Beyond the read's ranked few, the server picks the responsible agent.
     const agentId = candidate?.responsibleAgentId ?? task.assigneeAgentId ?? null;
+    const who = agentName(agentId ?? "") ?? t("responsibilityOneScreen.yourAgent");
+    const conversationState = candidate?.conversation?.state;
+    const label = conversationState === "proposal_waiting"
+      ? t("responsibilityOneScreen.reviewAgentProposal", { agent: who })
+      : conversationState === "discussing"
+        ? t("responsibilityOneScreen.continueWithAgent", { agent: who })
+        : t("responsibilityOneScreen.automateWithAgent", { agent: who });
     return {
-      label: conversationButtonLabel({ conversation: candidate?.conversation ?? null, responsibleAgentId: agentId }, agentName),
+      label,
       busy: conversation.isPending,
       onTalk: () => openConversation({ issueId: task.id, agentId, responsibilityId: responsibility.id, conversation: candidate?.conversation ?? null }),
       onByHand: () => setMaking({
@@ -246,7 +252,7 @@ export function ResponsibilityOneScreen({
         cadenceSource: candidate?.cadenceSource,
       }),
     };
-  }, [automation, agentName, conversation.isPending, openConversation, responsibility.id]);
+  }, [automation, agentName, conversation.isPending, openConversation, responsibility.id, t]);
   const byKind = useMemo(() => {
     const entries = workBearings(responsibility, now, agentName);
     return {
@@ -278,16 +284,16 @@ export function ResponsibilityOneScreen({
         <Card id="responsibility-bar-summary" elevation="low" className="h-fit gap-5 px-5 py-5 lg:col-span-2" aria-labelledby="one-screen-bar-heading">
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-2">
-              <h2 id="one-screen-bar-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">The bar</h2>
+              <h2 id="one-screen-bar-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("responsibilityOneScreen.theBar")}</h2>
               {canEditBar ? (
                 <Button size="xs" variant="ghost" onClick={onEditBar}>
                   <Pencil aria-hidden="true" />
-                  Edit the bar
+                  {t("responsibilityOneScreen.editTheBar")}
                 </Button>
               ) : null}
             </div>
             <p className="text-sm text-foreground">
-              {standard || <span className="text-muted-foreground">No bar yet.</span>}
+              {standard || <span className="text-muted-foreground">{t("responsibilityOneScreen.noBarYet")}</span>}
             </p>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -295,8 +301,16 @@ export function ResponsibilityOneScreen({
             {automation ? (
               <p className="flex items-center gap-1.5 text-xs tabular-nums text-muted-foreground" data-automation-line="">
                 <Repeat aria-hidden="true" className="size-3.5 shrink-0" />
-                {automationSplitWords(automation.automationCount, automation.manualTaskCount)}
-                {automationShareLabel(automation.share) ? ` · ${automationShareLabel(automation.share)}` : null}
+                {automation.automationCount === 1
+                  ? t("responsibilityOneScreen.oneAutomation")
+                  : t("responsibilityOneScreen.automations", { count: automation.automationCount })}
+                {" · "}
+                {automation.manualTaskCount === 1
+                  ? t("responsibilityOneScreen.oneManualTask")
+                  : t("responsibilityOneScreen.manualTasks", { count: automation.manualTaskCount })}
+                {responsibilityAutomationPercent(automation.share) !== null
+                  ? ` · ${t("responsibilityOneScreen.automationShare", { percent: responsibilityAutomationPercent(automation.share) })}`
+                  : null}
               </p>
             ) : null}
           </div>
@@ -314,7 +328,7 @@ export function ResponsibilityOneScreen({
           {narrative.summary?.text.trim() ? (
             <section aria-labelledby="one-screen-affecting-heading" className="flex flex-col gap-1.5 border-t border-border pt-4" data-affecting-summary="">
               <h3 id="one-screen-affecting-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                What is affecting the number
+                {t("responsibilityOneScreen.whatAffectsTheNumber")}
               </h3>
               <NarrativeParagraph summary={narrative.summary} stillWaiting={narrative.stillWaiting} />
             </section>
@@ -333,7 +347,7 @@ export function ResponsibilityOneScreen({
             automateFor={automateFor}
           />
           {conversation.error ? (
-            <p role="alert" className="text-xs text-destructive">Couldn’t open the conversation. {describeError(conversation.error).body}</p>
+            <p role="alert" className="text-xs text-destructive">{t("responsibilityOneScreen.couldntOpenConversation")} {describeError(conversation.error).body}</p>
           ) : null}
           <ArtifactCards artifacts={responsibility.artifacts} total={responsibility.artifactsTotal} />
         </div>

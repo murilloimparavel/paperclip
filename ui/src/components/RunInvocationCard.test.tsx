@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ThemeProvider } from "../context/ThemeContext";
 import { RunInvocationCard } from "./run-log/RunDetails";
+import { t } from "@/i18n";
 
 describe("RunInvocationCard", () => {
   it("keeps verbose invocation details collapsed by default", () => {
@@ -25,10 +26,10 @@ describe("RunInvocationCard", () => {
       </ThemeProvider>,
     );
 
-    expect(html).toContain("Invocation");
-    expect(html).toContain("Adapter:");
-    expect(html).toContain("Working dir:");
-    expect(html).toContain("Details");
+    expect(html).toContain(t("runLogs.invocation"));
+    expect(html).toContain(t("runLogs.adapter"));
+    expect(html).toContain(t("runLogs.workingDir"));
+    expect(html).toContain(t("runLogs.details"));
     expect(html).not.toContain("Command:");
     expect(html).not.toContain("Prompt is piped to claude via stdin.");
     expect(html).not.toContain("very long prompt body");

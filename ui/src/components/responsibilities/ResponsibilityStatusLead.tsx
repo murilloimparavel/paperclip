@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import {
-  RESPONSIBILITY_STATUS_REPORT_LABEL,
   type Agent,
   type ResponsibilityHealth,
   type ResponsibilityRollup,
@@ -12,7 +13,7 @@ import { describeError } from "@/api/errors";
 import { responsibilitiesApi } from "@/api/responsibilities";
 import { Button } from "@/components/ui/button";
 import { queryKeys } from "@/lib/queryKeys";
-import { describeReadingAge } from "@/lib/responsibilities";
+import { daysBetween } from "@/lib/responsibilities";
 import { cn } from "@/lib/utils";
 import { ResponsibilityHealthBadge, StaleFlag } from "./ResponsibilityHealthBadge";
 
@@ -43,13 +44,29 @@ export function describeStatusAuthor(
   agentsById: ReadonlyMap<string, Agent>,
   now: Date,
   ownerUserId: string,
+  t: TFunction,
+  locale: string,
 ): string {
   const who = current.agentId
-    ? agentsById.get(current.agentId)?.name ?? "an agent"
+    ? agentsById.get(current.agentId)?.name ?? t("responsibilityStatusLead.anAgent")
     : current.userId
-      ? current.userId === ownerUserId ? "the owner" : "a teammate"
-      : "an agent no longer here";
-  return `Written by ${who} · ${describeReadingAge(current.writtenAt, now)}`;
+      ? current.userId === ownerUserId ? t("responsibilityStatusLead.theOwner") : t("responsibilityStatusLead.aTeammate")
+      : t("responsibilityStatusLead.agentNoLongerHere");
+  const days = daysBetween(current.writtenAt, now);
+  const age = days === 0
+    ? t("responsibilityStatusLead.today")
+    : days === 1
+      ? t("responsibilityStatusLead.yesterday")
+      : days < 30
+        ? t("responsibilityStatusLead.daysAgo", { count: days })
+        : t("responsibilityStatusLead.onDate", {
+            date: new Date(current.writtenAt).toLocaleDateString(locale, {
+              month: "short",
+              day: "numeric",
+              ...(new Date(current.writtenAt).getFullYear() !== now.getFullYear() ? { year: "numeric" as const } : {}),
+            }),
+          });
+  return t("responsibilityStatusLead.writtenBy", { who, age });
 }
 
 /**
@@ -73,6 +90,7 @@ export function ResponsibilityStatusBlock({
   editable: boolean;
   className?: string;
 }) {
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const report = useResponsibilityStatusReport(responsibility.id, responsibility.status === "active");
   const ask = useMutation({
@@ -98,12 +116,12 @@ export function ResponsibilityStatusBlock({
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-col gap-1.5" data-agent-status="">
         <div className="flex flex-wrap items-center gap-2">
-          <ResponsibilityHealthBadge health={REPORT_HEALTH[current.status]} label={RESPONSIBILITY_STATUS_REPORT_LABEL[current.status]} />
+          <ResponsibilityHealthBadge health={REPORT_HEALTH[current.status]} label={t(`responsibilityStatusLead.report.${current.status}`)} />
         </div>
         <p className="text-sm text-foreground" data-agent-status-message="">{current.message}</p>
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-          <span>{describeStatusAuthor(current, agentsById, now, responsibility.ownerUserId)}</span>
-          {current.outOfDate ? <StaleFlag label="Out of date" /> : null}
+          <span>{describeStatusAuthor(current, agentsById, now, responsibility.ownerUserId, t, i18n.resolvedLanguage ?? "en-US")}</span>
+          {current.outOfDate ? <StaleFlag label={t("responsibilityStatusLead.outOfDate")} /> : null}
         </p>
         {editable && reporterName ? (
           <div className="flex flex-wrap items-center gap-2">
@@ -117,16 +135,18 @@ export function ResponsibilityStatusBlock({
               data-ask-for-update=""
             >
               {ask.isPending ? <Loader2 aria-hidden="true" className="animate-spin" /> : <MessageSquare aria-hidden="true" />}
-              {requested ? `Asked ${reporterName} for an update` : `Ask ${reporterName} for an update`}
+              {requested
+                ? t("responsibilityStatusLead.askedForUpdate", { name: reporterName })
+                : t("responsibilityStatusLead.askForUpdate", { name: reporterName })}
             </Button>
             {ask.error ? (
-              <p role="alert" className="text-xs text-destructive">Couldn’t ask. {describeError(ask.error).body}</p>
+              <p role="alert" className="text-xs text-destructive">{t("responsibilityStatusLead.couldntAsk")} {describeError(ask.error).body}</p>
             ) : null}
           </div>
         ) : null}
       </div>
       <div className="flex flex-col gap-1.5 border-t border-border pt-3" data-derived-status="">
-        <span className="text-xs text-muted-foreground">From the number</span>
+        <span className="text-xs text-muted-foreground">{t("responsibilityStatusLead.fromTheNumber")}</span>
         {derived}
       </div>
     </div>

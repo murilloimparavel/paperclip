@@ -1304,11 +1304,11 @@ describe("AgentConfigForm environment selector", () => {
   it("reads and saves Pi thinking effort using the Pi runtime key", async () => {
     const result = await renderForm([], { adapterType: "pi_local", adapterConfig: { model: "openrouter/anthropic/claude-sonnet-4.6", thinking: "high" } });
     roots.push(result.root);
-    const effort = [...result.container.querySelectorAll("button")].find(button => button.textContent?.trim() === "high")!;
+    const effort = [...result.container.querySelectorAll("button")].find(button => button.textContent?.trim() === "High")!;
     expect(effort).toBeTruthy();
     await act(async () => effort.click());
     await flushReact();
-    const low = [...document.querySelectorAll("button")].find(button => button.textContent?.trim() === "lowlow")!;
+    const low = [...document.querySelectorAll("button")].find(button => button.textContent?.trim() === "Lowlow")!;
     expect(low).toBeTruthy();
     await act(async () => low.click());
     await flushReact();

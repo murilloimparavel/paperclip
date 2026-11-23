@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   DndContext,
   KeyboardSensor,
@@ -66,10 +67,10 @@ export function reorderQueuedMessageEntries(
  * People see one readable line. A saved card response also carries a typed
  * JSON receipt for the agent; it never reaches a label or a hover.
  */
-export function queuedMessageLabel(entry: IssueQueuedCommentEntry): string {
+export function queuedMessageLabel(entry: IssueQueuedCommentEntry, savedResponseFallback = "Saved response"): string {
   if (entry.source?.kind !== "interaction") return entry.comment.body;
   const summary = entry.source.summary?.trim();
-  return summary || entry.comment.body.split("\n")[0] || "Saved response";
+  return summary || entry.comment.body.split("\n")[0] || savedResponseFallback;
 }
 
 function queueActionErrorCode(error: unknown): string | null {
@@ -123,8 +124,9 @@ function SortableQueuedMessage({
   onDiscard: () => void;
   onCancelAutoSteer: () => void;
 }) {
+  const { t } = useTranslation();
   const immutableResponse = entry.source?.kind === "interaction";
-  const body = queuedMessageLabel(entry);
+  const body = queuedMessageLabel(entry, t("taskChatQueue.savedResponse"));
   const images = extractImageRefs(body).filter(image =>
     /^\/api\/(?:attachments|assets)\/[^/?#\\]+\/content(?:\?[^#\\]*)?$/.test(image.url));
   const label = stripStandaloneImageEmbeds(body);
@@ -140,10 +142,10 @@ function SortableQueuedMessage({
     queueMutationDisabled || queue.steeringDisposition !== "available";
   const steerTitle =
     queue.steeringDisposition === "unsupported"
-      ? "This runner does not support steering"
+      ? t("taskChatQueue.steeringUnsupported")
       : queue.steeringDisposition === "temporarily_unavailable"
-        ? "Steering is temporarily unavailable"
-        : "Steer this message into the active turn";
+        ? t("taskChatQueue.steeringUnavailable")
+        : t("taskChatQueue.steerTitle");
 
   return (
     <div
@@ -162,7 +164,7 @@ function SortableQueuedMessage({
         {...sortable.attributes}
         {...sortable.listeners}
         disabled={queueMutationDisabled || immutableResponse}
-        aria-label={`Reorder queued message: ${label || "Images"}`}
+        aria-label={t("taskChatQueue.reorderAria", { label: label || t("taskChatQueue.images") })}
         className="flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-accent hover:text-foreground active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
       >
         <GripVertical className="h-3.5 w-3.5" aria-hidden />
@@ -178,7 +180,7 @@ function SortableQueuedMessage({
           linkIssueReferences={false}
           mediaMode="omit"
         >{label}</MarkdownBody> : null}
-        {images.length ? <div className="flex min-w-0 max-w-full flex-wrap items-center gap-1" role="group" aria-label="Queued images">
+        {images.length ? <div className="flex min-w-0 max-w-full flex-wrap items-center gap-1" role="group" aria-label={t("taskChatQueue.queuedImages")}>
           {images.slice(0, 3).map(image => <img
             key={image.url} src={image.url} alt={image.name} loading="lazy"
             className="size-8 shrink-0 rounded-md border border-border object-cover"
@@ -190,26 +192,26 @@ function SortableQueuedMessage({
       {autoSteerSecondsLeft !== null ? (
         <span className="flex shrink-0 items-center gap-1" data-testid={`task-chat-queued-auto-steer-${entry.comment.id}`}>
           <span className="px-1 text-xs text-muted-foreground tabular-nums">
-            Sending in {autoSteerSecondsLeft}s
+            {t("taskChatQueue.sendingIn", { count: autoSteerSecondsLeft })}
           </span>
           <button
             type="button"
             onClick={onEdit}
             disabled={!entry.canEdit}
-            title="Edit before it is sent"
+            title={t("taskChatQueue.editBeforeSend")}
             className="flex h-7 shrink-0 items-center rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
             data-testid={`task-chat-queued-auto-steer-edit-${entry.comment.id}`}
           >
-            Edit
+            {t("taskChatQueue.edit")}
           </button>
           <button
             type="button"
             onClick={onCancelAutoSteer}
-            title="Keep this message in the queue"
+            title={t("taskChatQueue.keepInQueue")}
             className="flex h-7 shrink-0 items-center rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             data-testid={`task-chat-queued-auto-steer-cancel-${entry.comment.id}`}
           >
-            Cancel
+            {t("taskChatQueue.cancel")}
           </button>
         </span>
       ) : (queue.targetRunId || queue.state === "deferred") && (!queue.targetRunId || queue.protocol === "legacy" || entry.source?.requiresFreshSession ||
@@ -217,9 +219,9 @@ function SortableQueuedMessage({
         <button
           type="button"
           onClick={onInterrupt}
-          aria-label={!queue.targetRunId ? "Send queued messages" : undefined}
+          aria-label={!queue.targetRunId ? t("taskChatQueue.sendQueued") : undefined}
           disabled={busy || !queue.queueId || !onInterrupt}
-          title={queue.targetRunId ? "Interrupt the active turn and send queued messages" : "Send queued messages now"}
+          title={queue.targetRunId ? t("taskChatQueue.interruptAndSend") : t("taskChatQueue.sendQueuedNow")}
           className="flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           data-testid={`task-chat-queued-interrupt-${entry.comment.id}`}
         >
@@ -228,7 +230,7 @@ function SortableQueuedMessage({
           ) : (
             <CornerDownRight className="h-3.5 w-3.5" aria-hidden />
           )}
-          {queue.targetRunId ? "Interrupt" : "Send"}
+          {queue.targetRunId ? t("taskChatQueue.interrupt") : t("taskChatQueue.send")}
         </button>
       ) : (
         <button
@@ -244,7 +246,7 @@ function SortableQueuedMessage({
           ) : (
             <CornerDownRight className="h-3.5 w-3.5" aria-hidden />
           )}
-          Steer
+          {t("taskChatQueue.steer")}
         </button>
       ))}
 
@@ -252,8 +254,8 @@ function SortableQueuedMessage({
         type="button"
         onClick={onDiscard}
         disabled={busy || !entry.canDiscard}
-        title="Discard queued message"
-        aria-label={`Discard queued message: ${label}`}
+        title={t("taskChatQueue.discard")}
+        aria-label={t("taskChatQueue.discardAria", { label })}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
         data-testid={`task-chat-queued-discard-${entry.comment.id}`}
       >
@@ -269,8 +271,8 @@ function SortableQueuedMessage({
           <button
             type="button"
             disabled={queueMutationDisabled || immutableResponse}
-            title="Queued message actions"
-            aria-label={`Queued message actions: ${label}`}
+            title={t("taskChatQueue.messageActions")}
+            aria-label={t("taskChatQueue.messageActionsAria", { label })}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <MoreHorizontal className="h-4 w-4" aria-hidden />
@@ -279,7 +281,7 @@ function SortableQueuedMessage({
         <DropdownMenuContent align="end" className="w-44">
           <DropdownMenuItem disabled={!entry.canEdit} onSelect={onEdit}>
             <Pencil className="h-4 w-4" aria-hidden />
-            Edit message
+            {t("taskChatQueue.editMessage")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu> : null}
@@ -298,6 +300,7 @@ export function TaskChatQueuedMessages({
   editingCommentId = null,
   autoSteerDelayMs = null,
 }: TaskChatQueuedMessagesProps) {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState(queue.entries);
   // Automatic steering: Cancel keeps a message queued for this view; each
   // message revision gets at most one automatic attempt, so a failure falls
@@ -338,7 +341,7 @@ export function TaskChatQueuedMessages({
     setDeferredStatus(current => {
       if (!current) return null;
       if (queue.state !== "deferred" || queue.queueId !== current.queueId || !queue.entries.length) return null;
-      const message = queue.executionWait?.message ?? "Messages are still queued. They will send when the task is ready.";
+      const message = queue.executionWait?.message ?? t("taskChatQueue.stillQueuedReady");
       return current.message === message ? current : { ...current, message };
     });
   }, [queue.state, queue.queueId, queue.entries.length, queue.executionWait?.message]);
@@ -374,7 +377,7 @@ export function TaskChatQueuedMessages({
   useEffect(() => {
     const fresh = [...autoSteerDeadlines.keys()].filter(id => !announcedCountdowns.current.has(id));
     for (const id of fresh) announcedCountdowns.current.add(id);
-    if (fresh.length) setAnnouncement("Queued message will be sent into the active turn in a few seconds. Edit or Cancel to keep it.");
+    if (fresh.length) setAnnouncement(t("taskChatQueue.autoSendAnnouncement"));
   }, [autoSteerDeadlines]);
 
   // Tick only while a countdown is visible.
@@ -424,9 +427,7 @@ export function TaskChatQueuedMessages({
     setEntries(next);
     setReordering(true);
     setVisibleError(null);
-    setAnnouncement(
-      `Moved queued message to position ${to + 1} of ${next.length}.`,
-    );
+    setAnnouncement(t("taskChatQueue.movedAnnouncement", { position: to + 1, total: next.length }));
     try {
       await onReorder(orderedIds, queue.revision);
     } catch (error) {
@@ -434,8 +435,8 @@ export function TaskChatQueuedMessages({
       setAnnouncement("");
       setVisibleError(
         queueActionErrorCode(error) === "queued_comment_revision_conflict"
-          ? "The queue changed in another session. Its latest order has been restored."
-          : "Couldn’t reorder. Previous order restored.",
+          ? t("taskChatQueue.reorderConflict")
+          : t("taskChatQueue.reorderError"),
       );
     } finally {
       setReordering(false);
@@ -466,10 +467,10 @@ export function TaskChatQueuedMessages({
     setVisibleError(null); setDeferredStatus(null);
     setAnnouncement(
       action === "steer"
-        ? "Steering queued message."
+        ? t("taskChatQueue.steeringMessage")
         : action === "interrupt"
-          ? "Sending queued messages."
-          : "Discarding queued message.",
+          ? t("taskChatQueue.sendingMessages")
+          : t("taskChatQueue.discardingMessage"),
     );
     try {
       if (action === "steer") await onSteer(commentId, queue.revision);
@@ -479,8 +480,8 @@ export function TaskChatQueuedMessages({
         if (updatedQueue?.state === "deferred" && !isQueuedInterruptHandoff(updatedQueue)) {
           for (const entry of updatedQueue.entries) optimisticDeliveryIds.current.delete(entry.comment.id);
           setEntries(updatedQueue.entries.filter(entry => !optimisticDeliveryIds.current.has(entry.comment.id)));
-          setDeferredStatus({ queueId: updatedQueue.queueId, message: updatedQueue.executionWait?.message ?? "Messages are still queued. They will send when the task is ready." });
-          setAnnouncement("Messages are still queued.");
+          setDeferredStatus({ queueId: updatedQueue.queueId, message: updatedQueue.executionWait?.message ?? t("taskChatQueue.stillQueuedReady") });
+          setAnnouncement(t("taskChatQueue.stillQueued"));
           return;
         }
       }
@@ -492,12 +493,12 @@ export function TaskChatQueuedMessages({
       }
       setAnnouncement(
         action === "steer"
-          ? "Message steered into the active turn."
+          ? t("taskChatQueue.steeredSuccess")
           : action === "interrupt"
             ? queue.targetRunId
-              ? "Queued messages will be sent when the previous run has stopped."
-              : "Queued messages submitted. Waiting for the agent."
-            : "Queued message discarded.",
+              ? t("taskChatQueue.interruptedSendQueued")
+              : t("taskChatQueue.sentWaitingAgent")
+            : t("taskChatQueue.discardedSuccess"),
       );
     } catch (error) {
       for (const id of deliveredIds) optimisticDeliveryIds.current.delete(id);
@@ -510,14 +511,14 @@ export function TaskChatQueuedMessages({
       const code = queueActionErrorCode(error);
       setVisibleError(
         code === "queued_comment_already_dispatching"
-          ? "Too late to discard: this message is already being sent."
+          ? t("taskChatQueue.alreadySending")
           : action === "steer"
-            ? "Couldn’t steer. Message is still queued."
+            ? t("taskChatQueue.steerError")
             : action === "interrupt"
-              ? queue.targetRunId ? "Couldn’t interrupt. Message is still queued." : "Couldn’t send. Message is still queued."
+              ? queue.targetRunId ? t("taskChatQueue.interruptError") : t("taskChatQueue.sendError")
               : code === "queued_comment_revision_conflict"
-                ? "The queue changed in another session. Review it and try again."
-                : "Couldn’t discard. Message is still queued.",
+                ? t("taskChatQueue.queueConflict")
+                : t("taskChatQueue.discardError"),
       );
     } finally {
       setPending(null);
@@ -536,7 +537,7 @@ export function TaskChatQueuedMessages({
   return (
     <TaskChatComposerBar
       data-testid="task-chat-queued-messages"
-      aria-label="Queued messages"
+      aria-label={t("taskChatQueue.queuedMessages")}
     >
       <DndContext
         sensors={sensors}

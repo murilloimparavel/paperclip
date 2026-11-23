@@ -160,7 +160,7 @@ test.describe("Announcement placement on a new company's first task", () => {
     expect(card.width + borderWidth, "announcement fills the sidebar inside its continuous border")
       .toBeCloseTo(sidebarBox.width, 0);
     expect.soft(card.height, "docked card keeps at most half the window height").toBeLessThanOrEqual(viewport.height / 2 + 1);
-    await expect.soft(page.getByLabel("Workspace navigation").getByRole("link", { name: "Tasks" })).toBeInViewport();
+    await expect.soft(page.getByLabel("Workspace navigation").getByRole("link", { name: /^(Tasks|Tarefas)$/ })).toBeInViewport();
     const accountTrigger = page.getByRole("button", { name: "Open account menu" });
     await expect.soft(accountTrigger).toBeInViewport();
     expect.soft(overlapArea(card, await box(accountTrigger, "account menu trigger"))).toBe(0);

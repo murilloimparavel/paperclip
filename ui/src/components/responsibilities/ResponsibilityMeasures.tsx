@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 import type { ResponsibilityHealth } from "@paperclipai/shared";
 import { Bot } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
-import { agentPoweredShare, RESPONSIBILITY_HEALTH_LABEL, RESPONSIBILITY_HEALTH_ORDER } from "@/lib/responsibilities";
+import { agentPoweredShare, RESPONSIBILITY_HEALTH_ORDER } from "@/lib/responsibilities";
 import { cn } from "@/lib/utils";
 import { healthStatusStyle } from "./ResponsibilityHealthBadge";
 
@@ -44,25 +45,26 @@ export function ResponsibilityStandingSummary({
   onSelect?: (health: ResponsibilityHealth | null) => void;
   children?: ReactNode;
 }) {
+  const { t } = useTranslation();
   const total = RESPONSIBILITY_HEALTH_ORDER.reduce((sum, health) => sum + counts[health], 0);
   return (
     <Card elevation="low" className="gap-4 px-5 py-4" aria-labelledby="responsibility-standing-heading">
       <div className="flex items-baseline justify-between gap-3">
         <h3 id="responsibility-standing-heading" className="text-sm font-semibold text-foreground">
-          Where things stand
+          {t("responsibilityMeasures.whereThingsStand")}
         </h3>
         <p className="text-xs text-muted-foreground tabular-nums">
-          {total === 1 ? "1 responsibility" : `${total} responsibilities`}
+          {total === 1 ? t("responsibilityMeasures.oneResponsibility") : t("responsibilityMeasures.responsibilities", { count: total })}
         </p>
       </div>
       <HealthBar counts={counts} />
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role={onSelect ? "group" : undefined} aria-label={onSelect ? "Filter by status" : undefined}>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role={onSelect ? "group" : undefined} aria-label={onSelect ? t("responsibilityMeasures.filterByStatus") : undefined}>
         {RESPONSIBILITY_HEALTH_ORDER.map((health) => {
           const content = (
             <>
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="status-fill size-2 shrink-0 rounded-full" style={healthStatusStyle(health)} aria-hidden="true" />
-                <span className="truncate">{RESPONSIBILITY_HEALTH_LABEL[health]}</span>
+                <span className="truncate">{t(`responsibilityMeasures.health.${health}`)}</span>
               </span>
               <span className="text-2xl font-semibold tabular-nums text-foreground">{counts[health]}</span>
             </>
@@ -105,34 +107,35 @@ export function AgentPoweredSummary({
   userTasks: number;
   openTasks: number;
 }) {
+  const { t } = useTranslation();
   const share = agentPoweredShare(agentTasks, openTasks);
   return (
     <Card elevation="low" className="gap-4 px-5 py-4" aria-labelledby="responsibility-agent-powered-heading">
       <div className="flex items-baseline justify-between gap-3">
         <h3 id="responsibility-agent-powered-heading" className="text-sm font-semibold text-foreground">
-          Agent-powered
+          {t("responsibilityMeasures.agentPowered")}
         </h3>
         <Bot className="size-4 text-muted-foreground" aria-hidden="true" />
       </div>
       <div
         className="flex h-2 w-full overflow-hidden rounded-full bg-muted"
         role="meter"
-        aria-label="Open tasks run by an agent"
+        aria-label={t("responsibilityMeasures.openTasksRunByAgent")}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={share.percent}
-        aria-valuetext={openTasks > 0 ? `${share.label} open tasks` : share.label}
+        aria-valuetext={openTasks > 0 ? t("responsibilityMeasures.openTasksShare", { share: share.label }) : t("responsibilityMeasures.noOpenTasks")}
       >
         {/* Width is the measured share (data), not a visual value. */}
         <div className="h-full rounded-full bg-primary" style={{ width: `${share.percent}%` }} />
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div className="flex min-w-0 flex-col gap-1">
-          <span className="text-xs text-muted-foreground">Run by an agent</span>
+          <span className="text-xs text-muted-foreground">{t("responsibilityMeasures.runByAgent")}</span>
           <span className="text-2xl font-semibold tabular-nums text-foreground">{agentTasks}</span>
         </div>
         <div className="flex min-w-0 flex-col gap-1">
-          <span className="text-xs text-muted-foreground">On you alone</span>
+          <span className="text-xs text-muted-foreground">{t("responsibilityMeasures.onYouAlone")}</span>
           <span className="text-2xl font-semibold tabular-nums text-foreground">{userTasks}</span>
         </div>
       </div>

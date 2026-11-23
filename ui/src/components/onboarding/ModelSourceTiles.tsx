@@ -2,6 +2,7 @@ import { useRef, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "../../lib/utils";
+import { t } from "@/i18n";
 import {
   SOURCE_EXIT_FADE,
   SOURCE_COLLAPSE_MOVE,
@@ -33,9 +34,9 @@ export type ModelSource = {
 };
 
 const CREDENTIAL_TAG_LABEL: Record<ModelConnectionMode, string> = {
-  subscription: "Subscription",
-  api: "API key",
-  advanced: "Custom Gateway",
+  subscription: t("modelConnection.subscription"),
+  api: t("modelConnection.apiKey"),
+  advanced: t("modelConnection.customGateway"),
 };
 
 /**

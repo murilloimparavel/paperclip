@@ -14,6 +14,7 @@ import {
 } from "./onboarding/onboarding-motion";
 import { ANALYTICS_MASK_CLASS, ANALYTICS_NO_CAPTURE_CLASS } from "@/lib/analytics/privacy";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 /**
  * Which shell a login panel draws itself in.
@@ -97,7 +98,7 @@ export function OnboardingLoginCard({
       <div
         className="flex min-h-(--sz-108px) items-center justify-center rounded-xl bg-muted/40"
         role="status"
-        aria-label="Preparing the sign-in"
+        aria-label={t("loginChrome.preparingSignIn")}
       >
         <Loader2 className="size-4 animate-spin text-muted-foreground" />
       </div>
@@ -307,13 +308,13 @@ export function OnboardingLoginCodeRow({
             animate={{ opacity: 1, y: 0, transition: COPIED_REVEAL }}
             exit={{ opacity: 0, transition: COPIED_REVEAL }}
           >
-            Copied!
+            {t("loginChrome.copied")}
           </motion.span>
         )}
       </AnimatePresence>
       <LoginCardCopyButton
         value={code}
-        label="Copy the code"
+        label={t("loginChrome.copyCode")}
         onCopied={() => {
           // No wait here. A press is a direct action, and delaying its
           // acknowledgement would read as the button having missed.
@@ -363,8 +364,8 @@ export function OnboardingCardField({
   onSubmit,
   onPaste,
   disabled,
-  label = "Authorization code",
-  placeholder = "Paste authorization code here",
+  label = t("loginChrome.authorizationCode"),
+  placeholder = t("loginChrome.authorizationCodePlaceholder"),
   masked = false,
   autoFocus = false,
 }: {
@@ -441,7 +442,7 @@ export function ProviderSubscriptionCard({
   return (
     <OnboardingLoginCard
       loading={loading}
-      instruction={failure ? (failure === "expired" ? "This sign-in expired" : "Sign-in didn’t finish") : (
+          instruction={failure ? (failure === "expired" ? t("loginChrome.signInExpired") : t("loginChrome.signInDidNotFinish")) : (
         <>
           <a
             href={authorizationUrl}
@@ -454,19 +455,19 @@ export function ProviderSubscriptionCard({
             rel="noreferrer noopener"
             className="underline underline-offset-2 hover:text-foreground"
           >
-            Sign in to {providerName}
+            {t("loginChrome.signInToProvider", { provider: providerName })}
           </a>
-          {mode === "browser_redirect" ? " then return here"
+          {mode === "browser_redirect" ? t("loginChrome.thenReturnHere")
             : mode === "submitted_code"
-            ? " then come back and enter authorization code"
-            : " by providing the authorization code below"}
+            ? t("loginChrome.thenEnterCode")
+            : t("loginChrome.provideCodeBelow")}
         </>
       )}
     >
       {failure && (
         <div className="flex flex-col items-start gap-3 px-2">
-          <p role="alert" className="text-sm text-muted-foreground">{failureMessage ?? "Retry sign-in to get a fresh code. Your setup is saved."}</p>
-          {onRetry && <Button type="button" variant="outline" onClick={onRetry}>Retry sign-in</Button>}
+          <p role="alert" className="text-sm text-muted-foreground">{failureMessage ?? t("loginChrome.retryForFreshCode")}</p>
+          {onRetry && <Button type="button" variant="outline" onClick={onRetry}>{t("loginChrome.retrySignIn")}</Button>}
         </div>
       )}
       {children}
@@ -482,9 +483,9 @@ export function ProviderApiKeyCard({
 }) {
   return (
     <OnboardingLoginCard
-      instruction={`Provide your ${providerName} API key to connect`}
+      instruction={t("loginChrome.provideProviderApiKey", { provider: providerName })}
     >
-      <OnboardingCardField {...field} label="API key" masked />
+      <OnboardingCardField {...field} label={t("loginChrome.apiKeyLabel")} masked />
     </OnboardingLoginCard>
   );
 }
@@ -537,16 +538,16 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
     setBrowserCode(value);
     void submitBrowserCode(value);
   }
-  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Preparing sign-in…</p>;
+  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("loginChrome.preparingSignInProgress")}</p>;
   const ready = login?.status === "ready";
   const awaitingBrowserSignIn = browserLogin && !ready && !login?.authorizationUrl && !login?.error;
   return <div className="min-w-0 max-w-full space-y-3 text-sm text-muted-foreground">
     {ready ? <>
-      <p role="status" className={cn("flex items-center gap-2 text-foreground", ANALYTICS_MASK_CLASS)}><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{login?.accountLabel ?? provider} is signed in. Click Connect to use this account.</p>
-      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>Use a different account</button>}
-    </> : !browserLogin && <p>{isolated ? `Sign in to ${provider} for this connection on the machine running Paperclip. Your existing terminal login stays separate.` : `Connect uses your local ${provider} account on the machine running Paperclip.`}</p>}
-    {awaitingBrowserSignIn && <p role="status">Preparing browser sign-in…</p>}
-    {(submitting || codeSubmitted) && !ready && !login?.error && <p role="status">Finishing sign-in…</p>}
+      <p role="status" className={cn("flex items-center gap-2 text-foreground", ANALYTICS_MASK_CLASS)}><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{t("loginChrome.accountSignedIn", { account: login?.accountLabel ?? provider })}</p>
+      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>{t("loginChrome.useDifferentAccount")}</button>}
+    </> : !browserLogin && <p>{isolated ? t("loginChrome.isolatedLoginInfo", { provider }) : t("loginChrome.localLoginInfo", { provider })}</p>}
+    {awaitingBrowserSignIn && <p role="status">{t("loginChrome.preparingBrowserSignIn")}</p>}
+    {(submitting || codeSubmitted) && !ready && !login?.error && <p role="status">{t("loginChrome.finishingSignIn")}</p>}
     {browserLogin && !ready && !submitting && !codeSubmitted && !login?.error && login?.authorizationUrl && <ProviderSubscriptionCard
       providerName={connectSourceName(adapterType)}
       authorizationUrl={login.authorizationUrl}
@@ -560,17 +561,17 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
           onSubmit={() => void submitBrowserCode()}
           disabled={submitting}
         />
-        <Button type="button" disabled={!browserCode.trim() || submitting} onClick={() => void submitBrowserCode()}>Submit code</Button>
-      </div> : adapterType === "antigravity_runtime" ? <p>Finish signing in in the Google browser window, then return here.</p> : <OnboardingLoginCodeRow code={login.code ?? ""} />}
+        <Button type="button" disabled={!browserCode.trim() || submitting} onClick={() => void submitBrowserCode()}>{t("loginChrome.submitCode")}</Button>
+      </div> : adapterType === "antigravity_runtime" ? <p>{t("loginChrome.finishGoogleSignIn")}</p> : <OnboardingLoginCodeRow code={login.code ?? ""} />}
     </ProviderSubscriptionCard>}
     {!browserLogin && (!ready || showCommand) && !login?.error && <>
-      <p>Run this in a terminal on that machine and finish signing in in your browser. We’ll check automatically when you return.</p>
+      <p>{t("loginChrome.terminalLoginInstruction")}</p>
       {command && <div className="flex min-w-0 max-w-full items-start gap-2 rounded-md border bg-muted p-3 text-foreground">
         <pre className={cn("min-w-0 flex-1 whitespace-pre-wrap break-all font-mono text-xs", ANALYTICS_NO_CAPTURE_CLASS)}><code>{command}</code></pre>
-        <LoginCardCopyButton value={command} label="Copy sign-in command" />
+        <LoginCardCopyButton value={command} label={t("loginChrome.copySignInCommand")} />
       </div>}
     </>}
     {login?.error && <p role="alert">{login.error}</p>}
-    {login && !login.preparing && !ready && !awaitingBrowserSignIn && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? "Start sign-in again" : "Check again"}</button>}
+    {login && !login.preparing && !ready && !awaitingBrowserSignIn && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? t("loginChrome.startSignInAgain") : t("loginChrome.checkAgain")}</button>}
   </div>;
 }
