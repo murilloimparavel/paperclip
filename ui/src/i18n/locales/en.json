@@ -3170,5 +3170,16 @@
     "loadError": "Couldn't load worktrees.",
     "retry": "Retry",
     "emptyHint": "No existing worktrees yet. Choose New worktree to start one."
+  },
+  "richWorkProductCard": {
+    "noLink": "No link was provided for this work product.",
+    "updated": "Updated {{date}}",
+    "savedDescription": "Saved description",
+    "openInTab": "Open in tab",
+    "openInTabAria": "Open in tab: {{title}}",
+    "hideDetails": "Hide details",
+    "showDetails": "Show details",
+    "hideDetailsAria": "Hide details: {{title}}",
+    "showDetailsAria": "Show details: {{title}}"
   }
 }

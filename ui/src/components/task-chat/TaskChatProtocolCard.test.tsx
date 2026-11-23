@@ -18,6 +18,7 @@ import { transcriptToTaskChatItems } from "./transcript-adapter";
 import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { RichWorkProductCard } from "./RichWorkProductCard";
 import { stateChipFor } from "./RichWorkProductCard";
+import { i18n } from "@/i18n";
 
 function workProduct(overrides: Partial<IssueWorkProduct> = {}): IssueWorkProduct {
   return {
@@ -267,6 +268,21 @@ describe("TaskChatProtocolCard", () => {
     expect(container.querySelector("details")).toBeNull();
     expect(container.textContent).toContain("Branch · no remote link");
     expect(container.querySelector('button[aria-label^="Show details:"]')?.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("renders work product detail controls in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      flushSync(() => root.render(<RichWorkProductCard workProduct={workProduct({ type: "branch", provider: "git", title: "Ramo de entrega", summary: "Descrição do trabalho", url: null, metadata: null, status: "active" })} href={null} />));
+      const button = container.querySelector<HTMLButtonElement>('button[aria-label="Mostrar detalhes: Ramo de entrega"]');
+      expect(button).not.toBeNull();
+      expect(button?.textContent).toContain("Mostrar detalhes");
+      flushSync(() => button!.click());
+      expect(container.textContent).toContain("Descrição salva");
+      expect(container.querySelector('button[aria-label="Ocultar detalhes: Ramo de entrega"]')).not.toBeNull();
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it.each(["text/html", "application/zip"])("labels %s artifact links as downloads", (contentType) => {
