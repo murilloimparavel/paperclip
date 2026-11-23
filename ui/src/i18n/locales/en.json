@@ -2756,5 +2756,45 @@
       "removePrivateTask": "Remove private task",
       "private": "Private"
     }
+  },
+  "taskQuestions": {
+    "validation": {
+      "required": "This question is required.",
+      "customAnswer": "Enter a custom answer.",
+      "minLength": "Enter at least {{count}} characters.",
+      "maxLength": "Enter no more than {{count}} characters.",
+      "unsupportedPattern": "This question has an unsupported validation pattern.",
+      "format": "Use the requested format.",
+      "validType": "Enter a valid {{type}}.",
+      "integer": "integer",
+      "number": "number",
+      "minimum": "Enter a value of at least {{value}}.",
+      "maximum": "Enter a value no greater than {{value}}."
+    },
+    "recommended": "Recommended",
+    "noAnswer": "No answer",
+    "noAnswerableQuestions": "No answerable questions were provided.",
+    "pagination": "Question pagination",
+    "previousQuestion": "Previous question",
+    "nextQuestion": "Next question",
+    "pageCount": "{{current}} of {{total}}",
+    "context": "Question context",
+    "writeAnswer": "Write an answer",
+    "required": "Required",
+    "optional": "Optional",
+    "addContext": "Add context for the agent…",
+    "filterChoices": "Filter choices",
+    "filterChoicesFor": "Filter choices for {{question}}",
+    "other": "Other",
+    "typeAnswer": "Type your answer",
+    "attachImageToOther": "Attach image to other answer for {{question}}",
+    "cancel": "Cancel",
+    "skip": "Skip",
+    "submitAnswers": "Submit answers",
+    "next": "Next",
+    "answerBeforeSend": "Question {{count}} needs an answer before you can send.",
+    "submitError": "The answers could not be submitted.",
+    "cancelError": "The questions could not be cancelled.",
+    "attachImageToAnswer": "Attach image to answer for {{question}}"
   }
 }

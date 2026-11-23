@@ -2756,5 +2756,45 @@
       "removePrivateTask": "Remover tarefa privada",
       "private": "Privada"
     }
+  },
+  "taskQuestions": {
+    "validation": {
+      "required": "Esta pergunta é obrigatória.",
+      "customAnswer": "Digite uma resposta personalizada.",
+      "minLength": "Digite pelo menos {{count}} caracteres.",
+      "maxLength": "Digite no máximo {{count}} caracteres.",
+      "unsupportedPattern": "Esta pergunta tem um padrão de validação não compatível.",
+      "format": "Use o formato solicitado.",
+      "validType": "Digite um {{type}} válido.",
+      "integer": "número inteiro",
+      "number": "número",
+      "minimum": "Digite um valor igual ou maior que {{value}}.",
+      "maximum": "Digite um valor menor ou igual a {{value}}."
+    },
+    "recommended": "Recomendado",
+    "noAnswer": "Sem resposta",
+    "noAnswerableQuestions": "Nenhuma pergunta respondível foi fornecida.",
+    "pagination": "Paginação de perguntas",
+    "previousQuestion": "Pergunta anterior",
+    "nextQuestion": "Próxima pergunta",
+    "pageCount": "{{current}} de {{total}}",
+    "context": "Contexto da pergunta",
+    "writeAnswer": "Escreva uma resposta",
+    "required": "Obrigatória",
+    "optional": "Opcional",
+    "addContext": "Adicione contexto para o agente…",
+    "filterChoices": "Filtrar opções",
+    "filterChoicesFor": "Filtrar opções para {{question}}",
+    "other": "Outra",
+    "typeAnswer": "Digite sua resposta",
+    "attachImageToOther": "Anexar imagem à outra resposta para {{question}}",
+    "cancel": "Cancelar",
+    "skip": "Pular",
+    "submitAnswers": "Enviar respostas",
+    "next": "Próxima",
+    "answerBeforeSend": "A pergunta {{count}} precisa de uma resposta antes do envio.",
+    "submitError": "Não foi possível enviar as respostas.",
+    "cancelError": "Não foi possível cancelar as perguntas.",
+    "attachImageToAnswer": "Anexar imagem à resposta para {{question}}"
   }
 }
