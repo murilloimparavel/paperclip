@@ -3188,5 +3188,12 @@
     "verificationResults": "Resultados da verificação",
     "blocksCompletion": "impede a conclusão",
     "runEnded": "Execução encerrada"
+  },
+  "taskChatDiff": {
+    "addedPrefix": "Adicionado: ",
+    "removedPrefix": "Removido: ",
+    "showMoreLines_one": "Mostrar mais {{count}} linha",
+    "showMoreLines_other": "Mostrar mais {{count}} linhas",
+    "shortened": "Diff reduzido para exibição."
   }
 }
