@@ -8,6 +8,7 @@ import { useRef, type ReactNode } from "react";
 import type { ExecutionProjection } from "@paperclipai/shared";
 import { useSecondTick } from "@/hooks/useSecondTick";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import type {
   TaskChatItem,
   TaskChatMessageItem,
@@ -84,6 +85,7 @@ function RunnerTurnStatus({
   continuedAfterSteering?: boolean;
   waitingLabel?: string | null;
 }) {
+  const { t } = useTranslation();
   const terminal = isTerminalRunStatus(status);
   useSecondTick(!terminal && startedAtMs != null);
   const elapsedMs =
@@ -96,10 +98,10 @@ function RunnerTurnStatus({
   const elapsed = formatCompactDuration(elapsedMs);
 
   const failed = terminalStatusFailed(status);
-  const label = terminal ? (failed ? "Stopped" : "Worked") : waitingLabel ?? "Working";
+  const label = terminal ? (failed ? t("taskChatRunnerTurn.stopped") : t("taskChatRunnerTurn.worked")) : waitingLabel ?? t("taskChatRunnerTurn.working");
   const suffix = terminal
-    ? elapsed ? ` ${failed ? "after" : "for"} ${elapsed}` : ""
-    : elapsed ? `${waitingLabel ? " · " : " for "}${elapsed}` : "";
+    ? elapsed ? ` ${t(failed ? "taskChatRunnerTurn.elapsedAfter" : "taskChatRunnerTurn.elapsedFor", { duration: elapsed })}` : ""
+    : elapsed ? `${waitingLabel ? " · " : ` ${t("taskChatRunnerTurn.elapsedFor", { duration: elapsed })}`}` : "";
 
   return (
     <span
@@ -109,17 +111,18 @@ function RunnerTurnStatus({
       aria-live="polite"
       aria-atomic="true"
     >
-      {continuedAfterSteering ? <span data-conversation-meta="">Continued after steering · </span> : null}
+      {continuedAfterSteering ? <span data-conversation-meta="">{t("taskChatRunnerTurn.continuedAfterSteering")} · </span> : null}
       {label}<span data-conversation-meta="">{suffix}</span>
     </span>
   );
 }
 
 function RunnerCurrentActivityTail({ status, waitingLabel }: { status: string; waitingLabel?: string | null }) {
+  const { t } = useTranslation();
   const shimmer = useTaskChatShimmer("working");
   if (isTerminalRunStatus(status)) return null;
   return <div className="mt-2 flex min-h-8 min-w-0 items-center gap-2 px-1 py-1 text-xs text-muted-foreground" data-testid="task-chat-current-activity" data-turn-position="tail">
-    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? "Thinking"}</span>
+    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? t("taskChatRunnerTurn.thinking")}</span>
   </div>;
 }
 

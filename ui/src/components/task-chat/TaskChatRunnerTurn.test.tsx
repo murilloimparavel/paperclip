@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { MemoryRouter } from "@/lib/router";
+import { i18n } from "@/i18n";
 import { TaskChatRunnerTurn } from "./TaskChatRunnerTurn";
 import { TaskChatRequestHistoryContext } from "./TaskChatComposerTakeoverContext";
 import { transcriptToTaskChatItems } from "./transcript-adapter";
@@ -87,6 +88,17 @@ describe("TaskChatRunnerTurn", () => {
       expect(container.textContent).not.toContain("Queued");
     },
   );
+
+  it("localizes the live runner status and activity in Brazilian Portuguese", async () => {
+    await act(async () => { await i18n.changeLanguage("pt-BR"); });
+    try {
+      render([], "running");
+      expect(container.querySelector('[data-testid="task-chat-turn-status-header"]')?.textContent).toContain("Em andamento");
+      expect(container.querySelector('[data-testid="task-chat-current-activity-label"]')?.textContent).toBe("Pensando");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
 
   it("preserves a specific preparation label before a run ID exists", () => {
     render([], "queued", null, undefined, false, false, undefined, "Preparing workspace");

@@ -2924,6 +2924,15 @@
     },
     "details": "Details"
   },
+  "taskChatRunnerTurn": {
+    "stopped": "Stopped",
+    "worked": "Worked",
+    "working": "Working",
+    "thinking": "Thinking",
+    "continuedAfterSteering": "Continued after steering",
+    "elapsedFor": "for {{duration}}",
+    "elapsedAfter": "after {{duration}}"
+  },
   "agentQueueWait": {
     "waitingFor": "Waiting for {{name}}",
     "slotsMax_one": "{{count}} slot max",

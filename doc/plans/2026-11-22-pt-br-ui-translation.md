@@ -217,4 +217,8 @@ Traduzir todas as superfícies de produto do Paperclip para português do Brasil
   - [x] Traduzir aviso detalhado, posição na fila, configuração e nomes acessíveis.
   - [x] Traduzir o chip compacto exibido em listas e cabeçalhos.
   - [x] Validar catálogos e renderização explícita em pt-BR.
+- Status do turno Paperclip Runner:
+  - [x] Traduzir estados em andamento, pensando, concluído e interrompido.
+  - [x] Traduzir duração e continuação após orientação, mantendo rótulos dinâmicos do servidor.
+  - [x] Validar catálogos, teste do turno e renderização explícita em pt-BR.
 - Em andamento: variantes legadas e de produção, conteúdo de instruções, detalhes completos de tarefas e revisão visual das rotas principais.
