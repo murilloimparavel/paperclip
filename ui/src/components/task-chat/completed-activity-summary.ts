@@ -6,24 +6,25 @@ import {
   type ToolIcon,
 } from "./tool-taxonomy";
 import { protocolActivityPresentation, providerNoticeSeverity } from "./task-chat-activity-presentation";
+import { t } from "@/i18n";
 
 type Activity = TaskChatActivityPhaseItem["items"][number];
-const labels: Record<ToolFamily, string> = {
-  terminal: "Ran commands",
-  grep: "Searched files",
-  search: "Searched files",
-  read: "Read files",
-  edit: "Edited files",
-  web: "Searched the web",
-  plan: "Worked on a plan",
-  question: "Requested input",
-  agent: "Worked with agents",
-  safety: "Reviewed safety",
-  image: "Worked with images",
-  wait: "Waited",
-  mcp: "Used connected tools",
-  other: "Used tools",
+const labelKeys: Record<ToolFamily, string> = {
+  terminal: "ranCommands", grep: "searchedFiles", search: "searchedFiles", read: "readFiles",
+  edit: "editedFiles", web: "searchedWeb", plan: "workedOnPlan", question: "requestedInput",
+  agent: "workedWithAgents", safety: "reviewedSafety", image: "workedWithImages", wait: "waited",
+  mcp: "usedConnectedTools", other: "usedTools",
 };
+
+const summaryText = (key: string) => t(`taskChatCompletedSummary.${key}`);
+
+function localizeKnownProtocolLabel(value: string) {
+  const known: Record<string, string> = {
+    "PreToolUse hook ran": "preToolUseRan",
+    "PreToolUse hook blocked a tool call": "preToolUseBlocked",
+  };
+  return known[value] ? summaryText(known[value]!) : value;
+}
 
 /** Describe observed activities, never infer success from a finished group. */
 export function completedActivitySummary(items: Activity[]) {
@@ -84,19 +85,19 @@ export function completedActivitySummary(items: Activity[]) {
         if (item.surface === "provider_activity" && (item.family === "hook" || item.family === "safety")) {
           // A hook or reviewer that stopped an action is the headline of the
           // group; routine passes only describe a group with nothing else.
-          if (p.tone === "blocked" || p.tone === "failed") add(p.completedLabel, p.icon, -1);
-          else quietGovernance.push({ label: item.family === "hook" ? "Ran hooks" : "Auto-reviewed actions", single: p.completedLabel, icon: p.icon, order });
+          if (p.tone === "blocked" || p.tone === "failed") add(localizeKnownProtocolLabel(p.completedLabel), p.icon, -1);
+          else quietGovernance.push({ label: summaryText(item.family === "hook" ? "ranHooks" : "autoReviewedActions"), single: localizeKnownProtocolLabel(p.completedLabel), icon: p.icon, order });
           continue;
         }
         if (item.surface === "provider_activity" && item.family === "verification") {
           // A failed check stays visible even when the compact label truncates.
-          if (item.status === "failed") add("Check failed", p.icon, -1);
-          else if (item.details.find((entry) => entry.label === "Status")?.value === "not_run") add("Skipped checks", p.icon, order);
-          else add("Ran checks", p.icon, order);
+          if (item.status === "failed") add(summaryText("checkFailed"), p.icon, -1);
+          else if (item.details.find((entry) => entry.label === "Status")?.value === "not_run") add(summaryText("skippedChecks"), p.icon, order);
+          else add(summaryText("ranChecks"), p.icon, order);
           continue;
         }
         if (item.surface === "provider_activity" && item.eventType === "model.route.changed") {
-          add("Switched models", p.icon, order);
+          add(summaryText("switchedModels"), p.icon, order);
           continue;
         }
         const family =
@@ -104,24 +105,14 @@ export function completedActivitySummary(items: Activity[]) {
         const label =
           (
             {
-              research: "Searched the web",
-              plan: "Worked on a plan",
-              delegation: "Worked with agents",
-              artifact: "Worked with artifacts",
-              context: "Managed context",
-              memory: "Checked memory",
-              model_identity: "Checked model settings",
-              review: "Worked in review mode",
-              hook: "Ran hooks",
-              safety: "Reviewed safety",
-              terminal: "Ran commands",
-              wait: "Waited",
-              verification: "Ran checks",
-              workspace_change: "Worked on files",
-              workspace_file: "Referenced files",
-              resource: "Added resources",
+              research: summaryText("searchedWeb"), plan: summaryText("workedOnPlan"), delegation: summaryText("workedWithAgents"),
+              artifact: summaryText("workedWithArtifacts"), context: summaryText("managedContext"), memory: summaryText("checkedMemory"),
+              model_identity: summaryText("checkedModelSettings"), review: summaryText("workedInReviewMode"), hook: summaryText("ranHooks"),
+              safety: summaryText("reviewedSafety"), terminal: summaryText("ranCommands"), wait: summaryText("waited"),
+              verification: summaryText("ranChecks"), workspace_change: summaryText("workedOnFiles"),
+              workspace_file: summaryText("referencedFiles"), resource: summaryText("addedResources"),
             } as Record<string, string>
-          )[family] ?? "Used tools";
+          )[family] ?? summaryText("usedTools");
         add(label, p.icon, order);
       }
     }
@@ -131,12 +122,12 @@ export function completedActivitySummary(items: Activity[]) {
       ?? notices.find((notice) => notice.severity === "warning")
       ?? notices[0]!;
     const label = notices.length === 1
-      ? strongest.summary || "Received a provider update"
+      ? strongest.summary || summaryText("receivedProviderUpdate")
       : strongest.severity === "error"
-        ? "Provider error reported"
+        ? summaryText("providerErrorReported")
         : strongest.severity === "warning"
-          ? "Provider warning reported"
-          : "Received provider updates";
+          ? summaryText("providerWarningReported")
+          : summaryText("receivedProviderUpdates");
     // One notice category leaves room for actual work. Keep warnings and errors
     // visible when the compact label truncates other activity categories.
     add(label, strongest.icon, strongest.severity === "info" ? notices[0]!.order : -1);
@@ -149,10 +140,10 @@ export function completedActivitySummary(items: Activity[]) {
     const succeeded = completedFamilies.has(tool.family);
     const label =
       tool.family === "read" && !succeeded
-        ? "Checked files"
+        ? summaryText("checkedFiles")
         : tool.family === "edit" && !succeeded
-          ? "Worked on files"
-          : labels[tool.family];
+          ? summaryText("workedOnFiles")
+          : summaryText(labelKeys[tool.family]);
     add(label, tool.icon, tool.order);
   }
   if (!categories.size) {
@@ -162,10 +153,10 @@ export function completedActivitySummary(items: Activity[]) {
   }
   if (!categories.size) {
     if (items.some((item) => item.kind === "thinking"))
-      add("Thought through the task", Brain);
+      add(summaryText("thoughtThroughTask"), Brain);
     else if (items.some((item) => item.kind === "marker"))
-      add("Activity stopped", CirclePause);
-    else add("Recorded usage", Gauge);
+      add(summaryText("activityStopped"), CirclePause);
+    else add(summaryText("recordedUsage"), Gauge);
   }
   const values = [...categories.values()].sort((a, b) => a.order - b.order);
   const join = (parts: string[]) =>
@@ -176,7 +167,7 @@ export function completedActivitySummary(items: Activity[]) {
   return {
     label:
       values.length > 3
-        ? `${join(values.slice(0, 2).map((v) => v.label))}, and more`
+        ? `${join(values.slice(0, 2).map((v) => v.label))}, ${summaryText("andMore")}`
         : fullLabel,
     fullLabel,
     icon: values.length === 1 ? values[0].icon : Layers3,

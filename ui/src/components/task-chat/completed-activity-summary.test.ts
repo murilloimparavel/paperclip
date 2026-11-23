@@ -1,5 +1,6 @@
 import { AlertTriangle, Info } from "lucide-react";
 import { describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
 import { completedActivitySummary } from "./completed-activity-summary";
 import type {
   TaskChatActivityPhaseItem,
@@ -42,6 +43,20 @@ const thought: Activity = {
 };
 
 describe("completedActivitySummary", () => {
+  it("localizes summary categories and compact overflow in Brazilian Portuguese", async () => {
+    await i18n.changeLanguage("pt-BR");
+    try {
+      expect(completedActivitySummary([tool("read"), tool("exec_command")]).label)
+        .toBe("Leu arquivos, executou comandos");
+      const failedCheck = { ...provider("verification", "failed"), id: "failed-check" };
+      expect(completedActivitySummary([failedCheck, tool("read"), tool("exec_command")]).fullLabel)
+        .toBe("Verificação falhou, leu arquivos, executou comandos");
+      expect(completedActivitySummary([thought]).label).toBe("Pensou sobre a tarefa");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
+
   it.each([
     "completed",
     "failed",
